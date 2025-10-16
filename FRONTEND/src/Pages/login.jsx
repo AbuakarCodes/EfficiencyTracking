@@ -6,12 +6,10 @@ import { useForm } from "react-hook-form"
 import { Login_URL } from "../../API_EndPoints"
 import { Credentials } from "../utils/axios_Credentials"
 import { useAuthContext } from "../Contexts/AuthProvider"
-import { useEffect } from "react"
 
 export default function Login() {
-  const {IsLoggedIn, setIsLoggedIn} = useAuthContext()
+  const { IsLoggedIn, setIsLoggedIn,  } = useAuthContext()
   const navigate = useNavigate()
-
   const {
     register,
     handleSubmit,
@@ -23,9 +21,10 @@ export default function Login() {
   async function submithandler(data) {
     try {
       const res = await axios.post(Login_URL, data, Credentials)
-      alert("User login Sucessfully")  
+      alert("User login Sucessfully")
       reset()
       setIsLoggedIn(true)
+      navigate("/")
     } catch (error) {
       console.log(error?.response?.data?.message || "Somthing went wrong")
     }

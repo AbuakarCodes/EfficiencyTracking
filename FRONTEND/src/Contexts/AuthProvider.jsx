@@ -5,7 +5,7 @@ import { isLoggedIN_URL } from "../../API_EndPoints";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [IsLoggedIn, setIsLoggedIn] = useState(null);
+  const [IsLoggedIn, setIsLoggedIn] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
   const [userId, setUserId] = useState(null);
   const [error, setError] = useState({ state: false, message: "" });

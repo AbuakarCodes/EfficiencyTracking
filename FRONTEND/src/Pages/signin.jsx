@@ -5,12 +5,10 @@ import { useForm } from "react-hook-form"
 import { siginIN_URL } from "../../API_EndPoints"
 import { Credentials } from "../utils/axios_Credentials"
 import { useAuthContext } from "../Contexts/AuthProvider"
-// import { useAppContext } from "../hooks/useCustomContext"
-// import { useIsLoggedIn } from "../hooks/useIsLoggedIn"
-// import { useEffect } from "react"
+import { useEffect } from "react"
 
 export default function Signin() {
-  const { setIsLoggedIn, setUserId } = useAuthContext();
+  const { IsLoggedIn,setIsLoggedIn } = useAuthContext();
   
   const navigate = useNavigate()
   const {
@@ -21,11 +19,14 @@ export default function Signin() {
     formState: { errors, isSubmitting },
   } = useForm()
 
+  
+
   async function submithandler(data) {
     try {
       const res = await axios.post(siginIN_URL, data, Credentials)
       alert(res?.data?.message)
       setIsLoggedIn(true)
+      navigate("/")
       reset()
       
     } catch (error) {

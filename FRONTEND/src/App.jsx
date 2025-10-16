@@ -8,17 +8,7 @@ import { useAuthContext } from "./Contexts/AuthProvider"
 
 function App() {
   const { IsLoggedIn, isCheacking, Error} = useAuthContext()
-  useEffect(() => {
-    // rerender app to chech which component shoud render home or signin
-  }, [IsLoggedIn])
   
-  // if (!Error) {
-  //   return <div>Something went wrong</div>
-  // }
-  // if (isCheacking) {
-  //   return <div>cheakink....</div>
-  // }
-
   return !IsLoggedIn ? (
     <Signin></Signin>
   ) : (

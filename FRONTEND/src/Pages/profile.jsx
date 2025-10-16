@@ -16,7 +16,6 @@
     alert("Profile updated successfully (demo only).")
   }
 
-
 import { useEffect, useState } from "react"
 import { Credentials } from "../utils/axios_Credentials"
 import { logout_URL } from "../../API_EndPoints"
@@ -37,17 +36,12 @@ export default function Profile() {
   })
 
   useEffect(() => {
-    
-  // navigate("/")
+    // rerender to get back on home page
   }, [IsLoggedIn])
   
-
-  
-
   async function logoutHandler() {
     try {
       const res = await axios.get(logout_URL, Credentials)
-      console.log(res)
       alert("User Loggedout")
       setIsLoggedIn(false)
       navigate("/")
