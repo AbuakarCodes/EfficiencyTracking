@@ -11,7 +11,7 @@ const logout = async (req, res, next) => {
         if (!user) return res.status(404).json(new ErrorClass("User not Found", 404))
 
         clearCookies(res, "accesssToken", "refreshToken")
-        res.status(200).json(new responseClass("logout sucessfully", [], 200))
+        res.status(200).json(new responseClass("logout sucessfully", true, 200))
     } catch (error) {
         return res.status(500).json(new ErrorClass(error.message, 500))
     }

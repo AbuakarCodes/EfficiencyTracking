@@ -1,96 +1,151 @@
-import Navbar from "../Components/navbar";
+import axios from "axios"
+import SiginINChart from "../Charts/SiginINChart"
+import { Link, useNavigate } from "react-router"
+import { useForm } from "react-hook-form"
+import { siginIN_URL } from "../../API_EndPoints"
+import { Credentials } from "../utils/axios_Credentials"
+import { useAuthContext } from "../Contexts/AuthProvider"
+// import { useAppContext } from "../hooks/useCustomContext"
+// import { useIsLoggedIn } from "../hooks/useIsLoggedIn"
+// import { useEffect } from "react"
 
 export default function Signin() {
+  const { setIsLoggedIn, setUserId } = useAuthContext();
+  
+  const navigate = useNavigate()
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm()
+
+  async function submithandler(data) {
+    try {
+      const res = await axios.post(siginIN_URL, data, Credentials)
+      alert(res?.data?.message)
+      setIsLoggedIn(true)
+      reset()
+      
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 409) {
+          alert(error.response.data.message)
+          reset()
+        } else {
+          alert("Something went wrong. Try again later.")
+          reset()
+        }
+      }
+    }
+  }
+
   return (
-    <main className="min-h-screen flex flex-col  ">
-      {/* Navbar */}
-     <Navbar></Navbar>
+    <>
+      <div className="min-h-screen flex flex-col items-center justify-center text-white">
+        <div className="py-6 px-4">
+          <div className="grid lg:grid-cols-2 items-center gap-6 max-w-6xl w-full">
+            {/* ---- Form Section ---- */}
+            <div className="border border-black/20 rounded-2xl p-8 max-w-md shadow-[0_0_25px_-5px_rgba(255,255,255,0.2)]  backdrop-blur max-lg:mx-auto">
+              <form
+                onSubmit={handleSubmit(submithandler)}
+                className="space-y-6"
+              >
+                <div className="mb-12">
+                  <h1 className="text-3xl font-semibold text-black">Sign in</h1>
+                  <p className="text-black/70 text-[15px] mt-4 leading-relaxed">
+                    Sign in to your account and explore endless possibilities.
+                  </p>
+                </div>
 
-      {/* Sign Up Card */}
-      <section className="flex-1 grid place-items-center px-4 py-8">
-        <div className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
-          <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-white">
-            Create Account
-          </h2>
+                <div>
+                  <label className="text-black text-sm font-medium mb-2 block">
+                    Name
+                  </label>
+                  <div className="relative flex items-center">
+                    <input
+                      {...register("name", { required: true })}
+                      name="name"
+                      required={true}
+                      type="text"
+                      className="w-full text-sm text-black border border-black/30 pl-4 pr-10 py-3 rounded-lg  focus:border-black placeholder-gray-500"
+                      placeholder="Enter name"
+                    />
+                  </div>
+                </div>
 
-          {/* User Avatar */}
-          <div className="flex justify-center">
-            <img
-              src="https://via.placeholder.com/64"
-              alt="User Avatar"
-              className="rounded-full"
-            />
+                <div>
+                  <label className="text-black text-sm font-medium mb-2 block">
+                    Email
+                  </label>
+                  <div className="relative flex items-center">
+                    <input
+                      {...register("email", { required: true })}
+                      name="email"
+                      required={true}
+                      type="email"
+                      className="w-full text-sm text-black border border-black/30 pl-4 pr-10 py-3 rounded-lg  focus:border-black placeholder-gray-500"
+                      placeholder="Enter user name"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-black text-sm font-medium mb-2 block">
+                    Password
+                  </label>
+                  <div className="relative flex items-center">
+                    <input
+                      {...register("password", { required: true })}
+                      name="password"
+                      required={true}
+                      type="password"
+                      className="w-full text-sm text-black border border-black/30 pl-4 pr-10 py-3 rounded-lg  focus:border-black placeholder-gray-500"
+                      placeholder="Enter password"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-4">
+                  <div className="text-sm">
+                    <Link
+                      to="#"
+                      className="text-black/90 hover:underline transition"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="mt-10">
+                  <button
+                    disabled={isSubmitting}
+                    type="submit"
+                    className="w-full py-3 px-4 text-[15px] font-medium rounded-lg bg-black text-white hover:bg-black/90 transition-all duration-200 cursor-pointer"
+                  >
+                    {isSubmitting ? "..." : "Sign in"}
+                  </button>
+                  <p className="text-sm mt-6 text-center text-gray-400">
+                    Already have an account?{" "}
+                    <Link
+                      to={"/login"}
+                      className="text-black underline hover:opacity-80"
+                    >
+                      Login here
+                    </Link>
+                  </p>
+                </div>
+              </form>
+            </div>
+
+            {/* ---- Image Section ---- */}
+            <div className="max-lg:mt-8">
+              <SiginINChart></SiginINChart>
+            </div>
           </div>
-
-          {/* Full Name */}
-          <div className="space-y-2">
-            <label htmlFor="name" className="text-sm ">
-              Full Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              placeholder="John Doe"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            />
-          </div>
-
-          {/* Email */}
-          <div className="space-y-2">
-            <label htmlFor="email" className="text-sm ">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            />
-          </div>
-
-          {/* Password */}
-          <div className="space-y-2">
-            <label htmlFor="password" className="text-sm ">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            />
-          </div>
-
-          {/* Confirm Password */}
-          <div className="space-y-2">
-            <label htmlFor="confirm" className="text-sm ">
-              Confirm Password
-            </label>
-            <input
-              id="confirm"
-              type="password"
-              placeholder="••••••••"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            />
-          </div>
-
-          {/* Button */}
-          <button
-            type="submit"
-            className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition"
-          >
-            Sign Up
-          </button>
-
-          {/* Footer Text */}
-          <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-            Already have an account?{" "}
-            <a href="#" className="underline text-black dark:text-white hover:text-gray-700">
-              Sign in
-            </a>
-          </p>
         </div>
-      </section>
-    </main>
-  );
+      </div>
+    </>
+  )
 }

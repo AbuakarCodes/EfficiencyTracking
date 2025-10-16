@@ -7,19 +7,22 @@ import Login from "./Pages/login"
 import Signin from "./Pages/signin"
 import Efficiency from "./Pages/Efficiency"
 import Profile from "./Pages/profile"
+import { AuthProvider } from "./Contexts/AuthProvider"
 const root = document.getElementById("root")
 
 ReactDOM.createRoot(root).render(
   <AppProvider>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/efficiency" element={<Efficiency />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/lo" element={<Login />} />
-        <Route path="/sn" element={<Signin />} />
-        <Route path="*" element={<div>fuc*k off</div>} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/efficiency" element={<Efficiency />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="*" element={<div>fuc*k off</div>} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   </AppProvider>
 )

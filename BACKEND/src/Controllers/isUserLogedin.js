@@ -8,10 +8,15 @@ import { ErrorClass } from "../utils/ErrorClass.js";
 const isLoggedin = async (req, res, next) => {
     const { accesssToken } = req.cookies
     try {
-        jwt.verify(accesssToken, process.env.ACCESS_TOKEN_SECRET);
-        return res.status(200).json(new responseClass("user is logged in", true, 200))
+        const { id } = jwt.verify(accesssToken, process.env.ACCESS_TOKEN_SECRET);
+        return res.status(200).json(
+            new responseClass("User is logged in", { users_id: id, isLoggedin: true }, 200)
+        );
     } catch (error) {
-        return res.status(500).json(new ErrorClass("user is not logged in", 500))
+        return res.status(401).json(
+            new responseClass("User is not logged in", false, 401)
+        );
     }
+
 }
 export { isLoggedin }

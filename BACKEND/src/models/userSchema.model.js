@@ -18,7 +18,7 @@ const userSchema = new Schema(
 
 userSchema.methods.generateAccessToken = function () {
   const payload = { id: this._id, email: this.email }
-  const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" })
+  const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30d" })
   this.accessToken = token  
   return token
 }
@@ -26,7 +26,7 @@ userSchema.methods.generateAccessToken = function () {
 // Generate Refresh Token
 userSchema.methods.generateRefreshToken = function () {
   const payload = { id: this._id, email: this.email }
-  const token = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d" })
+  const token = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "90d" })
   this.refreshToken = token   
   return token
 }

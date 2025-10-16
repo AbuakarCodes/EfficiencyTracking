@@ -8,7 +8,6 @@ import { clearCookies, setCookies } from "../utils/COOKIES/AlingingCookies.js"
 
 const Login = async (req, res, next) => {
     const { accesssToken, refreshToken } = req.cookies
-    console.log("REOM LOGIN FORM", req.cookies) 
 
     try {
         const { email, password } = req.body;
