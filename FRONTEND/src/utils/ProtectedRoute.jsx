@@ -1,10 +1,11 @@
 import { Navigate } from "react-router"
 import { useAuthContext } from "../Contexts/AuthProvider"
+import DotLoder from "./Loders/dotLoder"
 
 export function ProtectedRoute({ children }) {
   const { IsLoggedIn, isChecking } = useAuthContext()
   if (isChecking) {
-    return <div className="bg-red-500 h-[22rem]">Loading  ...</div>; // or a spinner, skeleton, etc.
+    return <DotLoder></DotLoder>
   }
   if (!IsLoggedIn) {
     // user not logged in, redirect to login

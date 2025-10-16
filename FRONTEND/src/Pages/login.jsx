@@ -1,14 +1,13 @@
 import axios from "axios"
-import SiginINChart from "../Charts/SiginINChart"
-import Navbar from "../Components/navbar"
 import { Link, useNavigate } from "react-router"
 import { useForm } from "react-hook-form"
 import { Login_URL } from "../../API_EndPoints"
 import { Credentials } from "../utils/axios_Credentials"
 import { useAuthContext } from "../Contexts/AuthProvider"
+import DotLoder from "../utils/Loders/dotLoder"
 
 export default function Login() {
-  const { IsLoggedIn, setIsLoggedIn,  } = useAuthContext()
+  const { IsLoggedIn, setIsLoggedIn } = useAuthContext()
   const navigate = useNavigate()
   const {
     register,
@@ -21,23 +20,28 @@ export default function Login() {
   async function submithandler(data) {
     try {
       const res = await axios.post(Login_URL, data, Credentials)
-      alert("User login Sucessfully")
       reset()
       setIsLoggedIn(true)
       navigate("/")
     } catch (error) {
+      alert(error?.response?.data?.message)
       console.log(error?.response?.data?.message || "Somthing went wrong")
     }
   }
 
   return (
     <>
+      {isSubmitting && <DotLoder></DotLoder>}
       <div className="min-h-screen flex flex-col items-center justify-center text-white">
         <div className="py-6 px-4">
-          <div className="border border-black/20 rounded-2xl p-8 max-w-md shadow-[0_0_25px_-5px_rgba(255,255,255,0.2)]  backdrop-blur w-[18rem] sm:w-[24rem] md:w-[50rem]">
+          {/* ---- Form Section ---- */}
+          <div className="border border-black/20 rounded-2xl p-8 max-w-md shadow-[0_0_25px_-5px_rgba(255,255,255,0.2)]  backdrop-blur max-lg:mx-auto">
             <form onSubmit={handleSubmit(submithandler)} className="space-y-6">
               <div className="mb-12">
-                <h1 className="text-3xl font-semibold text-black">Log in</h1>
+                <h1 className="text-4xl font-semibold text-black">Log in</h1>
+                <p className="text-black mt-4 text-[15px] leading-relaxed">
+                  Login in to your account and explore endless possibilities.
+                </p>
               </div>
 
               <div>
@@ -89,15 +93,15 @@ export default function Login() {
                   type="submit"
                   className="w-full py-3 px-4 text-[15px] font-medium rounded-lg bg-black text-white hover:bg-black/90 transition-all duration-200 cursor-pointer"
                 >
-                  {isSubmitting ? "..." : "Sign in"}
+                  Log in
                 </button>
                 <p className="text-sm mt-6 text-center text-gray-400">
-                  Dont't have an account?{" "}
+                  Don't have an account?{" "}
                   <Link
                     to={"/signin"}
                     className="text-black underline hover:opacity-80"
                   >
-                    Sign in here
+                    SignUp here
                   </Link>
                 </p>
               </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { Link, NavLink } from "react-router"
+import Logo from ".././assets/Logo.svg"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -15,13 +16,13 @@ export default function Navbar() {
   ]
 
   return (
+    
     <div className="  border-black/20 border-b-[1px]">
       <nav className=" container mx-auto bg-white border-gray-200   ">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
           {/* Logo */}
-          <Link to={"/"} className="text-[1.4rem]">
-            {" "}
-            Optivio
+          <Link to={"/"} className="text-[1.4rem] h-[4rem] w-[4rem]">
+            <img src={Logo} alt="" srcset="" />
           </Link>
 
           {/* Toggle Button (for mobile) */}
@@ -63,7 +64,7 @@ export default function Navbar() {
                     <NavLink
                       to={e.link}
                       className={({ isActive }) =>
-                        `block rounded-[5px] border-[1px] border-transparent px-5 py-[.5rem] hover:border-black/20 hover:bg-black hover:text-white transition-all duration-200 ${
+                        ` text-[1.2rem] font-medium  block rounded-[5px] border-[1px] border-transparent px-5 py-[.5rem] hover:border-black/20 hover:bg-black hover:text-white transition-all duration-200 ${
                           isActive ? "  border-black/20 bg-black text-white" : ""
                         }`
                       }
