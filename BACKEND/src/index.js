@@ -3,7 +3,6 @@ dotenv.config();
 import { dbConnection } from "./db/dbConection.js";
 import { app } from "./app.js";
 import { Route } from "./Router/userRouter.js"
-import { auth } from "./middleware/Auth.middleware.js";
 
 dbConnection()
     .then(() => {

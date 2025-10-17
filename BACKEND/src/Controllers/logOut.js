@@ -6,7 +6,9 @@ import { User } from "../models/userSchema.model.js"
 const logout = async (req, res, next) => {
 
     try {
+        if (!req.user) return res.status(404).json(new ErrorClass("Usernot Found", 404))
         const { id } = req.user
+
         const user = await User.findById(id)
         if (!user) return res.status(404).json(new ErrorClass("User not Found", 404))
 

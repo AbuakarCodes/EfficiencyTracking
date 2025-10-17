@@ -2,10 +2,10 @@ import dotenv from "dotenv";
 dotenv.config();
 import jwt from "jsonwebtoken";
 import { responseClass } from "../utils/responseClass.js"
-import { ErrorClass } from "../utils/ErrorClass.js";
 
 
 const isLoggedin = async (req, res, next) => {
+     
     const { accesssToken } = req.cookies
     try {
         const { id } = jwt.verify(accesssToken, process.env.ACCESS_TOKEN_SECRET);

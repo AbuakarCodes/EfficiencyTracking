@@ -4,13 +4,15 @@ import { register } from "../Controllers/register.js"
 import { logout } from "../Controllers/logOut.js"
 import { auth } from "../middleware/Auth.middleware.js"
 import { isLoggedin } from "../Controllers/isUserLogedin.js"
+import { deleteUser } from "../Controllers/deleteUser.js"
 
 const Route = express.Router()
 
 Route.post("/register", register)
 Route.post("/login", Login)
-Route.get("/logout",auth, logout) 
+Route.get("/logout", auth, logout)
 Route.get("/isloggedin", isLoggedin)
+Route.get("/deleted", auth, deleteUser)
 
 
 export { Route }
