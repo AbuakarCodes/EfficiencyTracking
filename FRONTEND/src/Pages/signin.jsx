@@ -1,4 +1,5 @@
 import axios from "axios"
+import { toast } from 'react-toastify';
 import { Link, useNavigate } from "react-router"
 import {  useForm } from "react-hook-form"
 import { siginIN_URL } from "../../API_EndPoints"
@@ -20,22 +21,24 @@ export default function Signin() {
   } = useForm()
 
   async function submithandler(data) {
+    
     try {
       const res = await axios.post(siginIN_URL, data, Credentials)
+      toast.success("Sign in Sucessfully", { theme: "dark" })
       setIsLoggedIn(true)
       navigate("/")
       reset()
     } catch (error) {
       if (error.response) {
         if (error.response.status === 409) {
-          alert(error.response.data.message)
+          toast.success(error.response.data.message, { theme: "dark" })
         } else {
-          alert("Something went wrong. Try again later.")
+           toast.success("Something went wrong. Try again later.", { theme: "dark" })
         }
       } else if (error.request) {
-        alert("Cannot connect to the server.")
+        toast("Cannot connect to the server.", {theme:"dark"})
       } else {
-        alert("Unexpected error occurred. Please try again.")
+        toast("Unexpected error occurred. Please try again.", {theme:"dark"})
       }
       reset()
     }

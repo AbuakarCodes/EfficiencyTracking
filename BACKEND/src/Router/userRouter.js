@@ -5,6 +5,7 @@ import { logout } from "../Controllers/logOut.js"
 import { auth } from "../middleware/Auth.middleware.js"
 import { isLoggedin } from "../Controllers/isUserLogedin.js"
 import { deleteUser } from "../Controllers/deleteUser.js"
+import { changePassword } from "../Controllers/changePassword.js"
 
 const Route = express.Router()
 
@@ -13,6 +14,7 @@ Route.post("/login", Login)
 Route.get("/logout", auth, logout)
 Route.get("/isloggedin", isLoggedin)
 Route.get("/deleted", auth, deleteUser)
+Route.post("/changePassword", auth, changePassword)
 
 
 export { Route }

@@ -11,6 +11,7 @@ const Login = async (req, res, next) => {
 
     try {
         const { email, password } = req.body;
+        console.log(password)
         if (!email || !password) return res.status(404).json(new ErrorClass("Email and password are required"));
 
 

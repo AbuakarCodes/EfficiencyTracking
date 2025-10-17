@@ -5,6 +5,7 @@ import { Login_URL } from "../../API_EndPoints"
 import { Credentials } from "../utils/axios_Credentials"
 import { useAuthContext } from "../Contexts/AuthProvider"
 import DotLoder from "../utils/Loders/dotLoder"
+import { toast } from "react-toastify"
 
 export default function Login() {
   const { IsLoggedIn, setIsLoggedIn } = useAuthContext()
@@ -24,8 +25,7 @@ export default function Login() {
       setIsLoggedIn(true)
       navigate("/")
     } catch (error) {
-      alert(error?.response?.data?.message)
-      console.log(error?.response?.data?.message || "Somthing went wrong")
+      toast.error(error?.response?.data?.message||"Somthing went wrong", {theme:"dark"} )
     }
   }
 

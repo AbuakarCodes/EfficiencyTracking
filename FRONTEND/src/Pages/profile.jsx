@@ -7,22 +7,25 @@ import Navbar from "../Components/navbar"
 import DotLoder from "../utils/Loders/dotLoder"
 import { useAuthContext } from "../Contexts/AuthProvider.jsx"
 import ChangePassword from "../Components/ChangePassword.jsx"
+import { toast } from "react-toastify"
 
 export default function Profile() {
   const navigate = useNavigate()
   const { setIsLoggedIn } = useAuthContext()
   const [isLoding, setisLoding] = useState(false)
-  const [isPasswordUpdating, setisPasswordUpdating] = useState(false)
+  const [showPasswordPopup, setshowPasswordPopup] = useState(false)
+  const [updatedPassDate, setupdatedPassDate] = useState("")
+  
 
   async function logoutHandler() {
     try {
       setisLoding(true)
       const res = await axios.get(logout_URL, Credentials)
-      // alert("User Loggedout")
       setIsLoggedIn(false)
       setisLoding(false)
       navigate("/")
     } catch (error) {
+      toast.error(error.response?.data?.message)
       setisLoding(false)
       alert(error.response?.data?.message || "Something went wrong")
       console.error(error.response?.data?.message || "Something went wrong")
@@ -33,26 +36,28 @@ export default function Profile() {
     try {
       setisLoding(true)
       const res = await axios.get(delete_URL, Credentials)
+      toast.warning("Account deleted")
       setIsLoggedIn(false)
       setisLoding(false)
       navigate("/")
     } catch (error) {
       setisLoding(false)
-      alert(error.response?.data?.message || "Something went wrong")
+      toast(error.response?.data?.message || "Something went wrong", {theme:"dark"})
       console.error(error.response?.data?.message || "Something went wrong")
     }
   }
 
   function PassWordPopUPHandler() {
-     setisPasswordUpdating((prev)=>{
-      sessionStorage.setItem("isPasswordUpdating", !prev)
+     setshowPasswordPopup((prev)=>{
+      sessionStorage.setItem("showPasswordPopup", !prev)
       return !prev
      })
   }
 
   return (
     <>
-      {isPasswordUpdating && <ChangePassword setisPasswordUpdating={setisPasswordUpdating} />}
+      {showPasswordPopup && <ChangePassword setisLoding={setisLoding}
+       setshowPasswordPopup={setshowPasswordPopup}  setupdatedPassDate={setupdatedPassDate} />}
       <Navbar></Navbar>
       {isLoding && <DotLoder></DotLoder>}
       <div className="bg-background-light font-display text-primary ">
@@ -123,7 +128,7 @@ export default function Profile() {
                 </h3>
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <p className="text-primary/60 dark:text-background-light/60">
-                    Last changed 2 months ago
+                    {`Last changed ${updatedPassDate}`}
                   </p>
                   <button
                     onClick={PassWordPopUPHandler}
