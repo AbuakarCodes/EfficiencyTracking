@@ -9,6 +9,7 @@ import Efficiency from "./Pages/Efficiency"
 import Profile from "./Pages/profile"
 import { AuthProvider } from "./Contexts/AuthProvider"
 import { ProtectedRoute } from "./utils/ProtectedRoute"
+import ChangePassword from "./Components/ChangePassword"
 
 const root = document.getElementById("root")
 
@@ -29,6 +30,7 @@ ReactDOM.createRoot(root).render(
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signin" element={<Signin />} />
+          <Route path="/test" element={< ChangePassword/>} />
           <Route path="*" element={<div>fuc*k off</div>} />
         </Routes>
       </BrowserRouter>

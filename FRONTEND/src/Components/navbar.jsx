@@ -22,7 +22,7 @@ export default function Navbar() {
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
           {/* Logo */}
           <Link to={"/"} className="text-[1.4rem] h-[4rem] w-[4rem]">
-            <img src={Logo} alt="" srcset="" />
+            <img src={Logo} alt="Logo"  />
           </Link>
 
           {/* Toggle Button (for mobile) */}

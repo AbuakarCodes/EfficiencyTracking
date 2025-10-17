@@ -6,23 +6,24 @@ import axios from "axios"
 import Navbar from "../Components/navbar"
 import DotLoder from "../utils/Loders/dotLoder"
 import { useAuthContext } from "../Contexts/AuthProvider.jsx"
+import ChangePassword from "../Components/ChangePassword.jsx"
 
 export default function Profile() {
   const navigate = useNavigate()
   const { setIsLoggedIn } = useAuthContext()
-  const [Logout_Loding, setLogout_Loding] = useState(false)
-  const [deleteAccount_Loding, setdeleteAccount_Loding] = useState(false)
+  const [isLoding, setisLoding] = useState(false)
+  const [isPasswordUpdating, setisPasswordUpdating] = useState(false)
 
   async function logoutHandler() {
     try {
-      setLogout_Loding(true)
+      setisLoding(true)
       const res = await axios.get(logout_URL, Credentials)
       // alert("User Loggedout")
       setIsLoggedIn(false)
-      setLogout_Loding(false)
+      setisLoding(false)
       navigate("/")
     } catch (error) {
-      setLogout_Loding(false)
+      setisLoding(false)
       alert(error.response?.data?.message || "Something went wrong")
       console.error(error.response?.data?.message || "Something went wrong")
     }
@@ -30,22 +31,30 @@ export default function Profile() {
 
   async function deleteAccountHandler() {
     try {
-      setdeleteAccount_Loding(true)
+      setisLoding(true)
       const res = await axios.get(delete_URL, Credentials)
       setIsLoggedIn(false)
-      setdeleteAccount_Loding(false)
+      setisLoding(false)
       navigate("/")
     } catch (error) {
-      setdeleteAccount_Loding(false)
+      setisLoding(false)
       alert(error.response?.data?.message || "Something went wrong")
       console.error(error.response?.data?.message || "Something went wrong")
     }
   }
 
+  function PassWordPopUPHandler() {
+     setisPasswordUpdating((prev)=>{
+      sessionStorage.setItem("isPasswordUpdating", !prev)
+      return !prev
+     })
+  }
+
   return (
     <>
+      {isPasswordUpdating && <ChangePassword setisPasswordUpdating={setisPasswordUpdating} />}
       <Navbar></Navbar>
-      {(Logout_Loding || deleteAccount_Loding) && <DotLoder></DotLoder>}
+      {isLoding && <DotLoder></DotLoder>}
       <div className="bg-background-light font-display text-primary ">
         <div className="flex min-h-screen w-full flex-col">
           <main className="flex flex-1 justify-center p-4 sm:p-6 md:p-10">
@@ -116,7 +125,10 @@ export default function Profile() {
                   <p className="text-primary/60 dark:text-background-light/60">
                     Last changed 2 months ago
                   </p>
-                  <button className="flex items-center justify-center rounded bg-primary/10 dark:bg-background-light/10 px-4 py-2 text-sm font-medium hover:bg-primary/20 dark:hover:bg-background-light/20">
+                  <button
+                    onClick={PassWordPopUPHandler}
+                    className=" hover:bg-black hover:text-white p-2 transition-all duration-200 cursor-pointer  flex items-center justify-center rounded bg-primary/10 dark:bg-background-light/10 px-4 py-2 text-sm font-medium hover:bg-primary/20 dark:hover:bg-background-light/20"
+                  >
                     Change Password
                   </button>
                 </div>
@@ -140,9 +152,9 @@ export default function Profile() {
               <div className="flex justify-end ">
                 <button
                   onClick={logoutHandler}
-                  disabled={Logout_Loding}
+                  disabled={isLoding}
                   className={`${
-                    Logout_Loding ? "cursor-not-allowed" : ""
+                    isLoding ? "cursor-not-allowed" : ""
                   } flex items-center justify-center  bg-black  text-sm  text-white 
                   hover:bg-black/90 w-full sm:w-auto rounded  px-6 py-2 font-bold cursor-pointer`}
                 >
