@@ -39,7 +39,6 @@ export default function ChangePassword({ setshowPasswordPopup, setisLoding, setu
     try {
       setisLoding(true)
       const res = await axios.post(changePassword_URL, data, Credentials)
-      // setupdatedPassDate(formatToPakistaniDate(res?.data?.data[0]?.passwordUpdatedTime))
       toast.success(res?.data?.message||"Password change sucessfully")
       setisLoding(false)
       setshowPasswordPopup(false)
@@ -140,7 +139,6 @@ export default function ChangePassword({ setshowPasswordPopup, setisLoding, setu
 
               <div className="mt-10">
                 <button
-                onClick={submithandler}
                   disabled={isSubmitting}
                   type="submit"
                   className="w-full py-3 px-4 text-[15px] font-medium rounded-lg bg-black text-white hover:bg-black/90 transition-all duration-200 cursor-pointer"

@@ -1,17 +1,11 @@
-import { useEffect } from "react"
 import EfficiencyChart from "./Charts/HomePagePieCgart"
 import Calendar from "./Components/calender"
 import Navbar from "./Components/navbar"
 import Todo from "./Components/ToDo"
-import Signin from "./Pages/signin"
 import { useAuthContext } from "./Contexts/AuthProvider"
 
 function App() {
-  const { IsLoggedIn, isCheacking, Error} = useAuthContext()
-  
-  return !IsLoggedIn ? (
-    <Signin></Signin>
-  ) : (
+  return  (
     <div className="flex flex-col gap-y-[2rem] ">
       <Navbar></Navbar>
       <EfficiencyChart value={22}></EfficiencyChart>

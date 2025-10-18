@@ -21,7 +21,14 @@ ReactDOM.createRoot(root).render(
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<App />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <App />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/efficiency"
               element={
@@ -32,7 +39,9 @@ ReactDOM.createRoot(root).render(
             />
             <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/login/:intentionalRoute" element={<Login />} />
             <Route path="/signin" element={<Signin />} />
+            <Route path="/signin/:intentionalRoute" element={<Signin />} />
             <Route path="/test" element={<ChangePassword />} />
             <Route path="*" element={<div>fuc*k off</div>} />
           </Routes>

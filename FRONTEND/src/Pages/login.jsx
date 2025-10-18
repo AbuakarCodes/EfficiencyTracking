@@ -1,14 +1,16 @@
 import axios from "axios"
-import { Link, useNavigate } from "react-router"
+import { Link, useNavigate, useParams } from "react-router"
 import { useForm } from "react-hook-form"
 import { Login_URL } from "../../API_EndPoints"
 import { Credentials } from "../utils/axios_Credentials"
 import { useAuthContext } from "../Contexts/AuthProvider"
 import DotLoder from "../utils/Loders/dotLoder"
 import { toast } from "react-toastify"
+import Navbar from "../Components/navbar"
 
 export default function Login() {
-  const { IsLoggedIn, setIsLoggedIn } = useAuthContext()
+  const {intentionalRoute} =useParams()
+  const {  setIsLoggedIn } = useAuthContext()
   const navigate = useNavigate()
   const {
     register,
@@ -32,7 +34,8 @@ export default function Login() {
   return (
     <>
       {isSubmitting && <DotLoder></DotLoder>}
-      <div className="min-h-screen flex flex-col items-center justify-center text-white">
+      {intentionalRoute?<Navbar></Navbar>:""}
+      <div className={`${intentionalRoute?"min-h-[90vh]":"min-h-screen"} flex flex-col items-center justify-center text-white`}>
         <div className="py-6 px-4">
           {/* ---- Form Section ---- */}
           <div className="border border-black/20 rounded-2xl p-8 max-w-md shadow-[0_0_25px_-5px_rgba(255,255,255,0.2)]  backdrop-blur max-lg:mx-auto">
@@ -98,7 +101,7 @@ export default function Login() {
                 <p className="text-sm mt-6 text-center text-gray-400">
                   Don't have an account?{" "}
                   <Link
-                    to={"/signin"}
+                    to={intentionalRoute?"/signin/:intentionalRoute":"/signin"}
                     className="text-black underline hover:opacity-80"
                   >
                     SignUp here
