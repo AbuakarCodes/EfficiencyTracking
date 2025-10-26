@@ -8,6 +8,7 @@ import { useAuthContext } from "../Contexts/AuthProvider"
 import DotLoder from "../utils/Loders/dotLoder"
 import SignInSVG from "../assets/SignInSVG.svg"
 import Navbar from "../Components/navbar";
+import InitialAnimation from "../utils/MotionComponents/InitialAnimation";
 
 export default function Signin() {
   const { setIsLoggedIn } = useAuthContext()
@@ -48,7 +49,7 @@ export default function Signin() {
   
   return (
     
-    <>
+    <InitialAnimation>
     {isSubmitting && <DotLoder></DotLoder>}
     {intentionalRoute?<Navbar></Navbar>:""}
       <div className={`${intentionalRoute?"min-h-[90vh]":"min-h-screen"} flex flex-col items-center justify-center text-white`}>
@@ -158,6 +159,6 @@ export default function Signin() {
           </div>
         </div>
       </div>
-    </>
+    </InitialAnimation>
   )
 }

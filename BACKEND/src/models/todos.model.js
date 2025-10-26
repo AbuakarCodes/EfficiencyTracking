@@ -11,12 +11,16 @@ const todoSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
+    date_id:{type:String,required:true},
     day: { type: Number, required: true },
     month: { type: Number, required: true },
     year: { type: Number, required: true },
 
-    totalTasks: { type: Number, default: 0 },
-    completedTasks: { type: Number, default: 0 },
+    totalTodoTasks: { type: Number, default: 0 },
+    completedTodoTasks: { type: Number, default: 0 },
+    // The date (day) we define as a id
+    dayEfficiency:{ type: Number, default: 0 },
+    qotes:{type:string, required:true},
 
     goals: [goalSchema],
 });

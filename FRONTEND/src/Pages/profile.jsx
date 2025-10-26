@@ -8,6 +8,7 @@ import DotLoder from "../utils/Loders/dotLoder"
 import { useAuthContext } from "../Contexts/AuthProvider.jsx"
 import ChangePassword from "../Components/ChangePassword.jsx"
 import { toast } from "react-toastify"
+import InitialAnimation from "../utils/MotionComponents/InitialAnimation.jsx"
 
 export default function Profile() {
   const navigate = useNavigate()
@@ -56,7 +57,7 @@ export default function Profile() {
   }
 
   return (
-    <>
+    <InitialAnimation>
       {showPasswordPopup && (
         <ChangePassword
           setisLoding={setisLoding}
@@ -196,6 +197,6 @@ export default function Profile() {
           </main>
         </div>
       </div>
-    </>
+    </InitialAnimation>
   )
 }

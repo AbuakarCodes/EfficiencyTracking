@@ -1,27 +1,65 @@
-import React, { useState } from "react";
+import { useRef, useState } from "react"
+import { CalenderButton } from "../utils/CalenderButtons.jsx"
+import dayjs from "dayjs"
+import { useNavigate } from "react-router"
 
 export default function Calendar() {
-  const [date, setDate] = useState(new Date());
+  const isLongPress = useRef(false)
+  const timer = useRef(null)
+  const navigate = useNavigate()
 
-  const year = date.getFullYear();
-  const month = date.getMonth(); 
-  const today = date.getDate();
+  const [date, setDate] = useState(new Date())
+
+  const year = date.getFullYear()
+  const month = date.getMonth()
+  const today = date.getDate()
 
   // Get first and last day of month
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDay = new Date(year, month, 1).getDay()
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
 
   // Create days array
-  const days = [];
-  for (let i = 0; i < firstDay; i++) days.push(null); // empty cells before 1st day
-  for (let i = 1; i <= daysInMonth; i++) days.push(i);
+  const days = []
 
+  for (let i = 0; i < firstDay; i++) days.push(null) // empty cells before 1st day
+  for (let i = 1; i <= daysInMonth; i++) days.push(i)
 
   // Month names
   const months = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December"
-  ];
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ]
+
+  // handlers
+
+  const startPress = () => {
+    timer.current = setTimeout(() => {
+      isLongPress.current = true
+    }, 600)
+  }
+
+  const endPress = () => {
+    clearTimeout(timer.current)
+   
+  }
+
+  const onclickHandler = (e) => {
+    if (isLongPress.current) {
+      console.log(e.target.id)
+    } else {
+      navigate("/efficiency")
+    }
+  }
 
   return (
     <div className="flex justify-center items-center  bg-white text-black">
@@ -55,19 +93,25 @@ export default function Calendar() {
         {/* Days */}
         <div className="grid grid-cols-7 text-center gap-y-2">
           {days.map((day, index) => (
-            <div
+            <button
+              id={dayjs(new Date(year, month, day)).format("D/M/YYYY")}
+              onMouseDown={startPress}
+              onMouseUp={endPress}
+              onMouseLeave={endPress}
+              onTouchStart={startPress}
+              onTouchEnd={endPress}
+              onClick={onclickHandler}
               key={index}
               className={`p-2 rounded-full ${
-                day === today
-                  ? "bg-black text-white font-semibold"
-                  : "hover:bg-gray-200"
+                day === today ? "bg-black text-white font-semibold": "hover:bg-gray-200"
+
               }`}
             >
-              {day || ""}
-            </div>
+              {day}
+            </button>
           ))}
         </div>
       </div>
     </div>
-  );
+  )
 }

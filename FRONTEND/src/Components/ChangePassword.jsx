@@ -8,6 +8,7 @@ import { toast } from "react-toastify"
 import { useState } from "react"
 import { changePassword_URL } from "../../API_EndPoints"
 import { Credentials } from "../utils/axios_Credentials"
+import InitialAnimation from "../utils/MotionComponents/InitialAnimation"
 
 export default function ChangePassword({ setshowPasswordPopup, setisLoding, setupdatedPassDate }) {
   const [isBorderRed, setisBorderRed] = useState(false)
@@ -50,7 +51,7 @@ export default function ChangePassword({ setshowPasswordPopup, setisLoding, setu
     }
   }
   return (
-    <>
+    <InitialAnimation Y={0} >
       {isSubmitting && <DotLoder></DotLoder>}
       <div className="fixed inset-0 bg-black/55 min-h-screen flex flex-col items-center justify-center">
         <div className="py-6 px-4">
@@ -150,6 +151,6 @@ export default function ChangePassword({ setshowPasswordPopup, setisLoding, setu
           </div>
         </div>
       </div>
-    </>
+    </InitialAnimation>
   )
 }

@@ -1,8 +1,8 @@
-import { useAppContext } from "../../hooks/useCustomContext.jsx"
+ import { useAppContext } from "../../hooks/useCustomContext.jsx"
 
 export default function ToggleButton() {
   const { showComparision, setshowComparision } = useAppContext()
-  function ToggleButton(params) {
+  function ToggleButton() {
     setshowComparision((prev) => {
       sessionStorage.setItem("comparision_Togel", !prev)
       return !prev

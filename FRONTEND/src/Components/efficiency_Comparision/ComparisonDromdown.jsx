@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useAppContext } from "../../hooks/useCustomContext.jsx"
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
+import InitialAnimation from "../../utils/MotionComponents/InitialAnimation.jsx";
 
 
 export default function Dropdown() {
@@ -20,6 +21,7 @@ export default function Dropdown() {
   }
 
   return (
+  <InitialAnimation>
     <div className="relative inline-block text-left ">
       {/* Main button */}
       <button
@@ -45,5 +47,6 @@ export default function Dropdown() {
         </div>
       )}
     </div>
+  </InitialAnimation>
   )
 }

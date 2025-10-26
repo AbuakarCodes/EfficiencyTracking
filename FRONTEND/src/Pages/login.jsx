@@ -7,6 +7,7 @@ import { useAuthContext } from "../Contexts/AuthProvider"
 import DotLoder from "../utils/Loders/dotLoder"
 import { toast } from "react-toastify"
 import Navbar from "../Components/navbar"
+import InitialAnimation from "../utils/MotionComponents/InitialAnimation"
 
 export default function Login() {
   const {intentionalRoute} =useParams()
@@ -32,7 +33,7 @@ export default function Login() {
   }
 
   return (
-    <>
+    <InitialAnimation>
       {isSubmitting && <DotLoder></DotLoder>}
       {intentionalRoute?<Navbar></Navbar>:""}
       <div className={`${intentionalRoute?"min-h-[90vh]":"min-h-screen"} flex flex-col items-center justify-center text-white`}>
@@ -112,6 +113,6 @@ export default function Login() {
           </div>
         </div>
       </div>
-    </>
+    </InitialAnimation>
   )
 }

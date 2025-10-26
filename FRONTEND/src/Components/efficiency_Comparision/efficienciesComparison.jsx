@@ -1,12 +1,13 @@
 import Comparison_LineChart from "../../Charts/ComparisionChart.jsx"
 import { useAppContext } from "../../hooks/useCustomContext.jsx"
+import InitialAnimation from "../../utils/MotionComponents/InitialAnimation.jsx"
 import PeriodSelector from "./ComparisionDate"
 import ToggleButton from "./ComparisionTogel"
 import Dropdown from "./ComparisonDromdown"
 function EfficienciesComparison() {
   const { showComparision } = useAppContext()
   return (
-    <>
+    <InitialAnimation>
       <div className="container mx-auto flex flex-col  gap-y-2.5">
         <h1 className="p-4 text-[2rem] italic">Chart</h1>
         <div className=" flex flex-col gap-y-[1rem]  md:p-5 p-4 rounded-[.3rem] border-black/20 border-[1px]">
@@ -20,7 +21,7 @@ function EfficienciesComparison() {
           <Comparison_LineChart />
         </div>
       </div>
-    </>
+    </InitialAnimation>
   )
 }
 

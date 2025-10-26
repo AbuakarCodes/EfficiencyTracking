@@ -1,7 +1,7 @@
-import { BrowserRouter, Route, Routes } from "react-router"
+import { BrowserRouter, Route, Routes, useLocation } from "react-router"
 import { AppProvider } from "./Contexts/globalContext"
 import { ToastContainer } from "react-toastify"
-import App from "./app"
+
 import "./index.css"
 import "react-toastify/dist/ReactToastify.css"
 import ReactDOM from "react-dom/client"
@@ -12,43 +12,57 @@ import Profile from "./Pages/profile"
 import { AuthProvider } from "./Contexts/AuthProvider"
 import { ProtectedRoute } from "./utils/ProtectedRoute"
 import ChangePassword from "./Components/ChangePassword"
+import App from "./App"
+import { AnimatePresence } from "framer-motion"
 
-const root = document.getElementById("root")
+function AnimatedRoutes() {
+  const location = useLocation()
 
-ReactDOM.createRoot(root).render(
-  <>
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <App />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/efficiency"
+          element={
+            <ProtectedRoute>
+              <Efficiency />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/login/:intentionalRoute" element={<Login />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signin/:intentionalRoute" element={<Signin />} />
+        <Route path="/test" element={<ChangePassword />} />
+        <Route path="*" element={<div>404 Not Found</div>} />
+      </Routes>
+    </AnimatePresence>
+  )
+}
+
+// 👇 Step 2: Root component (BrowserRouter wraps AnimatePresence)
+function Root() {
+  return (
     <AppProvider>
       <AuthProvider>
         <BrowserRouter>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <App />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/efficiency"
-              element={
-                <ProtectedRoute>
-                  <Efficiency />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/login/:intentionalRoute" element={<Login />} />
-            <Route path="/signin" element={<Signin />} />
-            <Route path="/signin/:intentionalRoute" element={<Signin />} />
-            <Route path="/test" element={<ChangePassword />} />
-            <Route path="*" element={<div>fuc*k off</div>} />
-          </Routes>
+          <AnimatedRoutes />
         </BrowserRouter>
+        <ToastContainer position="top-right" autoClose={1000} />
       </AuthProvider>
     </AppProvider>
+  )
+}
 
-    <ToastContainer position="top-right" autoClose={1000} />
-  </>
-)
+const root = document.getElementById("root")
+ReactDOM.createRoot(root).render(<Root />)
