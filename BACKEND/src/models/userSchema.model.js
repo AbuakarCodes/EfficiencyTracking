@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
-import bcrypt, { hash } from "bcrypt"
+import bcrypt, { hash } from "bcrypt" 
 import jwt from "jsonwebtoken";
 const { Schema } = mongoose;
 

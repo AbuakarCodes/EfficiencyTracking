@@ -11,9 +11,7 @@ const Login = async (req, res, next) => {
 
     try {
         const { email, password } = req.body;
-        console.log(password)
         if (!email || !password) return res.status(404).json(new ErrorClass("Email and password are required"));
-
 
         const user = await User.findOne({ email });
         if (!user) return res.status(404).json(new ErrorClass("User not found", 404));
@@ -32,7 +30,7 @@ const Login = async (req, res, next) => {
 
         // 🔹 Case 2: Cookies exist → validate tokens
         try {
-            jwt.verify(req.cookies.accesssToken, process.env.ACCESS_TOKEN_SECRET);
+            const verifiedToken = jwt.verify(req.cookies.accesssToken, process.env.ACCESS_TOKEN_SECRET);
             return res
                 .status(200)
                 .json(new responseClass("User logged in with valid access token", [], 200));

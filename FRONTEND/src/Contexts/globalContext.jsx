@@ -5,7 +5,11 @@ const AppContext = createContext()
 export function AppProvider({ children }) {
   // Comparison Dropdown
   const [dataDropdownselected, setdataDropdownselected] = useState("Day")
-  const [showComparision, setshowComparision] = useState(sessionStorage.getItem("comparision_Togel") || false)
+  const [showComparision, setshowComparision] = useState(
+    sessionStorage.getItem("comparision_Togel") || false
+  )
+
+  // home Page
 
   const value = {
     dataDropdownselected,

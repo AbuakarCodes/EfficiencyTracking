@@ -3,7 +3,7 @@ import { setCookies } from "../utils/COOKIES/AlingingCookies.js"
 import { ErrorClass } from "../utils/ErrorClass.js"
 import { responseClass } from "../utils/responseClass.js"
 
-const register = async (req, res, next) => {
+const register = async (req, res, next) => { 
 
     const { name, email, password } = req.body
     if (!email || !password)

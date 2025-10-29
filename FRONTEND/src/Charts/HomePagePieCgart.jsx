@@ -2,15 +2,17 @@ import React from "react"
 import { Doughnut } from "react-chartjs-2"
 import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js"
 import InitialAnimation from "../utils/MotionComponents/InitialAnimation"
+import { useTodoContext } from "../Contexts/TodosAPIContext"
 
 // Register chart components
 ChartJS.register(ArcElement, Tooltip)
 
-export default function EfficiencyChart({ value = 75 }) {
+export default function EfficiencyChart() {
+  const {specificDateEfficiency} = useTodoContext()
   const data = {
     datasets: [
       {
-        data: [value, 100 - value],
+        data: [specificDateEfficiency, 100 - specificDateEfficiency],
         backgroundColor: ["#000", "#e5e5e5"],
         borderWidth: 0,
         cutout: "85%",
@@ -30,7 +32,7 @@ export default function EfficiencyChart({ value = 75 }) {
         <div className="w-42 h-42 relative">
           <Doughnut data={data} options={options} />
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-3xl font-semibold text-black">{value}%</span>
+            <span className="text-3xl font-semibold text-black">{specificDateEfficiency}%</span>
           </div>
           <p className="text-center mt-1">
             {new Date().toLocaleDateString("en-GB")}

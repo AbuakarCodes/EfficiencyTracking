@@ -3,6 +3,7 @@ dotenv.config();
 import { dbConnection } from "./db/dbConection.js";
 import { app } from "./app.js";
 import { Route } from "./Router/userRouter.js"
+import { TodoRoute } from "./Router/TodoRouter.js";
 
 dbConnection()
     .then(() => {
@@ -14,3 +15,4 @@ dbConnection()
 
 
 app.use("/users", Route)
+app.use("/todos", TodoRoute)

@@ -7,7 +7,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [IsLoggedIn, setIsLoggedIn] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
-  const [userId, setUserId] = useState(null);
+  const [user_Id, setUser_Id] = useState(null);
   const [error, setError] = useState({ state: false, message: "" });
 
   // Check login status once app loads
@@ -20,7 +20,7 @@ export function AuthProvider({ children }) {
           res.data?.data?.isLoggedin === true
         ) {
           setIsLoggedIn(true);
-          setUserId(res.data?.data?.users_id);
+          setUser_Id(res.data?.data?.users_id);
           setError({ state: false, message: "" });
         } else {
           setIsLoggedIn(false);
@@ -46,8 +46,8 @@ export function AuthProvider({ children }) {
         setIsLoggedIn,
         isChecking,
         error,
-        userId,
-        setUserId,
+        user_Id,
+        setUser_Id,
       }}
     >
       {children}
