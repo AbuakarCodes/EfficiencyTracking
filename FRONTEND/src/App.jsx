@@ -13,12 +13,10 @@ function App() {
           <InitialAnimation>
             <Navbar></Navbar>
           </InitialAnimation>
-
+          {/* chart */}
           <InitialAnimation>
-            <EfficiencyChart value={22} />
+            <EfficiencyChart  />
           </InitialAnimation>
-
-          {/* Calender TODO */}
 
           <div className="container p-4 flex flex-col md:flex-row  mx-auto">
             {/* Calender */}

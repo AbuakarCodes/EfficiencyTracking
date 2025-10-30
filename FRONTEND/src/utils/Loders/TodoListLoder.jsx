@@ -5,7 +5,7 @@ function TodoListLoder() {
         {[...Array(7)].map((_, i) => (
           <li
             key={i}
-            className="flex items-center justify-between border border-gray-200/70 rounded-md p-2 animate-pulse"
+            className="flex items-center justify-between border border-gray-200/70 rounded-md p-1 animate-pulse"
           >
             <div className="flex-1 min-w-0">
               <div className="h-5 bg-gray-200/70 rounded w-[95%] mb-1"></div>

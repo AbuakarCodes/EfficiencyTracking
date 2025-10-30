@@ -11,22 +11,28 @@ import { apiCall_deleteTodo } from "../utils/todoAPIcalls/apiCall_deleteTodo.jsx
 import TodoListLoder from "../utils/Loders/TodoListLoder.jsx"
 
 export default function TodoComponent() {
-  const { API_goals, API_dateID } = useTodoContext()
-  const { setspecificDateEfficiency } = useTodoContext()
-  const { sendApiData } = useTodoContext()
-  const { user_Id } = useAuthContext()
-  const [isLoding, setisLoding] = useState(false)
-  const [Todos, setTodos] = useState([])
+  const [input, setInput] = useState("")
+  const {
+    API_goals,
+    sendApiData,
+    API_dateID,
+    setspecificDateEfficiency,
+    Todos,
+    setTodos,
+    isTodoLoding,
+    setisTodoLoding,
+  } = useTodoContext()
+
   useEffect(() => {
     ;(async function () {
-      setisLoding(true)
-      const { RemoteTodo } = await apiCall_fetchRemoteTodos(setspecificDateEfficiency)
-      setisLoding(false)
+      const RemoteTodo = await apiCall_fetchRemoteTodos(
+        API_dateID,
+        setisTodoLoding,
+        setspecificDateEfficiency
+      )
       setTodos(RemoteTodo)
     })()
   }, [])
-
-  const [input, setInput] = useState("")
 
   const addTodo = () => {
     if (input.trim() === "") return
@@ -65,16 +71,14 @@ export default function TodoComponent() {
   async function addAPI(newTodo) {
     try {
       API_goals.current.goals = newTodo
-
-      sendApiData.current["user_id"] = user_Id
       sendApiData.current["date_id"] = API_dateID.current[0]
       sendApiData.current["month"] = dayjs(API_dateID.current[0]).month() + 1
       sendApiData.current["year"] = dayjs(API_dateID.current[0]).year()
       sendApiData.current["goals"] = API_goals.current.goals
 
-      apiCall_addTodos(addupdateTodo_url, sendApiData.current)
+      apiCall_addTodos(addupdateTodo_url, sendApiData.current, setspecificDateEfficiency)
     } catch (error) {
-      console.log("error")
+      console.log(error?.message)
     }
   }
 
@@ -105,7 +109,7 @@ export default function TodoComponent() {
 
         {/* To-Do Items */}
         <div className=" overflow-x-auto max-h-[20rem] no-scrollbar scroll-smooth  ">
-          {isLoding ? (
+          {isTodoLoding ? (
             <TodoListLoder />
           ) : (
             <>

@@ -1,15 +1,11 @@
 import dayjs from "dayjs"
-import { useRef, useState } from "react"
-import { useNavigate } from "react-router"
+import { useState } from "react"
 import { useTodoContext } from "../Contexts/TodosAPIContext.jsx"
 import { months } from "../utils/Data_Bytes.js"
+import { apiCall_fetchRemoteTodos } from "../utils/todoAPIcalls/apiCall_fetchRemoteTodos.jsx"
 
 export default function Calendar() {
-  const { API_dateID } = useTodoContext()
-  const [isSettingTodos, setIsSettingTodos] = useState(false)
-  const isLongPress = useRef(false)
-  const timer = useRef(null)
-  const navigate = useNavigate()
+  const { API_dateID, setTodos, setisTodoLoding, setspecificDateEfficiency } = useTodoContext()
 
   const [date, setDate] = useState(dayjs())
 
@@ -25,35 +21,10 @@ export default function Calendar() {
     i < firstDay ? null : i - firstDay + 1
   )
 
-  // Long press handlers
-  const startPress = () => {
-    isLongPress.current = false
-    timer.current = setTimeout(() => {
-      isLongPress.current = true
-    }, 600)
-  }
-
-  const endPress = () => {
-    clearTimeout(timer.current)
-  }
-
-  const onClickHandler = (e) => {
-    if (!e.target.id) return
-
-    if (isLongPress.current || isSettingTodos) {
-      // ✅ safer: check if API_dateID exists and avoid mutation if possible
-      if (Array.isArray(API_dateID.current)) {
-        if (!API_dateID.current.includes(e.target.id)) {
-          API_dateID.current.push(e.target.id)
-          console.log("Added:", e.target.id)
-        }
-      }
-    } else {
-      navigate("/efficiency")
-    }
-
-    // Reset long press state
-    isLongPress.current = false
+  const onClickHandler = async (e) => {
+    API_dateID.current[0] = e.target.id
+    const RemoteTodos = await apiCall_fetchRemoteTodos(API_dateID, setisTodoLoding, setspecificDateEfficiency)
+    setTodos(RemoteTodos)
   }
 
   const goPrevMonth = () => setDate(date.subtract(1, "month"))
@@ -95,11 +66,6 @@ export default function Calendar() {
               <button
                 key={index}
                 id={dayjs(`${year}-${month}-${day}`).format("YYYY/M/D")}
-                onMouseDown={startPress}
-                onMouseUp={endPress}
-                onMouseLeave={endPress}
-                onTouchStart={startPress}
-                onTouchEnd={endPress}
                 onClick={onClickHandler}
                 className={`p-2 rounded-full ${
                   day === today
@@ -114,8 +80,11 @@ export default function Calendar() {
         </div>
       </div>
 
-      <button onClick={() => setIsSettingTodos((prev) => !prev)}>
-        setTodos
+      <button
+        className="p-4 bg-black text-white cursor-pointer  "
+        onClick={() => setisMultiTodo((prev) => !prev)}
+      >
+        Schedule Tasks
       </button>
     </>
   )

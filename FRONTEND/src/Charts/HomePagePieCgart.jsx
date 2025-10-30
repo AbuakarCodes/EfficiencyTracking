@@ -32,7 +32,7 @@ export default function EfficiencyChart() {
         <div className="w-42 h-42 relative">
           <Doughnut data={data} options={options} />
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-3xl font-semibold text-black">{specificDateEfficiency}%</span>
+            <span className="text-3xl font-semibold text-black">{Math.trunc(specificDateEfficiency)}%</span>
           </div>
           <p className="text-center mt-1">
             {new Date().toLocaleDateString("en-GB")}
