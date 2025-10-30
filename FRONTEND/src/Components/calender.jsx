@@ -1,11 +1,23 @@
 import dayjs from "dayjs"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTodoContext } from "../Contexts/TodosAPIContext.jsx"
 import { months } from "../utils/Data_Bytes.js"
 import { apiCall_fetchRemoteTodos } from "../utils/todoAPIcalls/apiCall_fetchRemoteTodos.jsx"
 
 export default function Calendar() {
-  const { API_dateID, setTodos, setisTodoLoding, setspecificDateEfficiency } = useTodoContext()
+  const {
+    API_dateID,
+    setTodos,
+    setisTodoLoding,
+    setspecificDateEfficiency,
+    sethomePageChartDate,
+    isMultipleTask,
+    setisMultipleTask,
+  } = useTodoContext()
+
+  useEffect(() => {
+    isMultipleTask ? (API_dateID.current = []) : null
+  }, [isMultipleTask])
 
   const [date, setDate] = useState(dayjs())
 
@@ -21,14 +33,27 @@ export default function Calendar() {
     i < firstDay ? null : i - firstDay + 1
   )
 
-  const onClickHandler = async (e) => {
-    API_dateID.current[0] = e.target.id
-    const RemoteTodos = await apiCall_fetchRemoteTodos(API_dateID, setisTodoLoding, setspecificDateEfficiency)
-    setTodos(RemoteTodos)
-  }
-
   const goPrevMonth = () => setDate(date.subtract(1, "month"))
   const goNextMonth = () => setDate(date.add(1, "month"))
+
+  const onClickHandler = async (e) => {
+    if (isMultipleTask) {
+      API_dateID.current = Array.from(
+        new Set([...API_dateID.current, e.target.id])
+      )
+      return
+    }
+
+    // Setting Single tasks
+    API_dateID.current[0] = e.target.id
+    sethomePageChartDate(dayjs(e.target.id).format("DD/MM/YY"))
+    const RemoteTodos = await apiCall_fetchRemoteTodos(
+      API_dateID,
+      setisTodoLoding,
+      setspecificDateEfficiency
+    )
+    setTodos(RemoteTodos)
+  }
 
   return (
     <>
@@ -61,17 +86,19 @@ export default function Calendar() {
           </div>
 
           {/* Days */}
-          <div className="grid grid-cols-7 text-center gap-y-2">
+          <div className="grid grid-cols-7 text-center  gap-y-2">
             {days.map((day, index) => (
               <button
                 key={index}
                 id={dayjs(`${year}-${month}-${day}`).format("YYYY/M/D")}
                 onClick={onClickHandler}
-                className={`p-2 rounded-full ${
-                  day === today
-                    ? "bg-black text-white font-semibold"
-                    : "hover:bg-gray-200"
-                }`}
+                className={`p-2  border rounded-full cursor-pointer
+                        ${isMultipleTask ? "border-black" : "border-white"}
+                        ${
+                          day === today
+                            ? "bg-black text-white font-semibold"
+                            : "hover:bg-gray-200"
+                        }`}
               >
                 {day}
               </button>
@@ -80,12 +107,14 @@ export default function Calendar() {
         </div>
       </div>
 
-      <button
-        className="p-4 bg-black text-white cursor-pointer  "
-        onClick={() => setisMultiTodo((prev) => !prev)}
-      >
-        Schedule Tasks
-      </button>
+      <div className="flex items-center justify-center">
+        <button
+          className="p-4 bg-black text-white cursor-pointer w-70  "
+          onClick={() => setisMultipleTask((prev) => !prev)}
+        >
+          {isMultipleTask ? "single task" : "Multiple"}
+        </button>
+      </div>
     </>
   )
 }

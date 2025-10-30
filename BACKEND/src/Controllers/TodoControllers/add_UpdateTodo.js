@@ -1,3 +1,4 @@
+import dayjs from "dayjs"
 import { Todo } from "../../models/todos.model.js";
 import { User } from "../../models/userSchema.model.js";
 import { ErrorClass } from "../../utils/ErrorClass.js";
@@ -5,9 +6,8 @@ import { responseClass } from "../../utils/responseClass.js";
 
 export const add_UpdateTodos = async (req, res, next) => {
   try {
-    const { date_id, month, year, goals } = req.body;
+    const { date_id, goals } = req.body;
     const { id } = req.user;
-    console.log("user_id", id)
 
     if (!id || !date_id || !goals) {
       return res.status(400).json(new ErrorClass("Missing required fields"));
@@ -35,19 +35,17 @@ export const add_UpdateTodos = async (req, res, next) => {
       },
       { new: true }
     );
-    // console.log("updatedTodo", updatedTodo)
     if (updatedTodo) {
       return res
         .status(200)
         .json(new responseClass("Todo updated successfully", updatedTodo, 200));
     }
 
-    console.log("creating a new Todo")
     const newTodo = await Todo.create({
       user_id: id,
       date_id,
-      month,
-      year,
+      month: dayjs(date_id).month() + 1,
+      year: dayjs(date_id).year(),
       totalTodoTasks,
       completedTodoTasks,
       dayEfficiency,

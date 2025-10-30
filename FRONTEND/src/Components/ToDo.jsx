@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid"
 import { useEffect, useState } from "react"
 import { useTodoContext } from "../Contexts/TodosAPIContext"
 import { useAuthContext } from "../Contexts/AuthProvider"
-import { addupdateTodo_url } from "../../API_EndPoints"
+import { add_MultipleTodos_URL, addupdateTodo_url } from "../../API_EndPoints"
 import { apiCall_addTodos } from "../utils/todoAPIcalls/apiCall_addTodos.jsx"
 import { apiCall_fetchRemoteTodos } from "../utils/todoAPIcalls/apiCall_fetchRemoteTodos.jsx"
 import { apiCall_changeTodoState } from "../utils/todoAPIcalls/apiCall_changeTodoState.jsx"
@@ -21,6 +21,8 @@ export default function TodoComponent() {
     setTodos,
     isTodoLoding,
     setisTodoLoding,
+    isMultipleTask,
+    setisMultipleTask,
   } = useTodoContext()
 
   useEffect(() => {
@@ -46,7 +48,15 @@ export default function TodoComponent() {
     setInput("")
 
     // API call
-    addAPI(UpdatedTodos)
+    apiDataBundel(UpdatedTodos)
+    apiCall_addTodos(
+      isMultipleTask ? add_MultipleTodos_URL : addupdateTodo_url,
+      sendApiData.current,
+      setspecificDateEfficiency
+    )
+    if (isMultipleTask) {
+    } else {
+    }
   }
 
   const toggleTodo = (id) => {
@@ -68,15 +78,12 @@ export default function TodoComponent() {
   }
 
   // Api Functions
-  async function addAPI(newTodo) {
+  async function apiDataBundel(newTodo) {
     try {
       API_goals.current.goals = newTodo
-      sendApiData.current["date_id"] = API_dateID.current[0]
-      sendApiData.current["month"] = dayjs(API_dateID.current[0]).month() + 1
-      sendApiData.current["year"] = dayjs(API_dateID.current[0]).year()
+      if (isMultipleTask) sendApiData.current["date_id"] = API_dateID.current
+      else sendApiData.current["date_id"] = API_dateID.current[0]
       sendApiData.current["goals"] = API_goals.current.goals
-
-      apiCall_addTodos(addupdateTodo_url, sendApiData.current, setspecificDateEfficiency)
     } catch (error) {
       console.log(error?.message)
     }

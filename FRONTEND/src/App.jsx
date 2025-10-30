@@ -11,7 +11,7 @@ function App() {
       <ToDoApiProvider>
         <div className="flex flex-col gap-y-[2rem] ">
           <InitialAnimation>
-            <Navbar></Navbar>
+            <Navbar/>
           </InitialAnimation>
           {/* chart */}
           <InitialAnimation>

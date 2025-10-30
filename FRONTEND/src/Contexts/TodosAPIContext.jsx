@@ -6,11 +6,13 @@ const TodoContext = createContext()
 export const useTodoContext = () => useContext(TodoContext)
 
 export function ToDoApiProvider({ children }) {
+  const Today = dayjs().format("YYYY/MM/DD")
   const [Todos, setTodos] = useState([])
   const [isTodoLoding, setisTodoLoding] = useState(false)
   const [specificDateEfficiency, setspecificDateEfficiency] = useState(0)
+  const [homePageChartDate, sethomePageChartDate] = useState(dayjs().format("DD/MM/YYYY"))
+  const [isMultipleTask, setisMultipleTask] = useState(false)
 
-  const Today = dayjs().format("YYYY/MM/DD")
   let API_dateID = useRef([Today])
   let API_goals = useRef({ goals: [] })
   const sendApiData = useRef({})
@@ -25,6 +27,10 @@ export function ToDoApiProvider({ children }) {
     sendApiData,
     specificDateEfficiency,
     setspecificDateEfficiency,
+    homePageChartDate,
+    sethomePageChartDate,
+    isMultipleTask,
+    setisMultipleTask
   }
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>
