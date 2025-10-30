@@ -59,12 +59,12 @@ export default function TodoComponent() {
       (element) => element.todo_id == id
     ).isCompleted
     setTodos(TogeledTodo)
-    apiCall_changeTodoState(API_dateID, id, newState)
+    apiCall_changeTodoState(API_dateID, id, newState, setspecificDateEfficiency)
   }
 
   const deleteTodo = (id) => {
     setTodos(Todos.filter((element) => element.todo_id !== id))
-    apiCall_deleteTodo(API_dateID, id)
+    apiCall_deleteTodo(API_dateID, id, setspecificDateEfficiency)
   }
 
   // Api Functions

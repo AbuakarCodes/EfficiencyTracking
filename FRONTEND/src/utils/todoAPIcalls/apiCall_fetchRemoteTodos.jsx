@@ -21,6 +21,7 @@ export async function apiCall_fetchRemoteTodos(
     setisTodoLoding(false)
     return RemoteTodo
   } catch (error) {
+    setspecificDateEfficiency(0)
     setisTodoLoding(false)
     return []
   }

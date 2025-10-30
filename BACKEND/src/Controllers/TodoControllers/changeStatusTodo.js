@@ -17,9 +17,33 @@ export const changeStatusTodo = async (req, res, next) => {
             { new: true }
         );
 
+        if (!updatedTodo)
+            return res
+                .status(404)
+                .json(new ErrorClass("Todo or goal not found", 404));
+
+        //  Recalculate totals and efficiency
+        const totalTodoTasks = updatedTodo.goals.length;
+        const completedTodoTasks = updatedTodo.goals.filter(
+            (goal) => goal.isCompleted
+        ).length;
+
+        // Avoid division by zero
+        const dayEfficiency =
+            totalTodoTasks > 0
+                ? Math.round((completedTodoTasks / totalTodoTasks) * 100)
+                : 0;
+
+        //  Update calculated fields
+        updatedTodo.totalTodoTasks = totalTodoTasks;
+        updatedTodo.completedTodoTasks = completedTodoTasks;
+        updatedTodo.dayEfficiency = dayEfficiency;
+
+        await updatedTodo.save();
+
         if (!updatedTodo) return res.status(404).json(new ErrorClass("Todo or goal not found", 404));
 
-        res.status(200).json(new responseClass("Goal completion state toggled", null, 200))
+        res.status(200).json(new responseClass("Goal completion state toggled", updatedTodo, 200))
 
     } catch (error) {
         console.log(error.message);
