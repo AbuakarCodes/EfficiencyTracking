@@ -8,10 +8,12 @@ import { clearCookies, setCookies } from "../utils/COOKIES/AlingingCookies.js"
 
 const Login = async (req, res, next) => {
     const { accesssToken, refreshToken } = req.cookies
+    console.log(req.body)    
 
     try {
-        const { email, password } = req.body;
+        const { email, password, login_another_account } = req.body;
         if (!email || !password) return res.status(404).json(new ErrorClass("Email and password are required"));
+        console.log(req.body)
 
         const user = await User.findOne({ email });
         if (!user) return res.status(404).json(new ErrorClass("User not found", 404));
@@ -20,12 +22,12 @@ const Login = async (req, res, next) => {
         if (!isCorrectPass) return res.status(401).json(new ErrorClass("Password is incorrect", 401));
 
         // 🔹 Case 1: No cookies (first login)
-        if (!accesssToken || !refreshToken) {
+        if (!accesssToken || !refreshToken || login_another_account ) {
             const accessToken = user.generateAccessToken();
             const refreshToken = user.generateRefreshToken();
 
             setCookies(res, "accesssToken", accessToken, "refreshToken", refreshToken)
-            return res.status(200).json(new responseClass("User logged in (witout cookies)", [], 200));
+            return res.status(200).json(new responseClass("User logged in (witout cookies)", user, 200));
         }
 
         // 🔹 Case 2: Cookies exist → validate tokens
@@ -33,7 +35,7 @@ const Login = async (req, res, next) => {
             const verifiedToken = jwt.verify(req.cookies.accesssToken, process.env.ACCESS_TOKEN_SECRET);
             return res
                 .status(200)
-                .json(new responseClass("User logged in with valid access token", [], 200));
+                .json(new responseClass("User logged in with valid access token", user, 200));
         } catch (err) {
             if (err.name === "TokenExpiredError") {
                 // Access token expired → try refresh token
@@ -45,7 +47,7 @@ const Login = async (req, res, next) => {
                     const newRefreshToken = user.generateRefreshToken();
                     setCookies(res, "accesssToken", newAccessToken, "refreshToken", newRefreshToken)
 
-                    return res.status(200).json(new responseClass("New tokens issued", [], 200));
+                    return res.status(200).json(new responseClass("New tokens issued", user, 200));
                 }
                 catch (refreshErr) {
                     if (refreshErr.name === "TokenExpiredError") {

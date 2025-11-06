@@ -10,8 +10,9 @@ import Navbar from "../Components/navbar"
 import InitialAnimation from "../utils/MotionComponents/InitialAnimation"
 
 export default function Login() {
-  const {intentionalRoute} =useParams()
-  const {  setIsLoggedIn } = useAuthContext()
+  const { intentionalRoute } = useParams()
+  const { setIsLoggedIn, setUser } = useAuthContext()
+
   const navigate = useNavigate()
   const {
     register,
@@ -22,21 +23,31 @@ export default function Login() {
   } = useForm()
 
   async function submithandler(data) {
+    if (intentionalRoute) data["login_another_account"] = true
+    else data["login_another_account"] = false
+
     try {
       const res = await axios.post(Login_URL, data, Credentials)
+      setUser(res?.data?.data || {})
       reset()
       setIsLoggedIn(true)
       navigate("/")
     } catch (error) {
-      toast.error(error?.response?.data?.message||"Somthing went wrong", {theme:"dark"} )
+      toast.error(error?.response?.data?.message || "Somthing went wrong", {
+        theme: "dark",
+      })
     }
   }
 
   return (
     <InitialAnimation>
       {isSubmitting && <DotLoder></DotLoder>}
-      {intentionalRoute?<Navbar></Navbar>:""}
-      <div className={`${intentionalRoute?"min-h-[90vh]":"min-h-screen"} flex flex-col items-center justify-center text-white`}>
+      {intentionalRoute ? <Navbar></Navbar> : ""}
+      <div
+        className={`${
+          intentionalRoute ? "min-h-[90vh]" : "min-h-screen"
+        } flex flex-col items-center justify-center text-white`}
+      >
         <div className="py-6 px-4">
           {/* ---- Form Section ---- */}
           <div className="border border-black/20 rounded-2xl p-8 max-w-md shadow-[0_0_25px_-5px_rgba(255,255,255,0.2)]  backdrop-blur max-lg:mx-auto">
@@ -102,7 +113,9 @@ export default function Login() {
                 <p className="text-sm mt-6 text-center text-gray-400">
                   Don't have an account?{" "}
                   <Link
-                    to={intentionalRoute?"/signin/:intentionalRoute":"/signin"}
+                    to={
+                      intentionalRoute ? "/signin/:intentionalRoute" : "/signin"
+                    }
                     className="text-black underline hover:opacity-80"
                   >
                     SignUp here

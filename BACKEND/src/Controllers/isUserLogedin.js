@@ -19,7 +19,7 @@ const isLoggedin = async (req, res, next) => {
         }
 
         return res.status(200).json(
-            new responseClass("User is logged in", { users_id: id, isLoggedin: true }, 200)
+            new responseClass("User is logged in", { user, isLoggedin: true }, 200)
         );
     } catch (error) {
         return res.status(401).json(

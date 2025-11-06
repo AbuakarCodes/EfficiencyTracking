@@ -1,18 +1,18 @@
 import axios from "axios"
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify"
 import { Link, useNavigate, useParams } from "react-router"
-import {  useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { siginIN_URL } from "../../API_EndPoints"
 import { Credentials } from "../utils/axios_Credentials"
 import { useAuthContext } from "../Contexts/AuthProvider"
 import DotLoder from "../utils/Loders/dotLoder"
 import SignInSVG from "../assets/SignInSVG.svg"
-import Navbar from "../Components/navbar";
-import InitialAnimation from "../utils/MotionComponents/InitialAnimation";
+import Navbar from "../Components/navbar"
+import InitialAnimation from "../utils/MotionComponents/InitialAnimation"
 
 export default function Signin() {
-  const { setIsLoggedIn } = useAuthContext()
-    const {intentionalRoute} =useParams()
+  const { setIsLoggedIn, setUser } = useAuthContext()
+  const { intentionalRoute } = useParams()
 
   const navigate = useNavigate()
   const {
@@ -24,9 +24,9 @@ export default function Signin() {
   } = useForm()
 
   async function submithandler(data) {
-    
     try {
       const res = await axios.post(siginIN_URL, data, Credentials)
+      setUser(res?.data?.data || {})
       toast.success("Sign in Sucessfully", { theme: "dark" })
       setIsLoggedIn(true)
       navigate("/")
@@ -36,23 +36,28 @@ export default function Signin() {
         if (error.response.status === 409) {
           toast.error(error.response.data.message, { theme: "dark" })
         } else {
-           toast.error("Something went wrong. Try again later.", { theme: "dark" })
+          toast.error("Something went wrong. Try again later.", {
+            theme: "dark",
+          })
         }
       } else if (error.request) {
-        toast("Cannot connect to the server.", {theme:"dark"})
+        toast("Cannot connect to the server.", { theme: "dark" })
       } else {
-        toast("Unexpected error occurred. Please try again.", {theme:"dark"})
+        toast("Unexpected error occurred. Please try again.", { theme: "dark" })
       }
       reset()
     }
   }
-  
+
   return (
-    
     <InitialAnimation>
-    {isSubmitting && <DotLoder></DotLoder>}
-    {intentionalRoute?<Navbar></Navbar>:""}
-      <div className={`${intentionalRoute?"min-h-[90vh]":"min-h-screen"} flex flex-col items-center justify-center text-white`}>
+      {isSubmitting && <DotLoder></DotLoder>}
+      {intentionalRoute ? <Navbar></Navbar> : ""}
+      <div
+        className={`${
+          intentionalRoute ? "min-h-[90vh]" : "min-h-screen"
+        } flex flex-col items-center justify-center text-white`}
+      >
         <div className="py-6 px-4">
           <div className="grid lg:grid-cols-2 items-center gap-6 max-w-6xl w-full">
             {/* ---- Form Section ---- */}
@@ -138,7 +143,9 @@ export default function Signin() {
                   <p className="text-sm mt-6 text-center text-gray-400">
                     Already have an account?{" "}
                     <Link
-                     to={intentionalRoute?"/login/:intentionalRoute":"/login"}
+                      to={
+                        intentionalRoute ? "/login/:intentionalRoute" : "/login"
+                      }
                       className="text-black underline hover:opacity-80"
                     >
                       Login here
@@ -151,9 +158,7 @@ export default function Signin() {
             {/* ---- Image Section ---- */}
             <div className="max-lg:mt-8 flex justify-center items-center">
               <div className="w-ful max-w-[450px] ">
-
-                    <img src={SignInSVG} alt="" />
-
+                <img src={SignInSVG} alt="" />
               </div>
             </div>
           </div>

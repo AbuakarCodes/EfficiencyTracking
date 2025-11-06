@@ -8,6 +8,7 @@ export const add_UpdateTodos = async (req, res, next) => {
   try {
     const { date_id, goals } = req.body;
     const { id } = req.user;
+    console.log("Frontend ID",id)
 
     if (!id || !date_id || !goals) {
       return res.status(400).json(new ErrorClass("Missing required fields"));
@@ -20,13 +21,15 @@ export const add_UpdateTodos = async (req, res, next) => {
 
     const user = await User.findById(id);
     if (!user) return res.status(404).json(new ErrorClass("User not found"));
-
-
+console.log("DB_id",user._id)
+console.log("DB_Email",user.email)
+console.log("are they ewqual", user._id===id)
 
     const updatedTodo = await Todo.findOneAndUpdate(
       { user_id: id, date_id },
       {
         $set: {
+          userEmail: user.email,
           totalTodoTasks,
           completedTodoTasks,
           dayEfficiency,
@@ -44,6 +47,7 @@ export const add_UpdateTodos = async (req, res, next) => {
     const newTodo = await Todo.create({
       user_id: id,
       date_id,
+      userEmail: user.email,
       month: dayjs(date_id).month() + 1,
       year: dayjs(date_id).year(),
       totalTodoTasks,

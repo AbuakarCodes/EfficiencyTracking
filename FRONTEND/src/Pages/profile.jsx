@@ -12,7 +12,7 @@ import InitialAnimation from "../utils/MotionComponents/InitialAnimation.jsx"
 
 export default function Profile() {
   const navigate = useNavigate()
-  const { setIsLoggedIn } = useAuthContext()
+  const { setIsLoggedIn, User } = useAuthContext()
   const [isLoding, setisLoding] = useState(false)
   const [showPasswordPopup, setshowPasswordPopup] = useState(false)
   const [updatedPassDate, setupdatedPassDate] = useState("")
@@ -114,7 +114,7 @@ export default function Profile() {
                       Name
                     </dt>
                     <dd className="text-primary/60 dark:text-background-light/60 sm:col-span-2">
-                      Sophia Carter
+                      {User?.name ||""}
                     </dd>
                   </div>
 
@@ -123,7 +123,7 @@ export default function Profile() {
                       Email
                     </dt>
                     <dd className="text-primary/60 dark:text-background-light/60 sm:col-span-2">
-                      sophia.carter@email.com
+                      {User?.email || ""}
                     </dd>
                   </div>
                 </div>

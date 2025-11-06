@@ -7,12 +7,16 @@ const goalSchema = new mongoose.Schema({
 });
 
 const todoSchema = new mongoose.Schema({
+    userEmail: {
+        type: String,
+        required: true,
+    },
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
     },
-    date_id: { type: String, required: true  }, 
+    date_id: { type: String, required: true },
     month: { type: Number, required: true },
     year: { type: Number, required: true },
 

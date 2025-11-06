@@ -3,7 +3,7 @@ import { setCookies } from "../utils/COOKIES/AlingingCookies.js"
 import { ErrorClass } from "../utils/ErrorClass.js"
 import { responseClass } from "../utils/responseClass.js"
 
-const register = async (req, res, next) => { 
+const register = async (req, res, next) => {
 
     const { name, email, password } = req.body
     if (!email || !password)
@@ -13,11 +13,13 @@ const register = async (req, res, next) => {
         if (isUserRegestered) return res.status(409).json(new ErrorClass("User already exist", 409))
 
         const user = await User.create({ name, email, password })
+        if (!user) return res.status(404).json(new ErrorClass("User not found", 404));
+
         const AccessToken = user.generateAccessToken()
         const RefreshToken = user.generateRefreshToken()
         setCookies(res, "accesssToken", AccessToken, "refreshToken", RefreshToken)
-        
-        res.status(200).json(new responseClass("User has created", {}, 200))
+
+        res.status(200).json(new responseClass("User has created", user, 200))
     } catch (error) {
         res.status(404).json(new ErrorClass(error.message, 404))
     }

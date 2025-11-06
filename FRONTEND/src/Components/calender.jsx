@@ -52,6 +52,7 @@ export default function Calendar() {
       setisTodoLoding,
       setspecificDateEfficiency
     )
+    console.log(RemoteTodos)
     setTodos(RemoteTodos)
   }
 
@@ -95,9 +96,11 @@ export default function Calendar() {
                 className={`p-2  border rounded-full cursor-pointer
                         ${isMultipleTask ? "border-black" : "border-white"}
                         ${
-                          day === today
-                            ? "bg-black text-white font-semibold"
-                            : "hover:bg-gray-200"
+                          !isMultipleTask
+                            ? day === today
+                              ? "bg-black text-white font-semibold"
+                              : "hover:bg-gray-200"
+                            : ""
                         }`}
               >
                 {day}
@@ -110,7 +113,10 @@ export default function Calendar() {
       <div className="flex items-center justify-center">
         <button
           className="p-4 bg-black text-white cursor-pointer w-70  "
-          onClick={() => setisMultipleTask((prev) => !prev)}
+          onClick={() => {
+            setisMultipleTask((prev) => !prev)
+            setTodos([])
+          }}
         >
           {isMultipleTask ? "single task" : "Multiple"}
         </button>
