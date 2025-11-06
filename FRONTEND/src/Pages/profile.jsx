@@ -92,7 +92,7 @@ export default function Profile() {
                     ></div>
                     <div>
                       <h3 className="text-lg font-bold text-primary dark:text-background-light">
-                        Sophia Carter
+                      {User?.name ||""}
                       </h3>
                       <p className="text-sm text-primary/60 dark:text-background-light/60">
                         sophia.carter

@@ -46,13 +46,13 @@ export default function Calendar() {
 
     // Setting Single tasks
     API_dateID.current[0] = e.target.id
+    console.log(e.target.id)
     sethomePageChartDate(dayjs(e.target.id).format("DD/MM/YY"))
     const RemoteTodos = await apiCall_fetchRemoteTodos(
       API_dateID,
       setisTodoLoding,
       setspecificDateEfficiency
     )
-    console.log(RemoteTodos)
     setTodos(RemoteTodos)
   }
 
@@ -91,7 +91,7 @@ export default function Calendar() {
             {days.map((day, index) => (
               <button
                 key={index}
-                id={dayjs(`${year}-${month}-${day}`).format("YYYY/M/D")}
+                id={dayjs(`${year}-${month}-${day}`).format("YYYY/MM/DD")}
                 onClick={onClickHandler}
                 className={`p-2  border rounded-full cursor-pointer
                         ${isMultipleTask ? "border-black" : "border-white"}

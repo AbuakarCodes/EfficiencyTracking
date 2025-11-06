@@ -7,7 +7,7 @@ export const specificDateTodos = async (req, res, next) => {
     try {
         const { date_id } = req.body
         const { id } = req.user
-console.log("sprcific todo Frontend", id)
+
         const user = await User.findById(id)
         if (!user) return res.status(404).json(new ErrorClass("User not found", 404))
 
