@@ -8,12 +8,10 @@ import { clearCookies, setCookies } from "../utils/COOKIES/AlingingCookies.js"
 
 const Login = async (req, res, next) => {
     const { accesssToken, refreshToken } = req.cookies
-    console.log(req.body)    
 
     try {
         const { email, password, login_another_account } = req.body;
         if (!email || !password) return res.status(404).json(new ErrorClass("Email and password are required"));
-        console.log(req.body)
 
         const user = await User.findOne({ email });
         if (!user) return res.status(404).json(new ErrorClass("User not found", 404));
@@ -22,7 +20,7 @@ const Login = async (req, res, next) => {
         if (!isCorrectPass) return res.status(401).json(new ErrorClass("Password is incorrect", 401));
 
         // 🔹 Case 1: No cookies (first login)
-        if (!accesssToken || !refreshToken || login_another_account ) {
+        if (!accesssToken || !refreshToken || login_another_account) {
             const accessToken = user.generateAccessToken();
             const refreshToken = user.generateRefreshToken();
 

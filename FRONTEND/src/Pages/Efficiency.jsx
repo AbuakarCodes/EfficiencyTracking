@@ -3,6 +3,7 @@ import EfficienciesComparison from "../Components/efficiency_Comparision/efficie
 import InitialAnimation from "../utils/MotionComponents/InitialAnimation"
 
 function Efficiency() {
+  
   return (
     <InitialAnimation>
       <Navbar></Navbar>

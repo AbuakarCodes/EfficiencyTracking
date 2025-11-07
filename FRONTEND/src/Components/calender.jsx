@@ -46,7 +46,6 @@ export default function Calendar() {
 
     // Setting Single tasks
     API_dateID.current[0] = e.target.id
-    console.log(e.target.id)
     sethomePageChartDate(dayjs(e.target.id).format("DD/MM/YY"))
     const RemoteTodos = await apiCall_fetchRemoteTodos(
       API_dateID,

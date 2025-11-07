@@ -4,6 +4,7 @@ import { dbConnection } from "./db/dbConection.js";
 import { app } from "./app.js";
 import { Route } from "./Router/userRouter.js"
 import { TodoRoute } from "./Router/TodoRouter.js";
+import { EfficiencyRoute } from "./Router/EfficiencyRouter.js";
 
 dbConnection()
     .then(() => {
@@ -16,3 +17,4 @@ dbConnection()
 
 app.use("/users", Route)
 app.use("/todos", TodoRoute)
+app.use("/eficiency", EfficiencyRoute)

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { responseClass } from "../utils/responseClass.js"
 import { User } from "../models/userSchema.model.js";
 import { ErrorClass } from "../utils/ErrorClass.js";
-import { clearCookies } from "../utils/COOKIES/AlingingCookies.js";
+import { clearCookies } from "../utils/COOKIES/AlingingCookies.js";              
 
 
 const isLoggedin = async (req, res, next) => {

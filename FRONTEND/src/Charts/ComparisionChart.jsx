@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   Chart as ChartJS,
   LineElement,
@@ -9,10 +9,9 @@ import {
   Legend,
 } from "chart.js"
 import { Line } from "react-chartjs-2"
-import { useState } from "react"
 import { options } from "./ChartOptions/ComparasionsChartOptions"
+import { useAppContext } from "../hooks/useCustomContext"
 
-// Register chart.js components
 ChartJS.register(
   LineElement,
   CategoryScale,
@@ -23,24 +22,23 @@ ChartJS.register(
 )
 
 const Comparison_LineChart = () => {
-  const [Xaxis, setXaxis] = useState([1, 2, 3, 4, 5, 6, 7, 8,4,5,56,6,76,7,78,7,8,8,8,8,8,8,8,8,8,8,])
-  const [Yaxis, setYaxis] = useState([10, 2, 4, 5, 67, 88, 90])
-  
-  
+const {Yaxis, Xaxis} = useAppContext() 
+
+
+
   const data = {
     labels: Xaxis,
     datasets: [
       {
-        label: "Data A",
+        label: "Efficiency",
         data: Yaxis,
-        borderColor: "green",
+        borderColor: "purple",
         borderWidth: 2,
-        pointRadius: 0,
+        pointRadius: 3,
         tension: 0.35,
       },
     ],
   }
-
 
 
   return (

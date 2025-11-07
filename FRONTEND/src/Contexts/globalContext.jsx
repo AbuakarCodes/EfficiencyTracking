@@ -1,8 +1,6 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useRef, useState } from "react"
 
 const AppContext = createContext()
-
-
 
 export function AppProvider({ children }) {
   // Comparison Dropdown
@@ -11,6 +9,9 @@ export function AppProvider({ children }) {
   const [showComparision, setshowComparision] = useState(
     sessionStorage.getItem("comparision_Togel") || false
   )
+  let efficiencyApiData = useRef({ periodType: "Day", periodValue: "" })
+  const [Xaxis, setXaxis] = useState([])
+ const [Yaxis, setYaxis] = useState([])
 
   // home Page
 
@@ -21,6 +22,11 @@ export function AppProvider({ children }) {
     setshowComparision,
     efficiencyPageAttribute,
     setefficiencyPageAttribute,
+    efficiencyApiData,
+    Xaxis,
+    setXaxis,
+    Yaxis,
+    setYaxis,
   }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
