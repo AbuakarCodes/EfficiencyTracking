@@ -1,7 +1,7 @@
 import { useAppContext } from "../../hooks/useCustomContext"
 import { useRef, useState } from "react"
 import { apiCall_getMonthData } from "../../utils/EfficiencyAPICall/fetch_perMonthAPI"
-import { perMontEfficiency_URL } from "../../../API_EndPoints"
+import { PeriodEfficiency_URL } from "../../../API_EndPoints"
 import dayjs from "dayjs"
 
 function InputDate() {
@@ -11,6 +11,7 @@ function InputDate() {
     efficiencyApiData,
     setXaxis,
     setYaxis,
+    setEfficiencyGraphLoding,
   } = useAppContext()
 
   const intervalRef = useRef(null)
@@ -66,18 +67,24 @@ function InputDate() {
       }
 
       // Api call and setting chart values
-      const result = await apiCall_getMonthData(
-        perMontEfficiency_URL,
-        efficiencyApiData.current
-      )
-
-      setYaxis(result?.data?.data?.efficiencyData)
-      setXaxis(
-        Array.from(
-          { length: result?.data?.data?.elementLength || 30 },
-          (_, i) => i + 1
+      try {
+        setEfficiencyGraphLoding(true)
+        const result = await apiCall_getMonthData(
+          PeriodEfficiency_URL,
+          efficiencyApiData.current
         )
-      )
+        setEfficiencyGraphLoding(false)
+
+        setYaxis(result?.data?.data?.efficiencyData)
+        setXaxis(
+          Array.from(
+            { length: result?.data?.data?.elementLength || 30 },
+            (_, i) => i + 1
+          )
+        )
+      } catch (error) {
+        setEfficiencyGraphLoding(false)
+      }
     }, 300)
   }
 

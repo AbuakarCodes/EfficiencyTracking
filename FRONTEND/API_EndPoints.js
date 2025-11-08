@@ -17,7 +17,7 @@ let add_MultipleTodos_URL = `${hosting}${port_TodoBase}/add_MultipleTodos`
 
 // Efficiency
 let port_EfficiencyBase = ":8000/eficiency"
-let perMontEfficiency_URL =  `${hosting}${port_EfficiencyBase}/perMonth`
+let PeriodEfficiency_URL =  `${hosting}${port_EfficiencyBase}/periodEfficiency`
 
 
 
@@ -27,5 +27,5 @@ export {
     changePassword_URL, addupdateTodo_url, specificDateTodos_URL,
     changeStatusTodo_URL, DeleteTodo_URL, add_MultipleTodos_URL,
     // efficiency
-    perMontEfficiency_URL,
+    PeriodEfficiency_URL,
 }

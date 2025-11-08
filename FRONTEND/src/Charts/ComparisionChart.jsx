@@ -11,6 +11,7 @@ import {
 import { Line } from "react-chartjs-2"
 import { options } from "./ChartOptions/ComparasionsChartOptions"
 import { useAppContext } from "../hooks/useCustomContext"
+import DotLoder from "../utils/Loders/dotLoder"
 
 ChartJS.register(
   LineElement,
@@ -22,9 +23,7 @@ ChartJS.register(
 )
 
 const Comparison_LineChart = () => {
-const {Yaxis, Xaxis} = useAppContext() 
-
-
+  const { Yaxis, Xaxis, EfficiencyGraphLoding } = useAppContext()
 
   const data = {
     labels: Xaxis,
@@ -40,10 +39,13 @@ const {Yaxis, Xaxis} = useAppContext()
     ],
   }
 
-
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <Line data={data} options={options} />
+      {EfficiencyGraphLoding ? (
+        <DotLoder />
+      ) : (
+        <Line data={data} options={options} />
+      )}
     </div>
   )
 }

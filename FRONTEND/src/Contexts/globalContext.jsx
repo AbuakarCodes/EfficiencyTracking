@@ -11,9 +11,8 @@ export function AppProvider({ children }) {
   )
   let efficiencyApiData = useRef({ periodType: "Day", periodValue: "" })
   const [Xaxis, setXaxis] = useState([])
- const [Yaxis, setYaxis] = useState([])
-
-  // home Page
+  const [Yaxis, setYaxis] = useState([])
+  const [EfficiencyGraphLoding, setEfficiencyGraphLoding] = useState(false)
 
   const value = {
     dataDropdownselected,
@@ -27,6 +26,8 @@ export function AppProvider({ children }) {
     setXaxis,
     Yaxis,
     setYaxis,
+    EfficiencyGraphLoding,
+    setEfficiencyGraphLoding
   }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>

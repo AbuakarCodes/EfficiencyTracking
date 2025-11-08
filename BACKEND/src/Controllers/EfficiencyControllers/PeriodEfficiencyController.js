@@ -4,7 +4,7 @@ import { responseClass } from "../../utils/responseClass.js";
 import { getSpecificMonthEfficiency } from "../../utils/SpecificTimeEfficiencies/specificMonthEfficiency.js";
 import { getSpecificYearEfficiency } from "../../utils/SpecificTimeEfficiencies/specificYearEfficiency.js";
 import { getSpecificDayEfficiency } from "../../utils/SpecificTimeEfficiencies/specificDayEfficiency.js"
-export const monthEfficiencyController = async (req, res, next) => {
+export const PeriodEfficiencyController = async (req, res, next) => {
     try {
         const { periodType, periodValue } = req.body;
         const { id: user_id } = req.user;
