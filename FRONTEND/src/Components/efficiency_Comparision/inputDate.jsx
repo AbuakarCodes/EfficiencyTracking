@@ -3,6 +3,8 @@ import { useRef, useState } from "react"
 import { apiCall_getMonthData } from "../../utils/EfficiencyAPICall/fetch_perMonthAPI"
 import { PeriodEfficiency_URL } from "../../../API_EndPoints"
 import dayjs from "dayjs"
+import { Form } from "react-router"
+import { isValidDate } from "../../utils/isValidDate"
 
 function InputDate() {
   const {
@@ -14,10 +16,9 @@ function InputDate() {
     setEfficiencyGraphLoding,
   } = useAppContext()
 
-  const intervalRef = useRef(null)
+  let day_Year_Count = useRef(0)
   const [selectedMonth, setSelectedMonth] = useState("")
   const [selectedYear, setSelectedYear] = useState("")
-  const [selectedDate, setSelectedDate] = useState("")
 
   const months = [
     { name: "January", value: "01" },
@@ -34,58 +35,56 @@ function InputDate() {
     { name: "December", value: "12" },
   ]
 
-  function triggerAPICall(year, month, day) {
-    clearTimeout(intervalRef.current)
-    intervalRef.current = setTimeout(async () => {
-      switch (efficiencyPageAttribute.toLowerCase()) {
-        case "month": {
-          const periodValue = `${year}/${month}`
-          efficiencyApiData.current = {
-            ...efficiencyApiData.current,
-            periodValue,
-          }
-          break
+  async function triggerAPICall(year, month, day) {
+    switch (efficiencyPageAttribute.toLowerCase()) {
+      case "month": {
+        const periodValue = `${year}/${month}`
+        efficiencyApiData.current = {
+          ...efficiencyApiData.current,
+          periodValue,
         }
-
-        case "year": {
-          const periodValue = year
-          efficiencyApiData.current = {
-            ...efficiencyApiData.current,
-            periodValue,
-          }
-          break
-        }
-
-        case "day": {
-          const periodValue = day
-          efficiencyApiData.current = {
-            ...efficiencyApiData.current,
-            periodValue,
-          }
-          break
-        }
+        break
       }
 
-      // Api call and setting chart values
-      try {
-        setEfficiencyGraphLoding(true)
-        const result = await apiCall_getMonthData(
-          PeriodEfficiency_URL,
-          efficiencyApiData.current
-        )
-        setEfficiencyGraphLoding(false)
-
-        setYaxis(result?.data?.data?.efficiencyData)
-        setXaxis(
-          Array.from(
-            { length: result?.data?.data?.elementLength || 30 },
-            (_, i) => i + 1
-          )
-        )
-      } catch (error) {
-        setEfficiencyGraphLoding(false)
+      case "year": {
+        const periodValue = year
+        efficiencyApiData.current = {
+          ...efficiencyApiData.current,
+          periodValue,
+        }
+        break
       }
-    }, 300)
+
+      case "day": {
+        const periodValue = day
+        efficiencyApiData.current = {
+          ...efficiencyApiData.current,
+          periodValue,
+        }
+        setSelectedYear("")
+        break
+      }
+    }
+
+    // Api call and setting chart values
+    try {
+      setEfficiencyGraphLoding(true)
+      const result = await apiCall_getMonthData(
+        PeriodEfficiency_URL,
+        efficiencyApiData.current
+      )
+      setEfficiencyGraphLoding(false)
+
+      setYaxis(result?.data?.data?.efficiencyData)
+      setXaxis(
+        Array.from(
+          { length: result?.data?.data?.elementLength || 30 },
+          (_, i) => i + 1
+        )
+      )
+    } catch (error) {
+      setEfficiencyGraphLoding(false)
+    }
   }
 
   const handleMonthChange = (e) => {
@@ -104,8 +103,11 @@ function InputDate() {
 
   const handleDayChange = (e) => {
     const formattedDate = dayjs(e.target.value).format("YYYY/MM/DD")
-    setSelectedDate(e.target.value)
-    triggerAPICall(null, null, formattedDate)
+    day_Year_Count.current++
+    if (day_Year_Count.current == 4 && isValidDate(formattedDate)) {
+      triggerAPICall(null, null, formattedDate)
+      day_Year_Count.current = 0
+    } else if (day_Year_Count.current > 4) day_Year_Count.current = 0
   }
 
   if (dataDropdownselected === "Month") {
@@ -113,7 +115,7 @@ function InputDate() {
       <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-md px-3 py-2 shadow-sm w-fit focus-within:ring-2 focus-within:ring-black">
         <select
           onChange={handleMonthChange}
-          value={selectedMonth}
+          // value={selectedMonth}
           className="bg-transparent focus:outline-none text-gray-700"
         >
           <option value="" disabled>
@@ -133,7 +135,7 @@ function InputDate() {
           min="1900"
           max="2100"
           placeholder="Year"
-          value={selectedYear}
+          // value={selectedYear}
           onChange={handleYearChange}
           className="bg-transparent focus:outline-none w-20 text-gray-700"
         />
@@ -145,7 +147,6 @@ function InputDate() {
     return (
       <input
         type="date"
-        value={selectedDate}
         onChange={handleDayChange}
         className="border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500"
       />
@@ -156,7 +157,7 @@ function InputDate() {
     return (
       <input
         type="number"
-        value={selectedYear}
+        // value={selectedYear}
         placeholder="Enter year"
         onChange={handleYearChange}
         className="border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500"

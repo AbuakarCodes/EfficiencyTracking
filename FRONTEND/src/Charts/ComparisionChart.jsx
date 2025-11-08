@@ -31,7 +31,7 @@ const Comparison_LineChart = () => {
       {
         label: "Efficiency",
         data: Yaxis,
-        borderColor: "purple",
+        borderColor: "#14B8A6",
         borderWidth: 2,
         pointRadius: 3,
         tension: 0.35,
