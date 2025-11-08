@@ -19,7 +19,7 @@ function EfficienciesComparison() {
           </div>
           {showComparision ? <PeriodSelector /> : ""}
         </div>
-        <div className="w-full h-[30rem] ">
+        <div className="w-full h-[30rem] gap-2 p-4 md:p-0 lg:p-4">
           <Comparison_LineChart />
         </div>
       </div>

@@ -1,12 +1,13 @@
 import dayjs from "dayjs"
 export function getSpecificMonthEfficiency(periodValueQuery, todo) {
     const daysInMonth = dayjs(`${periodValueQuery.year}-${periodValueQuery.month}-01`).daysInMonth();
-
+  
+  
     const result = {
         month_id: {},
-        days: daysInMonth,
+        elementLength: daysInMonth,
         efficiencyData: [],
-        avrageEfficiency: 0
+        monthEfficiency: 0
     };
 
     // Finding Efficiency Arry 
@@ -26,7 +27,7 @@ export function getSpecificMonthEfficiency(periodValueQuery, todo) {
     // setting the return object
     result["month_id"] = periodValueQuery;
     result["efficiencyData"] = EfficiencyArry
-    result["avrageEfficiency"] = avgAllDays
+    result["monthEfficiency"] = avgAllDays
 
     return result;
 }
