@@ -1,9 +1,12 @@
 import { BrowserRouter, Route, Routes, useLocation } from "react-router"
 import { AppProvider } from "./Contexts/globalContext"
 import { ToastContainer } from "react-toastify"
+import { MantineProvider } from "@mantine/core" 
+import "@mantine/core/styles.css" 
+import "@mantine/dates/styles.css" 
+import "react-toastify/dist/ReactToastify.css"
 
 import "./index.css"
-import "react-toastify/dist/ReactToastify.css"
 import ReactDOM from "react-dom/client"
 import Login from "./Pages/login"
 import Signin from "./Pages/signin"
@@ -49,17 +52,19 @@ function AnimatedRoutes() {
   )
 }
 
-// 👇 Step 2: Root component (BrowserRouter wraps AnimatePresence)
 function Root() {
   return (
-    <AppProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <AnimatedRoutes />
-        </BrowserRouter>
-        <ToastContainer position="top-right" autoClose={1000} />
-      </AuthProvider>
-    </AppProvider>
+    <MantineProvider withGlobalStyles withNormalizeCSS>
+     
+      <AppProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <AnimatedRoutes />
+          </BrowserRouter>
+          <ToastContainer position="top-right" autoClose={1000} />
+        </AuthProvider>
+      </AppProvider>
+    </MantineProvider>
   )
 }
 

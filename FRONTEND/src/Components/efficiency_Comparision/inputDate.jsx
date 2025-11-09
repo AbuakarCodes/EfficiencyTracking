@@ -1,10 +1,13 @@
+
 import { useAppContext } from "../../hooks/useCustomContext"
 import { useRef, useState } from "react"
 import { apiCall_getMonthData } from "../../utils/EfficiencyAPICall/fetch_perMonthAPI"
 import { PeriodEfficiency_URL } from "../../../API_EndPoints"
 import dayjs from "dayjs"
-import { Form } from "react-router"
-import { isValidDate } from "../../utils/isValidDate"
+import { MonthPickerInput } from "@mantine/dates"
+import { YearPickerInput } from "@mantine/dates"
+import { DatePickerInput } from "@mantine/dates"
+import { EfficiencyDateStyle } from "../../utils/Data_Bytes"
 
 function InputDate() {
   const {
@@ -16,24 +19,6 @@ function InputDate() {
     setEfficiencyGraphLoding,
   } = useAppContext()
 
-  let day_Year_Count = useRef(0)
-  const [selectedMonth, setSelectedMonth] = useState("")
-  const [selectedYear, setSelectedYear] = useState("")
-
-  const months = [
-    { name: "January", value: "01" },
-    { name: "February", value: "02" },
-    { name: "March", value: "03" },
-    { name: "April", value: "04" },
-    { name: "May", value: "05" },
-    { name: "June", value: "06" },
-    { name: "July", value: "07" },
-    { name: "August", value: "08" },
-    { name: "September", value: "09" },
-    { name: "October", value: "10" },
-    { name: "November", value: "11" },
-    { name: "December", value: "12" },
-  ]
 
   async function triggerAPICall(year, month, day) {
     switch (efficiencyPageAttribute.toLowerCase()) {
@@ -61,7 +46,6 @@ function InputDate() {
           ...efficiencyApiData.current,
           periodValue,
         }
-        setSelectedYear("")
         break
       }
     }
@@ -87,80 +71,47 @@ function InputDate() {
     }
   }
 
-  const handleMonthChange = (e) => {
-    const month = e.target.value
-    setSelectedMonth(month)
-    if (selectedYear && month) triggerAPICall(selectedYear, month)
+  const handleMonthChange = (date) => {
+    const Year = date.split("-")[0]
+    const month = date.split("-")[1]
+    triggerAPICall(Year, month)
   }
 
-  const handleYearChange = (e) => {
-    const year = e.target.value
-    setSelectedYear(year)
-    if (year.length === 4 && selectedMonth) triggerAPICall(year, selectedMonth)
-    if (dataDropdownselected === "Year" && year.length === 4)
-      triggerAPICall(year)
+  const handleYearChange = (year) => {
+    triggerAPICall(year.split("-")[0])
   }
 
-  const handleDayChange = (e) => {
-    const formattedDate = dayjs(e.target.value).format("YYYY/MM/DD")
-    day_Year_Count.current++
-    if (day_Year_Count.current == 4 && isValidDate(formattedDate)) {
-      triggerAPICall(null, null, formattedDate)
-      day_Year_Count.current = 0
-    } else if (day_Year_Count.current > 4) day_Year_Count.current = 0
+  const handleDayChange = (date) => {
+    const formatedDate = dayjs(date).format("YYYY/MM/DD")
+    triggerAPICall(null, null, formatedDate)
   }
 
   if (dataDropdownselected === "Month") {
     return (
-      <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-md px-3 py-2 shadow-sm w-fit focus-within:ring-2 focus-within:ring-black">
-        <select
-          onChange={handleMonthChange}
-          // value={selectedMonth}
-          className="bg-transparent focus:outline-none text-gray-700"
-        >
-          <option value="" disabled>
-            Select month
-          </option>
-          {months.map((m) => (
-            <option key={m.value} value={m.value}>
-              {m.name}
-            </option>
-          ))}
-        </select>
-
-        <span className="text-gray-400">/</span>
-
-        <input
-          type="number"
-          min="1900"
-          max="2100"
-          placeholder="Year"
-          // value={selectedYear}
-          onChange={handleYearChange}
-          className="bg-transparent focus:outline-none w-20 text-gray-700"
-        />
-      </div>
+      <MonthPickerInput
+        placeholder={`Select ${dataDropdownselected}`}
+        onChange={handleMonthChange}
+        styles={EfficiencyDateStyle}
+      />
     )
   }
 
   if (dataDropdownselected === "Day") {
     return (
-      <input
-        type="date"
+      <DatePickerInput
+        placeholder={`Select ${dataDropdownselected}`}
         onChange={handleDayChange}
-        className="border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500"
+        styles={EfficiencyDateStyle}
       />
     )
   }
 
   if (dataDropdownselected === "Year") {
     return (
-      <input
-        type="number"
-        // value={selectedYear}
-        placeholder="Enter year"
+      <YearPickerInput
+        placeholder={`Select ${dataDropdownselected}`}
         onChange={handleYearChange}
-        className="border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500"
+        styles={EfficiencyDateStyle}
       />
     )
   }

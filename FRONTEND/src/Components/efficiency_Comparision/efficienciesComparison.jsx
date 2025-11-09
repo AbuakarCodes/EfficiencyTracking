@@ -12,7 +12,7 @@ function EfficienciesComparison() {
       <div className="container mx-auto flex flex-col  gap-y-2.5">
         <h1 className="p-4 text-[2rem] italic">Chart</h1>
         <div className=" flex flex-col gap-y-[1rem]  md:p-5 p-4 rounded-[.3rem] border-black/20 border-[1px]">
-          <div className="flex md:items-center gap-2  md:gap-x-[3rem] flex-col md:flex-row  ">
+          <div className="flex md:items-center gap-2  md:gap-x-[1rem] flex-col md:flex-row  ">
             <Dropdown></Dropdown>
             <InputDate />
             <ToggleButton></ToggleButton>

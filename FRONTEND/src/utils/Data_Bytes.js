@@ -12,4 +12,21 @@ const months = [
   "November",
   "December",
 ]
-export { months }
+
+const EfficiencyDateStyle = {
+  input: {
+    borderColor: "#333",
+    backgroundColor: "#000",
+    color: "#fff",
+    "&:focus": {
+      borderColor: "green",
+      boxShadow: "0 0 0 2px rgba(16,185,129,0.3)",
+    },
+  },
+  day: {
+    color: "black",
+  }
+
+}
+
+export { months, EfficiencyDateStyle }
