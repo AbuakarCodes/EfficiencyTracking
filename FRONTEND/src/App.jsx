@@ -11,11 +11,11 @@ function App() {
       <ToDoApiProvider>
         <div className="flex flex-col gap-y-[2rem] ">
           <InitialAnimation>
-            <Navbar/>
+            <Navbar />
           </InitialAnimation>
           {/* chart */}
           <InitialAnimation>
-            <EfficiencyChart  />
+            <EfficiencyChart />
           </InitialAnimation>
 
           <div className="container p-4 flex flex-col md:flex-row  mx-auto">

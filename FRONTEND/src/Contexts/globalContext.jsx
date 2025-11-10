@@ -14,6 +14,8 @@ export function AppProvider({ children }) {
   const [Yaxis, setYaxis] = useState([])
   const [Comparison_Cordinates, setComparison_Cordinates] = useState({PeriodA:{}, PeriodB:{}})
   const [EfficiencyGraphLoding, setEfficiencyGraphLoding] = useState(false)
+  const [hasComparChartData, sethasComparChartData] = useState(true)
+
 
   const value = {
     dataDropdownselected,
@@ -30,7 +32,9 @@ export function AppProvider({ children }) {
     EfficiencyGraphLoding,
     setEfficiencyGraphLoding,
     Comparison_Cordinates,
-    setComparison_Cordinates
+    setComparison_Cordinates,
+    hasComparChartData,
+    sethasComparChartData
   }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>

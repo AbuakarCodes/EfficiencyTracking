@@ -14,6 +14,7 @@ export default function PeriodSelector() {
     EfficiencyGraphLoding,
     setEfficiencyGraphLoding,
     setComparison_Cordinates,
+    hasComparChartData
   } = useAppContext()
   const [Period, setPeriod] = useState({ periodA: null, periodB: null })
   const [rawDateUIvalues, setrawDateUIvalues] = useState({
@@ -67,6 +68,15 @@ export default function PeriodSelector() {
       return
     }
 
+    if (Period.periodA === Period.periodB) {
+      setrawDateUIvalues((prev) => ({ ...prev, periodB: "" }))
+      setPeriod((prev) => ({ ...prev, periodB: "" }))
+      toast.error("Both fields are same", {
+        theme: "dark",
+      })
+      return
+    }
+
     let periodAValue, periodBValue
     if (dataDropdownselected.toLowerCase() === "month") {
       const [yearA, monthA] = Period.periodA.split("-")
@@ -92,9 +102,8 @@ export default function PeriodSelector() {
       setComparison_Cordinates(response?.data?.data || "")
       setEfficiencyGraphLoding(false)
     } catch (error) {
-      toast.error(" No data for selected dates", {
-        theme: "dark",
-      })
+      toast.error(" No data for selected dates", {theme: "dark"})
+      setComparison_Cordinates({PeriodA:{}, PeriodB:{}})
     } finally {
       setEfficiencyGraphLoding(false)
     }
@@ -131,7 +140,7 @@ export default function PeriodSelector() {
               disabled={EfficiencyGraphLoding}
               className="cursor-pointer rounded-[5px] px-3 py-1 bg-black text-white border-[1px] border-black/20"
             >
-              {EfficiencyGraphLoding ? "..." : "Compare"}
+              {EfficiencyGraphLoding ? "Comparing..." : "Compare"}
             </button>
           </div>
         </div>
