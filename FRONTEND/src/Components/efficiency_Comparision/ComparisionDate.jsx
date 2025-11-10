@@ -48,8 +48,11 @@ export default function PeriodSelector() {
   }
 
   async function submithandler() {
-    if (!(Period.periodA && Period.periodB)) {
-      toast.error( "Both fields are required", {
+    if (
+      (!Period.periodA && !Period.periodB) ||
+      (Period.periodA === "Invalid Date" || Period.periodB === "Invalid Date")
+    ) {
+      toast.error("Both fields are requied", {
         theme: "dark",
       })
       return
@@ -80,9 +83,10 @@ export default function PeriodSelector() {
       setComparison_Cordinates(response?.data?.data || "")
       setEfficiencyGraphLoding(false)
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Somthing went wrong", {
+      toast.error(" No data for selected dates", {
         theme: "dark",
       })
+    } finally {
       setEfficiencyGraphLoding(false)
     }
   }

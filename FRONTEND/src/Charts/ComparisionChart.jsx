@@ -13,15 +13,7 @@ import { options } from "./ChartOptions/ComparasionsChartOptions"
 import { useAppContext } from "../hooks/useCustomContext"
 import DotLoder from "../utils/Loders/dotLoder"
 
-ChartJS.register(
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-
-  Tooltip,
-  Legend
-)
+ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend)
 
 const Comparison_LineChart = () => {
   const {
@@ -36,51 +28,69 @@ const Comparison_LineChart = () => {
   const periodA = Comparison_Cordinates?.periodA || {}
   const periodB = Comparison_Cordinates?.periodB || {}
 
+  // Helper to make sure data is a plain number array
+  const sanitizeData = (arr) => (arr?.map(Number) || [])
 
   // reusable dataset factory
   const createDataset = (data, color, label) => ({
-    label: label,
-    data,
+    label,
+    data: sanitizeData(data),
     borderColor: color,
     borderWidth: 2,
     pointRadius: 3,
     tension: 0.35,
   })
 
-  const PlotingValues = showComparision
-    ? [
-        createDataset(periodA?.Yaxis || [], "#14B8A6", "periodA"),
-        createDataset(periodB?.Yaxis || [], "purple", "periodA"),
-      ]
-    : [createDataset(Yaxis, "#14B8A6", "Efficiency")]
+  // Build datasets dynamically
+  const PlotingValues = []
+  if (showComparision) {
+    if ((periodA?.Yaxis || []).length) {
+      PlotingValues.push(createDataset(periodA.Yaxis, "#14B8A6", "Period A"))
+    }
+    if ((periodB?.Yaxis || []).length) {
+      PlotingValues.push(createDataset(periodB.Yaxis, "purple", "Period B"))
+    }
+  } else {
+    if ((Yaxis || []).length) {
+      PlotingValues.push(createDataset(Yaxis, "#14B8A6", "Efficiency"))
+    }
+  }
+
+  // Set X-axis labels
+  const labels = showComparision
+    ? periodA?.XAxis?.length
+      ? periodA.XAxis
+      : periodB?.XAxis || []
+    : Xaxis
 
   const data = {
-    labels: showComparision ? periodA.XAxis || 0 : Xaxis,
+    labels,
     datasets: PlotingValues,
   }
 
-  // Fixing data Labels
+  // Update options with dynamic X-axis title
   const updatedOptions = {
-    ...options, 
+    ...options,
     scales: {
-      ...options.scales, 
+      ...options.scales,
       x: {
-        ...options.scales.x, 
+        ...options.scales.x,
         title: {
-          ...options.scales.x.title, 
-          text: showComparision? `${dataDropdownselected}'s`:dataDropdownselected, 
+          ...options.scales.x.title,
+          text: showComparision
+            ? `${dataDropdownselected}'s`
+            : dataDropdownselected,
         },
       },
     },
   }
 
+
+  console.log(PlotingValues)
+
   return (
     <div className="w-full h-full flex items-center justify-center">
-      {EfficiencyGraphLoding ? (
-        <DotLoder />
-      ) : (
-        <Line data={data} options={updatedOptions} />
-      )}
+      {EfficiencyGraphLoding ? <DotLoder /> : <Line data={data} options={updatedOptions} />}
     </div>
   )
 }

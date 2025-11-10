@@ -6,6 +6,6 @@ export async function apiCall_getComparisionData(url, data) {
     const response = await axios.post(url, data, Credentials)
     return response
   } catch (error) {
-    console.log(error?.message, "Something went Wrong")
+    throw error
   }
 }
