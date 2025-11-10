@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import  { useState } from "react"
 import { Link, NavLink } from "react-router"
 import Logo from ".././assets/Logo.svg"
 
@@ -16,8 +16,8 @@ export default function Navbar() {
   ]
 
   return (
-    <div className="  border-black/20 border-b-[1px] ">
-      <nav className=" container mx-auto bg-white border-gray-200   ">
+    <div className="border-black/20 border-b-[1px]">
+      <nav className="container mx-auto bg-white border-gray-200">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
           {/* Logo */}
           <Link to={"/"} className="text-[1.4rem] h-[4rem] w-[4rem]">
@@ -51,30 +51,28 @@ export default function Navbar() {
 
           {/* Navbar Links */}
           <div
-            className={`overflow-hidden transition-[max-height] duration-500  ease-in w-full md:block md:w-auto ${
-              isOpen ? "max-h-96" : "max-h-0"
-            }`}
+            className={`
+              w-full md:block md:w-auto
+              overflow-hidden transition-[max-height] duration-300 ease-linear
+              ${isOpen ? "max-h-96" : "max-h-0 md:max-h-full"}
+            `}
             id="navbar-default"
           >
             <ul className="font-normal flex flex-col p-2 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white">
-              {NavItems.map((e, index) => {
-                return (
-                  <li key={index}>
-                    <NavLink
-                      to={e.link}
-                      className={({ isActive }) =>
-                        ` text-[1.2rem] font-medium  block rounded-[5px] border-[1px] border-transparent px-5 py-[.5rem] hover:border-black/20 hover:bg-black hover:text-white transition-all duration-200 ${
-                          isActive
-                            ? "  border-black/20 bg-black text-white"
-                            : ""
-                        }`
-                      }
-                    >
-                      {e.text}
-                    </NavLink>
-                  </li>
-                )
-              })}
+              {NavItems.map((e, index) => (
+                <li key={index}>
+                  <NavLink
+                    to={e.link}
+                    className={({ isActive }) =>
+                      `text-[1.2rem] font-medium block rounded-[5px] border-[1px] border-transparent px-5 py-[.5rem] hover:border-black/20 hover:bg-black hover:text-white transition-all duration-200 ${
+                        isActive ? "border-black/20 bg-black text-white" : ""
+                      }`
+                    }
+                  >
+                    {e.text}
+                  </NavLink>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

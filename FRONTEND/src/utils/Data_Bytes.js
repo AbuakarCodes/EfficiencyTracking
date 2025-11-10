@@ -29,4 +29,6 @@ const EfficiencyDateStyle = {
 
 }
 
-export { months, EfficiencyDateStyle }
+const ProductName = "Optivo"
+
+export { months, EfficiencyDateStyle, ProductName }

@@ -12,6 +12,7 @@ import { Line } from "react-chartjs-2"
 import { options } from "./ChartOptions/ComparasionsChartOptions"
 import { useAppContext } from "../hooks/useCustomContext"
 import DotLoder from "../utils/Loders/dotLoder"
+import { ProductName } from "../utils/Data_Bytes"
 
 ChartJS.register(
   LineElement,
@@ -109,7 +110,7 @@ const Comparison_LineChart = () => {
         Object.keys(periodB).length === 0
       ) ? (
         <div className=" text-[3rem] md:text-[5rem] md:font-thin absolute left-[53%] md:left-1/2 top-[30%] -translate-x-1/2   flex items-center justify-center text-black/10">
-          Optivo
+          {ProductName || "" }
         </div>
       ): ""}
 
