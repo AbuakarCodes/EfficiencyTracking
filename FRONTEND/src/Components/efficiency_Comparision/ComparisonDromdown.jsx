@@ -39,7 +39,7 @@ export default function Dropdown() {
 
         {/* Dropdown menu */}
         {isOpen && (
-          <div className="absolute mt-2 w-32 bg-white shadow-md rounded">
+          <div className="absolute z-[9999] mt-2 w-32 bg-white shadow-md rounded">
             {items.map((item, index) => (
               <button
                 value={item}

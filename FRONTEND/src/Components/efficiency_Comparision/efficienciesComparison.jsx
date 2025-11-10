@@ -14,7 +14,7 @@ function EfficienciesComparison() {
         <div className=" flex flex-col gap-y-[1rem]  md:p-5 p-4 rounded-[.3rem] border-black/20 border-[1px]">
           <div className="flex md:items-center gap-2  md:gap-x-[1rem] flex-col md:flex-row  ">
             <Dropdown></Dropdown>
-            <InputDate />
+            {!showComparision ? <InputDate /> : ""}
             <ToggleButton></ToggleButton>
           </div>
           {showComparision ? <PeriodSelector /> : ""}

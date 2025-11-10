@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import ChartDataLabels from "chartjs-plugin-datalabels"
 import {
   Chart as ChartJS,
   LineElement,
@@ -18,25 +18,67 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
+
   Tooltip,
   Legend
 )
 
 const Comparison_LineChart = () => {
-  const { Yaxis, Xaxis, EfficiencyGraphLoding } = useAppContext()
+  const {
+    Yaxis,
+    Xaxis,
+    EfficiencyGraphLoding,
+    showComparision,
+    Comparison_Cordinates,
+    dataDropdownselected,
+  } = useAppContext()
+
+  // safer destructuring
+  const periodA = Comparison_Cordinates?.periodA || {}
+  const periodB = Comparison_Cordinates?.periodB || {}
+  console.log(periodA)
+
+  // generate comparison x-axis dynamically
+  const comparisionXaxis = Array.from(
+    { length: periodA?.XAxis || 30 },
+    (_, i) => i + 1
+  )
+
+  // reusable dataset factory
+  const createDataset = (data, color, label) => ({
+    label: label,
+    data,
+    borderColor: color,
+    borderWidth: 2,
+    pointRadius: 3,
+    tension: 0.35,
+  })
+
+  const PlotingValues = showComparision
+    ? [
+        createDataset(periodA?.Yaxis || [], "#14B8A6", "periodA"),
+        createDataset(periodB?.Yaxis || [], "purple", "periodA"),
+      ]
+    : [createDataset(Yaxis, "#14B8A6", "Efficiency")]
 
   const data = {
-    labels: Xaxis,
-    datasets: [
-      {
-        label: "Efficiency",
-        data: Yaxis,
-        borderColor: "#14B8A6",
-        borderWidth: 2,
-        pointRadius: 3,
-        tension: 0.35,
+    labels: showComparision ? periodA.XAxis || 0 : Xaxis,
+    datasets: PlotingValues,
+  }
+
+  // Fixing data Labels
+  const updatedOptions = {
+    ...options, 
+    scales: {
+      ...options.scales, 
+      x: {
+        ...options.scales.x, 
+        title: {
+          ...options.scales.x.title, 
+          text: showComparision? `${dataDropdownselected}'s`:dataDropdownselected, 
+        },
       },
-    ],
+    },
   }
 
   return (
@@ -44,7 +86,7 @@ const Comparison_LineChart = () => {
       {EfficiencyGraphLoding ? (
         <DotLoder />
       ) : (
-        <Line data={data} options={options} />
+        <Line data={data} options={updatedOptions} />
       )}
     </div>
   )

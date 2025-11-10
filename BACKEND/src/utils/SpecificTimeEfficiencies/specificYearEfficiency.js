@@ -1,4 +1,18 @@
 import { getSpecificMonthEfficiency } from "./specificMonthEfficiency.js";
+const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+];
 
 
 export function getSpecificYearEfficiency(periodValue, todo) {
@@ -6,6 +20,7 @@ export function getSpecificYearEfficiency(periodValue, todo) {
     const result = {
         Year_id: periodValue,
         elementLength: 12,
+        Xaxis_Lables: months,
         efficiencyData: [],
         avrageEfficiency: 0
     };
