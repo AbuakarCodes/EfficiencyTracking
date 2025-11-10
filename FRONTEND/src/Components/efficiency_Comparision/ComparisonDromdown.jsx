@@ -2,19 +2,25 @@ import { useState } from "react"
 import { useAppContext } from "../../hooks/useCustomContext.jsx"
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md"
 import InitialAnimation from "../../utils/MotionComponents/InitialAnimation.jsx"
+import { useEffect } from "react"
 
 export default function Dropdown() {
   const {
     dataDropdownselected,
     setdataDropdownselected,
-    efficiencyPageAttribute,
     setefficiencyPageAttribute,
     efficiencyApiData,
+    showComparision
   } = useAppContext()
 
+  
   const [isOpen, setIsOpen] = useState(false)
   const items = ["Day", "Month", "Year"]
-
+  
+  useEffect(() => {
+   setIsOpen(false)
+  }, [showComparision])
+  
   function menuHandler(e, item) {
     efficiencyApiData.current = {
       ...efficiencyApiData.current,

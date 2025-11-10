@@ -33,16 +33,9 @@ const Comparison_LineChart = () => {
     dataDropdownselected,
   } = useAppContext()
 
-  // safer destructuring
   const periodA = Comparison_Cordinates?.periodA || {}
   const periodB = Comparison_Cordinates?.periodB || {}
-  console.log(periodA)
 
-  // generate comparison x-axis dynamically
-  const comparisionXaxis = Array.from(
-    { length: periodA?.XAxis || 30 },
-    (_, i) => i + 1
-  )
 
   // reusable dataset factory
   const createDataset = (data, color, label) => ({

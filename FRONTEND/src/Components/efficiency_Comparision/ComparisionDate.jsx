@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import { apiCall_getComparisionData } from "../../utils/ComparisionEfficiencyAPICall/ComparisionEfficiencyApiCall.jsx"
 import { ComparisionPeriodEfficiency_URL } from "../../../API_EndPoints.js"
 import dayjs from "dayjs"
+import { toast } from "react-toastify"
 
 export default function PeriodSelector() {
   const {
@@ -14,6 +15,9 @@ export default function PeriodSelector() {
     setComparison_Cordinates,
   } = useAppContext()
   const [Period, setPeriod] = useState({ periodA: null, periodB: null })
+  useEffect(() => {
+    console.log(Period)
+  }, [Period])
 
   useEffect(() => {
     setPeriod({ periodA: null, periodB: null })
@@ -45,7 +49,9 @@ export default function PeriodSelector() {
 
   async function submithandler() {
     if (!(Period.periodA && Period.periodB)) {
-      console.log("fill Both date Fields")
+      toast.error( "Both fields are required", {
+        theme: "dark",
+      })
       return
     }
 
@@ -74,6 +80,9 @@ export default function PeriodSelector() {
       setComparison_Cordinates(response?.data?.data || "")
       setEfficiencyGraphLoding(false)
     } catch (error) {
+      toast.error(error?.response?.data?.message || "Somthing went wrong", {
+        theme: "dark",
+      })
       setEfficiencyGraphLoding(false)
     }
   }
