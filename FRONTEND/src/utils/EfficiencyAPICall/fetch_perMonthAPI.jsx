@@ -6,6 +6,6 @@ export async function apiCall_getMonthData(url, data) {
     const response = await axios.post(url, data, Credentials)
     return response
   } catch (error) {
-   
+   throw error
   }
 }

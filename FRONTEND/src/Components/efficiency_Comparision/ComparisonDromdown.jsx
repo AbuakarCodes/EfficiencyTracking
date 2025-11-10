@@ -1,8 +1,7 @@
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useAppContext } from "../../hooks/useCustomContext.jsx"
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md"
 import InitialAnimation from "../../utils/MotionComponents/InitialAnimation.jsx"
-import { useEffect } from "react"
 
 export default function Dropdown() {
   const {
@@ -10,17 +9,23 @@ export default function Dropdown() {
     setdataDropdownselected,
     setefficiencyPageAttribute,
     efficiencyApiData,
-    showComparision
   } = useAppContext()
 
-  
   const [isOpen, setIsOpen] = useState(false)
   const items = ["Day", "Month", "Year"]
-  
+
+  const dropdownRef = useRef(null)
+
+  // Close dropdown if clicking outside
   useEffect(() => {
-   setIsOpen(false)
-  }, [showComparision])
-  
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target))
+        setIsOpen(false)
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
   function menuHandler(e, item) {
     efficiencyApiData.current = {
       ...efficiencyApiData.current,
@@ -33,11 +38,11 @@ export default function Dropdown() {
 
   return (
     <InitialAnimation>
-      <div className="relative inline-block text-left ">
+      <div ref={dropdownRef} className="relative inline-block text-left">
         {/* Main button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className=" flex items-center gap-1 cursor-pointer border-[1px] border-black/20 text-black hover:bg-black hover:text-white transition-all duration-200 focus:bg-black focus:text-white  px-2 py-1 rounded  text-center"
+          className="flex items-center gap-1 cursor-pointer border-[1px] border-black/20 text-black hover:bg-black hover:text-white transition-all duration-200 focus:bg-black focus:text-white px-2 py-1 rounded text-center"
         >
           {dataDropdownselected}{" "}
           {isOpen ? <MdArrowDropUp /> : <MdArrowDropDown />}

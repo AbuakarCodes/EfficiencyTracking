@@ -13,7 +13,14 @@ import { options } from "./ChartOptions/ComparasionsChartOptions"
 import { useAppContext } from "../hooks/useCustomContext"
 import DotLoder from "../utils/Loders/dotLoder"
 
-ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend)
+ChartJS.register(
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  Tooltip,
+  Legend
+)
 
 const Comparison_LineChart = () => {
   const {
@@ -29,7 +36,7 @@ const Comparison_LineChart = () => {
   const periodB = Comparison_Cordinates?.periodB || {}
 
   // Helper to make sure data is a plain number array
-  const sanitizeData = (arr) => (arr?.map(Number) || [])
+  const sanitizeData = (arr) => arr?.map(Number) || []
 
   // reusable dataset factory
   const createDataset = (data, color, label) => ({
@@ -86,11 +93,10 @@ const Comparison_LineChart = () => {
   }
 
 
-  console.log(PlotingValues)
-
   return (
     <div className="w-full h-full flex items-center justify-center">
-      {EfficiencyGraphLoding ? <DotLoder /> : <Line data={data} options={updatedOptions} />}
+      {EfficiencyGraphLoding ? <DotLoder /> : ""}
+      <Line data={data} options={updatedOptions} />
     </div>
   )
 }

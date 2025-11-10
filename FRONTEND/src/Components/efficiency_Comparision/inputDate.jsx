@@ -1,4 +1,3 @@
-
 import { useAppContext } from "../../hooks/useCustomContext"
 import { useEffect, useRef, useState } from "react"
 import { apiCall_getMonthData } from "../../utils/EfficiencyAPICall/fetch_perMonthAPI"
@@ -8,6 +7,7 @@ import { MonthPickerInput } from "@mantine/dates"
 import { YearPickerInput } from "@mantine/dates"
 import { DatePickerInput } from "@mantine/dates"
 import { EfficiencyDateStyle } from "../../utils/Data_Bytes"
+import { toast } from "react-toastify"
 
 function InputDate() {
   const {
@@ -20,11 +20,9 @@ function InputDate() {
   } = useAppContext()
 
   useEffect(() => {
-   setXaxis("")
-   setYaxis("")
+    setXaxis("")
+    setYaxis("")
   }, [dataDropdownselected])
-  
-
 
   async function triggerAPICall(year, month, day) {
     switch (efficiencyPageAttribute.toLowerCase()) {
@@ -66,14 +64,18 @@ function InputDate() {
       setEfficiencyGraphLoding(false)
 
       setYaxis(result?.data?.data?.efficiencyData)
-      setXaxis(result?.data?.data?.Xaxis_Lables ||
-        Array.from(
-          { length: result?.data?.data?.elementLength || 30 },
-          (_, i) => i + 1
-        )
+      setXaxis(
+        result?.data?.data?.Xaxis_Lables ||
+          Array.from(
+            { length: result?.data?.data?.elementLength || 30 },
+            (_, i) => i + 1
+          )
       )
     } catch (error) {
       setEfficiencyGraphLoding(false)
+      toast.error(" No data for selected dates", {theme: "dark"})
+      setXaxis("")
+      setYaxis("")
     }
   }
 
