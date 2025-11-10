@@ -1,3 +1,4 @@
+// got it
 import { useAppContext } from "../../hooks/useCustomContext.jsx"
 import InitialAnimation from "../../utils/MotionComponents/InitialAnimation.jsx"
 import BaseDateInput from "../Date_Inputs/BaseDateInput.jsx"
@@ -15,12 +16,17 @@ export default function PeriodSelector() {
     setComparison_Cordinates,
   } = useAppContext()
   const [Period, setPeriod] = useState({ periodA: null, periodB: null })
+  const [rawDateUIvalues, setrawDateUIvalues] = useState({
+    periodA: null,
+    periodB: null,
+  })
   useEffect(() => {
     console.log(Period)
   }, [Period])
 
   useEffect(() => {
     setPeriod({ periodA: null, periodB: null })
+    setrawDateUIvalues({ periodA: null, periodB: null })
     setComparison_Cordinates({ PeriodA: {}, PeriodB: {} })
   }, [dataDropdownselected])
 
@@ -36,6 +42,7 @@ export default function PeriodSelector() {
     if (dataDropdownselected.toLowerCase() === "year")
       value = Number(data.split("-")[0])
     setPeriod((prev) => ({ ...prev, periodA: value }))
+    setrawDateUIvalues((prev) => ({ ...prev, periodA: data }))
   }
 
   function PeriodBhandler(data) {
@@ -45,12 +52,14 @@ export default function PeriodSelector() {
     if (dataDropdownselected.toLowerCase() === "year")
       value = value = Number(data.split("-")[0])
     setPeriod((prev) => ({ ...prev, periodB: value }))
+    setrawDateUIvalues((prev) => ({ ...prev, periodB: data }))
   }
 
   async function submithandler() {
     if (
       (!Period.periodA && !Period.periodB) ||
-      (Period.periodA === "Invalid Date" || Period.periodB === "Invalid Date")
+      Period.periodA === "Invalid Date" ||
+      Period.periodB === "Invalid Date"
     ) {
       toast.error("Both fields are requied", {
         theme: "dark",
@@ -101,7 +110,7 @@ export default function PeriodSelector() {
               <BaseDateInput
                 name="periodA"
                 type={type}
-                // value={Period?.periodA || ""}
+                value={rawDateUIvalues?.periodA || ""}
                 onChange={PeriodAhandler}
               />
             </div>
@@ -110,7 +119,7 @@ export default function PeriodSelector() {
               <BaseDateInput
                 name="periodB"
                 type={type}
-                // value={Period?.periodB || ""}
+                value={rawDateUIvalues?.periodB || ""}
                 onChange={PeriodBhandler}
               />
             </div>
