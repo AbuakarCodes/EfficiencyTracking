@@ -1,4 +1,4 @@
-// got it
+
 import { useAppContext } from "../../hooks/useCustomContext.jsx"
 import InitialAnimation from "../../utils/MotionComponents/InitialAnimation.jsx"
 import BaseDateInput from "../Date_Inputs/BaseDateInput.jsx"
@@ -14,16 +14,13 @@ export default function PeriodSelector() {
     EfficiencyGraphLoding,
     setEfficiencyGraphLoding,
     setComparison_Cordinates,
-    hasComparChartData
+    hasComparChartData,
   } = useAppContext()
   const [Period, setPeriod] = useState({ periodA: null, periodB: null })
   const [rawDateUIvalues, setrawDateUIvalues] = useState({
     periodA: null,
     periodB: null,
   })
-  useEffect(() => {
-    console.log(Period)
-  }, [Period])
 
   useEffect(() => {
     setPeriod({ periodA: null, periodB: null })
@@ -38,6 +35,7 @@ export default function PeriodSelector() {
 
   function PeriodAhandler(data) {
     let value = data
+
     if (dataDropdownselected.toLowerCase() === "day")
       value = dayjs(data).format("YYYY/MM/DD")
     if (dataDropdownselected.toLowerCase() === "year")
@@ -51,7 +49,8 @@ export default function PeriodSelector() {
     if (dataDropdownselected.toLowerCase() === "day")
       value = dayjs(data).format("YYYY/MM/DD")
     if (dataDropdownselected.toLowerCase() === "year")
-      value = value = Number(data.split("-")[0])
+      value = Number(data.split("-")[0])
+
     setPeriod((prev) => ({ ...prev, periodB: value }))
     setrawDateUIvalues((prev) => ({ ...prev, periodB: data }))
   }
@@ -78,6 +77,7 @@ export default function PeriodSelector() {
     }
 
     let periodAValue, periodBValue
+    // we are taking value from maintain date library, its default formate symbol is ("-")
     if (dataDropdownselected.toLowerCase() === "month") {
       const [yearA, monthA] = Period.periodA.split("-")
       const [yearB, monthB] = Period.periodB.split("-")
@@ -102,8 +102,8 @@ export default function PeriodSelector() {
       setComparison_Cordinates(response?.data?.data || "")
       setEfficiencyGraphLoding(false)
     } catch (error) {
-      toast.error(" No data for selected dates", {theme: "dark"})
-      setComparison_Cordinates({PeriodA:{}, PeriodB:{}})
+      toast.error(" No data for selected dates", { theme: "dark" })
+      setComparison_Cordinates({ PeriodA: {}, PeriodB: {} })
     } finally {
       setEfficiencyGraphLoding(false)
     }

@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import {
   DatePickerInput,
   MonthPickerInput,
   YearPickerInput,
 } from "@mantine/dates"
+import dayjs from "dayjs"
 import { EfficiencyDateStyle } from "../../utils/Data_Bytes"
-
-
+import { useAuthContext } from "../../Contexts/AuthProvider"
 
 const BaseDateInput = ({
   type = "date",
@@ -17,7 +17,11 @@ const BaseDateInput = ({
   styles,
   ...props
 }) => {
+  const {User} = useAuthContext()
   const [internalValue, setInternalValue] = useState(value || null)
+  const userRegesteredDate = useRef(User?.createdAt.split("T")[0] )
+  // console.log(userRegesteredDate.current)
+  // console.log(dayjs(userRegesteredDate.current).toDate())
 
   // Sync internalValue with external controlled value
   useEffect(() => {
@@ -37,12 +41,13 @@ const BaseDateInput = ({
   }
 
   const handleChange = (val) => {
-    setInternalValue(val || null) // clear internal state if null
+    setInternalValue(val || null)
     if (onChange) onChange(val || null)
   }
 
   return (
     <PickerComponent
+      minDate={dayjs(userRegesteredDate.current).toDate()}
       label={label}
       placeholder={placeholder || `Select ${type}`}
       value={internalValue}

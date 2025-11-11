@@ -93,12 +93,7 @@ const Comparison_LineChart = () => {
     },
   }
 
-  console.log(Boolean(!(
-        Yaxis.length === 0 &&
-        Xaxis.length === 0 &&
-        Object.keys(periodA).length === 0 &&
-        Object.keys(periodB).length === 0
-      )))
+
 
   return (
     <div className="w-full h-full flex items-center justify-center relative">

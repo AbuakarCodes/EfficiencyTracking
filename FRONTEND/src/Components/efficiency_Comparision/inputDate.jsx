@@ -3,11 +3,9 @@ import { useEffect, useRef, useState } from "react"
 import { apiCall_getMonthData } from "../../utils/EfficiencyAPICall/fetch_perMonthAPI"
 import { PeriodEfficiency_URL } from "../../../API_EndPoints"
 import dayjs from "dayjs"
-import { MonthPickerInput } from "@mantine/dates"
-import { YearPickerInput } from "@mantine/dates"
-import { DatePickerInput } from "@mantine/dates"
 import { EfficiencyDateStyle } from "../../utils/Data_Bytes"
 import { toast } from "react-toastify"
+import BaseDateInput from "../Date_Inputs/BaseDateInput"
 
 function InputDate() {
   const {
@@ -24,7 +22,29 @@ function InputDate() {
     setYaxis("")
   }, [dataDropdownselected])
 
+  let type = null
+  if (dataDropdownselected === "Day") type = "date"
+  if (dataDropdownselected === "Month") type = "month"
+  if (dataDropdownselected === "Year") type = "year"
+
   async function triggerAPICall(year, month, day) {
+    if (dataDropdownselected === "Day") {
+      if (!day || !dayjs(day).isValid()) {
+        toast.error("Invalid Day selected", { theme: "dark" })
+        return false
+      }
+    } else if (dataDropdownselected === "Month") {
+      if (!year || !month || !dayjs(`${year}-${month}-01`).isValid()) {
+        toast.error("Invalid Month selected", { theme: "dark" })
+        return false
+      }
+    } else if (dataDropdownselected === "Year") {
+      if (!year || !dayjs(`${year}-01-01`).isValid()) {
+        toast.error("Invalid Year selected", { theme: "dark" })
+        return false
+      }
+    }
+
     switch (efficiencyPageAttribute.toLowerCase()) {
       case "month": {
         const periodValue = `${year}/${month}`
@@ -73,50 +93,75 @@ function InputDate() {
       )
     } catch (error) {
       setEfficiencyGraphLoding(false)
-      toast.error(" No data for selected dates", {theme: "dark"})
+      toast.error(" No data for selected dates", { theme: "dark" })
       setXaxis("")
       setYaxis("")
     }
   }
 
   const handleMonthChange = (date) => {
-    const Year = date.split("-")[0]
-    const month = date.split("-")[1]
-    triggerAPICall(Year, month)
+    if (!date) return // user clicked cross/clear (no need for toster)
+
+    const d = dayjs(date).format("YYYY/MM/DD").split("/")
+    const year = Number(d[0])
+    const month = Number(d[1])
+
+    if (!year || !month) {
+      toast.error("Invalid month selected", { theme: "dark" })
+      return
+    }
+
+    triggerAPICall(year, month)
   }
 
-  const handleYearChange = (year) => {
-    triggerAPICall(year.split("-")[0])
+  const handleYearChange = (date) => {
+    if (!date) return // user clicked cross/clear (no need for toster)
+
+    const d = dayjs(date)
+    if (!d.isValid()) {
+      toast.error("Invalid date entered", { theme: "dark" })
+      return
+    }
+    const year = Number(d.format("YYYY/MM/DD").split("/")[0])
+    triggerAPICall(year)
   }
 
   const handleDayChange = (date) => {
-    const formatedDate = dayjs(date).format("YYYY/MM/DD")
-    triggerAPICall(null, null, formatedDate)
+    if (!date) return // user clicked cross/clear (no need for toster)
+
+    const d = dayjs(date)
+    if (!d.isValid()) {
+      toast.error("Invalid date entered", { theme: "dark" })
+      return
+    }
+    const day = d.format("YYYY/MM/DD")
+    triggerAPICall(null, null, day)
   }
 
   if (dataDropdownselected === "Month") {
     return (
-      <MonthPickerInput
+      <BaseDateInput
+        type={type}
         placeholder={`Select ${dataDropdownselected}`}
         onChange={handleMonthChange}
-        styles={EfficiencyDateStyle}
       />
     )
   }
 
   if (dataDropdownselected === "Day") {
     return (
-      <DatePickerInput
+      <BaseDateInput
+        type={type}
         placeholder={`Select ${dataDropdownselected}`}
         onChange={handleDayChange}
-        styles={EfficiencyDateStyle}
       />
     )
   }
 
   if (dataDropdownselected === "Year") {
     return (
-      <YearPickerInput
+      <BaseDateInput
+        type={type}
         placeholder={`Select ${dataDropdownselected}`}
         onChange={handleYearChange}
         styles={EfficiencyDateStyle}
