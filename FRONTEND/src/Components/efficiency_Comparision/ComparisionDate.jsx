@@ -138,7 +138,7 @@ export default function PeriodSelector() {
               disabled={EfficiencyGraphLoding}
               className="cursor-pointer rounded-[5px] px-3 py-1 bg-black text-white border-[1px] border-black/20"
             >
-              {EfficiencyGraphLoding ? "Comparing..." : "Compare"}
+              {EfficiencyGraphLoding ? "Comparing ..." : "Compare"}
             </button>
           </div>
         </div>
