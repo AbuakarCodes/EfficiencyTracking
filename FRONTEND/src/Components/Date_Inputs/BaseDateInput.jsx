@@ -54,6 +54,7 @@ const BaseDateInput = ({
       onChange={handleChange}
       allowFreeInput
       clearable
+      rightSectionWidth={40}
       styles={styles || EfficiencyDateStyle}
       {...props}
     />
