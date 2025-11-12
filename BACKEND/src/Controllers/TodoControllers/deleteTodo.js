@@ -15,7 +15,7 @@ export const DeleteTodo = async (req, res, next) => {
         );
 
         // Step 2: Handle not found
-        if (!updatedTodo)
+        if (!updatedTodo || updatedTodo.length === 0)
             return res.status(404).json(new ErrorClass("Goal or Todo document not found", 404));
 
         // Step 3: Recalculate counts and efficiency
@@ -38,7 +38,6 @@ export const DeleteTodo = async (req, res, next) => {
         // Step 5: Return updated document
         res.status(200).json(new responseClass("Goal deleted and efficiency recalculated successfully", updatedTodo, 200));
     } catch (error) {
-        console.log("DeleteTodo error:", error.message);
         res.status(501).json(new ErrorClass(error.message || "Something went wrong", 501));
     }
 };

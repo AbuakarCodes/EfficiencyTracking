@@ -12,6 +12,7 @@ export function ToDoApiProvider({ children }) {
   const [specificDateEfficiency, setspecificDateEfficiency] = useState(0)
   const [homePageChartDate, sethomePageChartDate] = useState(dayjs().format("DD/MM/YYYY"))
   const [isMultipleTask, setisMultipleTask] = useState(false)
+   const [SettedTodosDate, setSettedTodosDate] = useState([])
 
   let API_dateID = useRef([Today])
   let API_goals = useRef({ goals: [] })
@@ -30,7 +31,9 @@ export function ToDoApiProvider({ children }) {
     homePageChartDate,
     sethomePageChartDate,
     isMultipleTask,
-    setisMultipleTask
+    setisMultipleTask,
+    SettedTodosDate,
+    setSettedTodosDate
   }
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>

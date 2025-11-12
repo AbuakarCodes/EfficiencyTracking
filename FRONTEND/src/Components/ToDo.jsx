@@ -9,6 +9,7 @@ import { apiCall_fetchRemoteTodos } from "../utils/todoAPIcalls/apiCall_fetchRem
 import { apiCall_changeTodoState } from "../utils/todoAPIcalls/apiCall_changeTodoState.jsx"
 import { apiCall_deleteTodo } from "../utils/todoAPIcalls/apiCall_deleteTodo.jsx"
 import TodoListLoder from "../utils/Loders/TodoListLoder.jsx"
+import { apiCall_SettedTodo } from "../utils/todoAPIcalls/apiCall_SettedTodo.jsx"
 
 export default function TodoComponent() {
   const [input, setInput] = useState("")
@@ -23,7 +24,10 @@ export default function TodoComponent() {
     setisTodoLoding,
     isMultipleTask,
     setisMultipleTask,
+    setSettedTodosDate
   } = useTodoContext()
+
+  
 
   useEffect(() => {
     ;(async function () {
@@ -35,6 +39,19 @@ export default function TodoComponent() {
       setTodos(RemoteTodo)
     })()
   }, [])
+
+    useEffect(() => {
+      ;(async function () {
+        try {
+          const response = await apiCall_SettedTodo()
+          setSettedTodosDate(response?.data?.data || [])
+        } catch (error) {
+          setSettedTodosDate([])
+        }
+      })()
+    }, [Todos])
+
+
 
   const addTodo = () => {
     if (input.trim() === "") return
@@ -54,6 +71,7 @@ export default function TodoComponent() {
       sendApiData.current,
       setspecificDateEfficiency
     )
+    
     if (isMultipleTask) {
     } else {
     }

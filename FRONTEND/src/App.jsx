@@ -1,5 +1,5 @@
 import EfficiencyChart from "./Charts/HomePagePieCgart"
-import Calendar from "./Components/calender"
+import Calendar from "./Components/Calender/calender"
 import Navbar from "./Components/navbar"
 import Todo from "./Components/ToDo"
 import InitialAnimation from "./utils/MotionComponents/InitialAnimation"

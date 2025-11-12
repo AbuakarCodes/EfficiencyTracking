@@ -14,6 +14,7 @@ let specificDateTodos_URL = `${hosting}${port_TodoBase}/specificDateTodos`
 let changeStatusTodo_URL = `${hosting}${port_TodoBase}/changeStatusTodo`
 let DeleteTodo_URL = `${hosting}${port_TodoBase}/DeleteTodo`
 let add_MultipleTodos_URL = `${hosting}${port_TodoBase}/add_MultipleTodos`
+let settedTodoDates_URL = `${hosting}${port_TodoBase}/settedTodoDates`
 
 // Efficiency
 let port_EfficiencyBase = ":8000/eficiency"
@@ -29,6 +30,7 @@ export {
     // Todo 
     addupdateTodo_url, specificDateTodos_URL,
     changeStatusTodo_URL, DeleteTodo_URL, add_MultipleTodos_URL,
+    settedTodoDates_URL,
     // efficiency
     PeriodEfficiency_URL, ComparisionPeriodEfficiency_URL
 }

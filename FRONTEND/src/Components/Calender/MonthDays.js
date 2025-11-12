@@ -19,6 +19,5 @@ export function getMonthDays(firstDay, daysInMonth, year, month) {
             CalenderDays.push(null)
         }
     })
-    console.log(CalenderDays)
     return CalenderDays
 }

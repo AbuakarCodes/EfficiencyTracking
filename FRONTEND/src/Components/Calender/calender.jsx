@@ -1,12 +1,17 @@
 import dayjs from "dayjs"
+import axios from "axios"
 import { useEffect, useState } from "react"
-import { useTodoContext } from "../Contexts/TodosAPIContext.jsx"
-import { months } from "../utils/Data_Bytes.js"
-import { apiCall_fetchRemoteTodos } from "../utils/todoAPIcalls/apiCall_fetchRemoteTodos.jsx"
-import { useAuthContext } from "../Contexts/AuthProvider.jsx"
+import { useTodoContext } from "../../Contexts/TodosAPIContext.jsx"
+import { months } from "../../utils/Data_Bytes.js"
+import { apiCall_fetchRemoteTodos } from "../../utils/todoAPIcalls/apiCall_fetchRemoteTodos.jsx"
+import { useAuthContext } from "../../Contexts/AuthProvider.jsx"
 import { FaCaretLeft } from "react-icons/fa"
 import { FaCaretRight } from "react-icons/fa"
-import { getMonthDays } from "../utils/CalenderUtils/MonthDays.js"
+import { getMonthDays } from "./MonthDays.js"
+import { settedTodoDates_URL } from "../../../API_EndPoints.js"
+import { Credentials } from "../../utils/axios_Credentials.js"
+import { useAppContext } from "../../hooks/useCustomContext.jsx"
+import { apiCall_SettedTodo } from "../../utils/todoAPIcalls/apiCall_SettedTodo.jsx"
 
 export default function Calendar() {
   const {
@@ -17,13 +22,11 @@ export default function Calendar() {
     sethomePageChartDate,
     isMultipleTask,
     setisMultipleTask,
+    SettedTodosDate, setSettedTodosDate
   } = useTodoContext()
 
   const { User } = useAuthContext()
-
-  useEffect(() => {
-    isMultipleTask ? (API_dateID.current = []) : null
-  }, [isMultipleTask])
+  // const {  } = useAppContext()
 
   const [date, setDate] = useState(dayjs())
   const [userRegisteredDate, setUserRegisteredDate] = useState({
@@ -31,22 +34,13 @@ export default function Calendar() {
     isperMonthButtonDisable: false,
   })
 
-  const year = date.year()
-  const month = date.month() + 1
-  const today = date.date()
-  console.log({ today })
+  useEffect(() => {
+    isMultipleTask ? (API_dateID.current = []) : null
+  }, [isMultipleTask])
 
-  const firstDay = date.startOf("month").day()
-  const daysInMonth = date.daysInMonth()
-
-  const CalenderDays = getMonthDays(firstDay, daysInMonth, year, month)
-
-  // If the user registered this month, the check will trigger immediately without needing to click the previous month.
-  // Otherwise, the condition will only become true after the user clicks the previous month button, moving one month back.
-
+  // Handle prev month button disable if user registered this month or before
   useEffect(() => {
     setDate((CurrentDate) => {
-      // it cheact both isSame and isBefore
       if (!CurrentDate.isAfter(userRegisteredDate.date, "month")) {
         setUserRegisteredDate((CurrentRegesterDate) => ({
           ...CurrentRegesterDate,
@@ -62,6 +56,26 @@ export default function Calendar() {
       }
     })
   }, [])
+
+  // Fetch setted todo dates
+  useEffect(() => {
+    ;(async function () {
+      try {
+        const response = await apiCall_SettedTodo()
+        setSettedTodosDate(response?.data?.data || [])
+      } catch (error) {
+        setSettedTodosDate([])
+      }
+    })()
+  }, [])
+
+  const year = date.year()
+  const month = date.month() + 1
+  const today = dayjs().format("YYYY/MM/DD")
+
+  const firstDay = date.startOf("month").day()
+  const daysInMonth = date.daysInMonth()
+  const CalenderDays = getMonthDays(firstDay, daysInMonth, year, month)
 
   function getPrevMonth_handler() {
     setDate((CurrentDate) => {
@@ -144,33 +158,43 @@ export default function Calendar() {
             {/* CalenderDays */}
             <div className="grid grid-cols-7 text-center text-[1.1rem] ">
               {CalenderDays.map((element, index) => {
-                if (element?.day) {
-                  return (
-                    <button
-                      key={element.id}
-                      id={dayjs(element.id).format("YYYY/MM/DD")}
-                      onClick={onClickHandler}
-                      disabled={
-                        !dayjs(element.id).isAfter(
-                          dayjs(userRegisteredDate.date),
-                          "day"
-                        )
-                      }
-                      // disabled={dayjs(element.id).format("YYYY/MM/DD").isSame(userRegisteredDate.date)?true:false}
-                      className={` disabled:cursor-not-allowed disabled:text-black/20 min-h-[2.5rem] min-w-[2.5rem] flex items-center justify-center  border rounded-[50%] cursor-pointer
-                      ${isMultipleTask ? "border-black m-1 " : "border-white"}
+                if (!element?.day) return <div key={index}></div>
+
+                const elementDate = dayjs(element.id).format("YYYY/MM/DD")
+                const isDisabled = !dayjs(element.id).isAfter(
+                  dayjs(userRegisteredDate.date),
+                  "day"
+                )
+                const hasTodos =
+                  SettedTodosDate.length !== 0
+                    ? SettedTodosDate.includes(elementDate)
+                    : false
+
+                let buttonClass = `disabled:cursor-not-allowed disabled:text-black/20
+                      min-h-[2.5rem] min-w-[2.5rem] flex items-center justify-center
+                      border rounded-[50%] cursor-pointer
+                      ${isMultipleTask ? "border-black m-1" : "border-white"}
+                      ${hasTodos ? "bg-black/5" : ""}
                       ${
                         !isMultipleTask
-                        // ? element.day === today
-                        //   ? "bg-black text-white font-semibold"
-                        //   : "hover:bg-gray-200"
-                        // : ""
-                      }`}
-                    >
-                      {element.day}
-                    </button>
-                  )
-                } else return <div key={index}></div>
+                          ? element.id === today
+                            ? "bg-black text-white font-semibold"
+                            : "hover:bg-gray-200"
+                          : ""
+                      }
+                    `
+
+                return (
+                  <button
+                    key={element.id}
+                    id={elementDate}
+                    onClick={onClickHandler}
+                    disabled={isDisabled}
+                    className={buttonClass}
+                  >
+                    {element.day}
+                  </button>
+                )
               })}
             </div>
           </div>
