@@ -1,5 +1,4 @@
 import dayjs from "dayjs"
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { useTodoContext } from "../../Contexts/TodosAPIContext.jsx"
 import { months } from "../../utils/Data_Bytes.js"
@@ -8,9 +7,6 @@ import { useAuthContext } from "../../Contexts/AuthProvider.jsx"
 import { FaCaretLeft } from "react-icons/fa"
 import { FaCaretRight } from "react-icons/fa"
 import { getMonthDays } from "./MonthDays.js"
-import { settedTodoDates_URL } from "../../../API_EndPoints.js"
-import { Credentials } from "../../utils/axios_Credentials.js"
-import { useAppContext } from "../../hooks/useCustomContext.jsx"
 import { apiCall_SettedTodo } from "../../utils/todoAPIcalls/apiCall_SettedTodo.jsx"
 
 export default function Calendar() {
@@ -22,17 +18,18 @@ export default function Calendar() {
     sethomePageChartDate,
     isMultipleTask,
     setisMultipleTask,
-    SettedTodosDate, setSettedTodosDate
+    SettedTodosDate,
+    setSettedTodosDate,
   } = useTodoContext()
 
   const { User } = useAuthContext()
-  // const {  } = useAppContext()
 
   const [date, setDate] = useState(dayjs())
   const [userRegisteredDate, setUserRegisteredDate] = useState({
     date: dayjs(User?.createdAt.split("T")[0]).format("YYYY/MM/DD"),
     isperMonthButtonDisable: false,
   })
+  const [clickedCalenderBtn, setclickedCalenderBtn] = useState("")
 
   useEffect(() => {
     isMultipleTask ? (API_dateID.current = []) : null
@@ -107,6 +104,7 @@ export default function Calendar() {
   }
 
   const onClickHandler = async (e) => {
+    setclickedCalenderBtn(e.target.id)
     if (isMultipleTask) {
       API_dateID.current = Array.from(
         new Set([...API_dateID.current, e.target.id])
@@ -176,14 +174,18 @@ export default function Calendar() {
                       ${isMultipleTask ? "border-black m-1" : "border-white"}
                       ${hasTodos ? "bg-black/5" : ""}
                       ${
-                        !isMultipleTask
+                        !clickedCalenderBtn
                           ? element.id === today
                             ? "bg-black text-white font-semibold"
                             : "hover:bg-gray-200"
                           : ""
                       }
+                      ${
+                        elementDate === clickedCalenderBtn
+                          ? "bg-black text-white font-semibold"
+                          : ""
+                      }
                     `
-
                 return (
                   <button
                     key={element.id}
