@@ -34,6 +34,7 @@ export default function Calendar() {
   const year = date.year()
   const month = date.month() + 1
   const today = date.date()
+  console.log({ today })
 
   const firstDay = date.startOf("month").day()
   const daysInMonth = date.daysInMonth()
@@ -45,10 +46,8 @@ export default function Calendar() {
 
   useEffect(() => {
     setDate((CurrentDate) => {
-      if (
-        CurrentDate.isSame(userRegisteredDate.date, "month") ||
-        CurrentDate.isBefore(userRegisteredDate.date, "month")
-      ) {
+      // it cheact both isSame and isBefore
+      if (!CurrentDate.isAfter(userRegisteredDate.date, "month")) {
         setUserRegisteredDate((CurrentRegesterDate) => ({
           ...CurrentRegesterDate,
           isperMonthButtonDisable: true,
@@ -67,10 +66,7 @@ export default function Calendar() {
   function getPrevMonth_handler() {
     setDate((CurrentDate) => {
       const UIMonth = CurrentDate.subtract(1, "month")
-      if (
-        UIMonth.isSame(userRegisteredDate.date, "month") ||
-        UIMonth.isBefore(userRegisteredDate.date, "month")
-      ) {
+      if (!UIMonth.isAfter(userRegisteredDate.date, "month")) {
         setUserRegisteredDate((CurrentRegesterDate) => ({
           ...CurrentRegesterDate,
           isperMonthButtonDisable: true,
@@ -123,11 +119,7 @@ export default function Calendar() {
             {/* Header */}
             <div className={`flex justify-between items-center mb-4`}>
               <button
-                className={`px-2 text-lg font-bold hover:text-gray-500 p-2 rounded-[50%] ${
-                  userRegisteredDate.isperMonthButtonDisable
-                    ? "cursor-not-allowed"
-                    : "cursor-pointer"
-                }`}
+                className={`px-2 text-lg font-bold hover:text-gray-500 p-2 rounded-[50%]  disabled:text-black/20 disabled:cursor-not-allowed cursor-pointer `}
                 onClick={getPrevMonth_handler}
                 disabled={userRegisteredDate.isperMonthButtonDisable}
               >
@@ -156,24 +148,29 @@ export default function Calendar() {
                   return (
                     <button
                       key={element.id}
-                      id={dayjs(`${year}-${month}-${element.day}`).format(
-                        "YYYY/MM/DD"
-                      )}
+                      id={dayjs(element.id).format("YYYY/MM/DD")}
                       onClick={onClickHandler}
-                      className={` min-h-[2.5rem] min-w-[2.5rem] flex items-center justify-center  border rounded-[50%] cursor-pointer
+                      disabled={
+                        !dayjs(element.id).isAfter(
+                          dayjs(userRegisteredDate.date),
+                          "day"
+                        )
+                      }
+                      // disabled={dayjs(element.id).format("YYYY/MM/DD").isSame(userRegisteredDate.date)?true:false}
+                      className={` disabled:cursor-not-allowed disabled:text-black/20 min-h-[2.5rem] min-w-[2.5rem] flex items-center justify-center  border rounded-[50%] cursor-pointer
                       ${isMultipleTask ? "border-black m-1 " : "border-white"}
                       ${
                         !isMultipleTask
-                          ? element.day === today
-                            ? "bg-black text-white font-semibold"
-                            : "hover:bg-gray-200"
-                          : ""
+                        // ? element.day === today
+                        //   ? "bg-black text-white font-semibold"
+                        //   : "hover:bg-gray-200"
+                        // : ""
                       }`}
                     >
                       {element.day}
                     </button>
                   )
-                } else return <div key={index} ></div>
+                } else return <div key={index}></div>
               })}
             </div>
           </div>
