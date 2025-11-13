@@ -53,10 +53,10 @@ const Comparison_LineChart = () => {
   const PlotingValues = []
   if (showComparision) {
     if ((periodA?.Yaxis || []).length) {
-      PlotingValues.push(createDataset(periodA.Yaxis, "#14B8A6", "Period A"))
+      PlotingValues.push(createDataset(periodA.Yaxis, "#86efac", "Period A"))
     }
     if ((periodB?.Yaxis || []).length) {
-      PlotingValues.push(createDataset(periodB.Yaxis, "purple", "Period B"))
+      PlotingValues.push(createDataset(periodB.Yaxis, "#fca5a5", "Period B"))
     }
   } else {
     if ((Yaxis || []).length) {

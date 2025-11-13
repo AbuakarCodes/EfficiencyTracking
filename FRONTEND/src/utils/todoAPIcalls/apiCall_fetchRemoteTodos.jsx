@@ -11,10 +11,11 @@ export async function apiCall_fetchRemoteTodos(
     setisTodoLoding(true)
     const response = await axios.post(
       specificDateTodos_URL,
-      { date_id: API_dateID.current[0] },
+      { date_id: API_dateID.current },
       Credentials
     )
-    const RemoteTodo = response?.data?.data?.goals || []
+
+    const RemoteTodo = response?.data?.data || []
 
     setspecificDateEfficiency(response?.data?.data?.dayEfficiency || 0)
 

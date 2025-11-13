@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTodoContext } from "../../Contexts/TodosAPIContext.jsx"
 import { months } from "../../utils/Data_Bytes.js"
 import { apiCall_fetchRemoteTodos } from "../../utils/todoAPIcalls/apiCall_fetchRemoteTodos.jsx"
@@ -29,7 +29,7 @@ export default function Calendar() {
     date: dayjs(User?.createdAt.split("T")[0]).format("YYYY/MM/DD"),
     isperMonthButtonDisable: false,
   })
-  const [clickedCalenderBtn, setclickedCalenderBtn] = useState("")
+  const [clickedDates, setclickedDates] = useState([])
 
   useEffect(() => {
     isMultipleTask ? (API_dateID.current = []) : null
@@ -65,6 +65,31 @@ export default function Calendar() {
       }
     })()
   }, [])
+
+  // API date_id being seted and APi call as well
+  useEffect(() => {
+    if (clickedDates.length === 0) return
+    if (isMultipleTask) {
+      API_dateID.current = clickedDates
+        .filter((elem) => elem.date && elem.isSelected == true)
+        .map((elem) => elem.date)
+    } else
+      API_dateID.current = clickedDates[clickedDates.length - 1]?.date
+
+      // calling APi
+    ;(async function () {
+      try {
+        const RemoteTodos = await apiCall_fetchRemoteTodos(
+          API_dateID,
+          setisTodoLoding,
+          setspecificDateEfficiency
+        )
+        setTodos(RemoteTodos)
+      } catch (error) {
+        console.log(error?.message || "somthing Went Worng")
+      }
+    })()
+  }, [clickedDates])
 
   const year = date.year()
   const month = date.month() + 1
@@ -104,22 +129,24 @@ export default function Calendar() {
   }
 
   const onClickHandler = async (e) => {
-    setclickedCalenderBtn(e.target.id)
-    if (isMultipleTask) {
-      API_dateID.current = Array.from(
-        new Set([...API_dateID.current, e.target.id])
-      )
-      return
-    }
-
-    API_dateID.current[0] = e.target.id
     sethomePageChartDate(dayjs(e.target.id).format("DD/MM/YY"))
-    const RemoteTodos = await apiCall_fetchRemoteTodos(
-      API_dateID,
-      setisTodoLoding,
-      setspecificDateEfficiency
-    )
-    setTodos(RemoteTodos)
+    // setting data for api CALL TO set and unset data, can just modified days of month as
+    // id the user change the month the whole data will bw lost or user will be
+    // bounded to only set multiple todos of same month
+    if (isMultipleTask) {
+      setclickedDates((currentState) => {
+        const AlreadyExist = currentState.some((obj) => obj.date == e.target.id)
+        if (AlreadyExist) {
+          return currentState.map((obj) =>
+            obj.date === e.target.id
+              ? { ...obj, isSelected: !obj.isSelected }
+              : obj
+          )
+        } else return [...currentState, { date: e.target.id, isSelected: true }]
+      })
+    } else {
+      setclickedDates([{ date: e.target.id, isSelected: true }])
+    }
   }
 
   return (
@@ -159,10 +186,17 @@ export default function Calendar() {
                 if (!element?.day) return <div key={index}></div>
 
                 const elementDate = dayjs(element.id).format("YYYY/MM/DD")
+
                 const isDisabled = !dayjs(element.id).isAfter(
                   dayjs(userRegisteredDate.date),
                   "day"
                 )
+                const chosingMultipleDates = clickedDates.some(
+                  (obj) => obj.date == elementDate && obj.isSelected == true
+                )
+
+                const isToday = element.id === today
+
                 const hasTodos =
                   SettedTodosDate.length !== 0
                     ? SettedTodosDate.includes(elementDate)
@@ -171,21 +205,43 @@ export default function Calendar() {
                 let buttonClass = `disabled:cursor-not-allowed disabled:text-black/20
                       min-h-[2.5rem] min-w-[2.5rem] flex items-center justify-center
                       border rounded-[50%] cursor-pointer
-                      ${isMultipleTask ? "border-black m-1" : "border-white"}
-                      ${hasTodos ? "bg-black/5" : ""}
+                      ${isMultipleTask ? "border-black/20" : "border-white"}
+                   
+                      // Today background
                       ${
-                        !clickedCalenderBtn
-                          ? element.id === today
-                            ? "bg-black text-white font-semibold"
-                            : "hover:bg-gray-200"
+                        clickedDates.length === 0
+                          ? isToday
+                            ? "!bg-black text-white font-semibold"
+                            : hasTodos
+                            ? "bg-black/5"
+                            : ""
                           : ""
                       }
+
+                    single Clicked background 
                       ${
-                        elementDate === clickedCalenderBtn
+                        clickedDates.some(
+                          (obj) =>
+                            obj.date == elementDate && obj.isSelected === true
+                        )
                           ? "bg-black text-white font-semibold"
-                          : ""
+                          : hasTodos
+                          ? "bg-black/5"
+                          : "hover:!text-red-300"
                       }
+
+                // Multiple Todos
+              
+
+                ${
+                  isMultipleTask
+                    ? chosingMultipleDates
+                      ? "bg-black text-white"
+                      : ""
+                    : ""
+                }
                     `
+
                 return (
                   <button
                     key={element.id}

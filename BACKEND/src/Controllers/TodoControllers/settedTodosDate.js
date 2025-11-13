@@ -6,7 +6,6 @@ export const settedTodoDates = async (req, res) => {
     try {
         const { id: user_id } = req.user;
         const todo = await Todo.find({ user_id })
-        console.log(todo)
         if (!todo || todo.length === 0)
             return res.status(404).json(new ErrorClass("todos not found", 404));
 

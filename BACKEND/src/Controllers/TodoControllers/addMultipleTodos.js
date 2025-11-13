@@ -7,7 +7,7 @@ import { responseClass } from "../../utils/responseClass.js";
 export const add_MultipleTodos = async (req, res, next) => {
     try {
         const { date_id, goals } = req.body; // date_id = array of date strings like ["2025/10/30", "2025/10/31"]
-        const { id } = req.user;
+        const { id, email } = req.user;
 
         if (!id || !Array.isArray(date_id) || date_id.length === 0 || !goals) {
             return res.status(400).json(new ErrorClass("Missing or invalid fields"));
@@ -22,7 +22,7 @@ export const add_MultipleTodos = async (req, res, next) => {
         for (const date of date_id) {
             const parsedDate = dayjs(date, "YY/MM/DD");
             const year = parsedDate.year();
-            const month = parsedDate.month() + 1; // month() is 0-based
+            const month = parsedDate.month() + 1;
             const day = parsedDate.date();
 
             const totalTodoTasks = goals.length;
@@ -65,6 +65,7 @@ export const add_MultipleTodos = async (req, res, next) => {
                 const newTodo = await Todo.create({
                     user_id: id,
                     date_id: date,
+                    userEmail:email,
                     month,
                     year,
                     totalTodoTasks,
@@ -81,7 +82,7 @@ export const add_MultipleTodos = async (req, res, next) => {
             .status(200)
             .json(new responseClass("Todos processed successfully", results, 200));
     } catch (error) {
-        console.error("Error in add_UpdateTodos:", error);
+        console.log("Error in add_UpdateTodos:", error);
         return res
             .status(500)
             .json(new ErrorClass("Internal server error", 500, error.message));

@@ -3,12 +3,18 @@ import { Todo } from "../../models/todos.model.js";
 import { User } from "../../models/userSchema.model.js";
 import { ErrorClass } from "../../utils/ErrorClass.js";
 import { responseClass } from "../../utils/responseClass.js";
+import { Backend_isValidDate } from "../../utils/Backend_isValidDate.js";
 
 export const add_UpdateTodos = async (req, res, next) => {
   try {
     const { date_id, goals } = req.body;
     const { id } = req.user;
-    console.log("Frontend ID",id)
+
+    
+
+    // console.log({ date_id, isDAte:Backend_isValidDate(date_id) })
+
+    // if (!Backend_isValidDate(date_id)) return res.status(400).json(new ErrorClass("Date is not valid"))
 
     if (!id || !date_id || !goals) {
       return res.status(400).json(new ErrorClass("Missing required fields"));
@@ -21,9 +27,7 @@ export const add_UpdateTodos = async (req, res, next) => {
 
     const user = await User.findById(id);
     if (!user) return res.status(404).json(new ErrorClass("User not found"));
-console.log("DB_id",user._id)
-console.log("DB_Email",user.email)
-console.log("are they ewqual", user._id===id)
+
 
     const updatedTodo = await Todo.findOneAndUpdate(
       { user_id: id, date_id },
@@ -41,7 +45,7 @@ console.log("are they ewqual", user._id===id)
     if (updatedTodo) {
       return res
         .status(200)
-        .json(new responseClass("Todo updated successfully", updatedTodo, 200));
+        .json(new responseClass("Todo updated successfully", updatedTodo?.goals|| [], 200));
     }
 
     const newTodo = await Todo.create({
@@ -58,7 +62,7 @@ console.log("are they ewqual", user._id===id)
 
     return res
       .status(201)
-      .json(new responseClass("New Todo created successfully", newTodo, 201));
+      .json(new responseClass("New Todo created successfully", newTodo?.goals|| [], 201));
   } catch (error) {
     console.log("Error in add_UpdateTodos:", error);
     return res

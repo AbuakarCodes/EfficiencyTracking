@@ -24,10 +24,8 @@ export default function TodoComponent() {
     setisTodoLoding,
     isMultipleTask,
     setisMultipleTask,
-    setSettedTodosDate
+    setSettedTodosDate,
   } = useTodoContext()
-
-  
 
   useEffect(() => {
     ;(async function () {
@@ -40,18 +38,16 @@ export default function TodoComponent() {
     })()
   }, [])
 
-    useEffect(() => {
-      ;(async function () {
-        try {
-          const response = await apiCall_SettedTodo()
-          setSettedTodosDate(response?.data?.data || [])
-        } catch (error) {
-          setSettedTodosDate([])
-        }
-      })()
-    }, [Todos])
-
-
+  useEffect(() => {
+    ;(async function () {
+      try {
+        const response = await apiCall_SettedTodo()
+        setSettedTodosDate(response?.data?.data || [])
+      } catch (error) {
+        setSettedTodosDate([])
+      }
+    })()
+  }, [Todos])
 
   const addTodo = () => {
     if (input.trim() === "") return
@@ -71,7 +67,7 @@ export default function TodoComponent() {
       sendApiData.current,
       setspecificDateEfficiency
     )
-    
+
     if (isMultipleTask) {
     } else {
     }
@@ -99,8 +95,7 @@ export default function TodoComponent() {
   async function apiDataBundel(newTodo) {
     try {
       API_goals.current.goals = newTodo
-      if (isMultipleTask) sendApiData.current["date_id"] = API_dateID.current
-      else sendApiData.current["date_id"] = API_dateID.current[0]
+      sendApiData.current["date_id"] = API_dateID.current
       sendApiData.current["goals"] = API_goals.current.goals
     } catch (error) {
       console.log(error?.message)
