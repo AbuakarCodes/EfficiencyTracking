@@ -1,22 +1,26 @@
+import { lazy, Suspense } from "react"
+import ReactDOM from "react-dom/client"
 import { BrowserRouter, Route, Routes, useLocation } from "react-router"
 import { AppProvider } from "./Contexts/globalContext"
 import { ToastContainer } from "react-toastify"
-import { MantineProvider } from "@mantine/core" 
-import "@mantine/core/styles.css" 
-import "@mantine/dates/styles.css" 
-import "react-toastify/dist/ReactToastify.css"
+import { MantineProvider } from "@mantine/core"
+import { AnimatePresence } from "framer-motion"
 
+import "@mantine/core/styles.css"
+import "@mantine/dates/styles.css"
+import "react-toastify/dist/ReactToastify.css"
 import "./index.css"
-import ReactDOM from "react-dom/client"
-import Login from "./Pages/login"
-import Signin from "./Pages/signin"
-import Efficiency from "./Pages/Efficiency"
-import Profile from "./Pages/profile"
+
 import { AuthProvider } from "./Contexts/AuthProvider"
 import { ProtectedRoute } from "./utils/ProtectedRoute"
 import ChangePassword from "./Components/ChangePassword"
 import App from "./App"
-import { AnimatePresence } from "framer-motion"
+import DotLoder from "./utils/Loders/dotLoder"
+
+const Login = lazy(() => import("./Pages/login"))
+const Signin = lazy(() => import("./Pages/signin"))
+const Efficiency = lazy(() => import("./Pages/Efficiency"))
+const Profile = lazy(() => import("./Pages/profile"))
 
 function AnimatedRoutes() {
   const location = useLocation()
@@ -36,15 +40,64 @@ function AnimatedRoutes() {
           path="/efficiency"
           element={
             <ProtectedRoute>
-              <Efficiency />
+              <Suspense fallback={<DotLoder />}>
+                <Efficiency />
+              </Suspense>
             </ProtectedRoute>
           }
         />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/login/:intentionalRoute" element={<Login />} />
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/signin/:intentionalRoute" element={<Signin />} />
+        <Route
+          path="/profile"
+          element={
+            <Suspense fallback={<DotLoder />}>
+              <Profile />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/login"
+          element={
+            <Suspense fallback={<DotLoder />}>
+              <Login />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/login/:intentionalRoute"
+          element={
+            <Suspense fallback={<DotLoder />}>
+              <Login />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/signin"
+          element={
+            <Suspense fallback={<DotLoder />}>
+              <Signin />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/signin/:intentionalRoute"
+          element={
+            <Suspense fallback={<DotLoder />}>
+              <Signin />
+            </Suspense>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <Suspense fallback={<DotLoder />}>
+              <div>404 Not Found</div>
+            </Suspense>
+          }
+        />
         <Route path="/test" element={<ChangePassword />} />
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
@@ -55,7 +108,6 @@ function AnimatedRoutes() {
 function Root() {
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
-     
       <AppProvider>
         <AuthProvider>
           <BrowserRouter>
