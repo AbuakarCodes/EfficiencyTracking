@@ -5,7 +5,8 @@ import { specificDateTodos_URL } from "../../../API_EndPoints"
 export async function apiCall_fetchRemoteTodos(
   API_dateID,
   setisTodoLoding,
-  setspecificDateEfficiency
+  setspecificDateEfficiency,
+  isMultipleTask
 ) {
   try {
     setisTodoLoding(true)
@@ -16,7 +17,6 @@ export async function apiCall_fetchRemoteTodos(
     )
 
     const RemoteTodo = response?.data?.data?.goals || []
-
     setspecificDateEfficiency(response?.data?.data?.efficiency || 0)
 
     setisTodoLoding(false)

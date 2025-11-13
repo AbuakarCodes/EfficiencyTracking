@@ -23,16 +23,17 @@ export default function TodoComponent() {
     isTodoLoding,
     setisTodoLoding,
     isMultipleTask,
-    setisMultipleTask,
     setSettedTodosDate,
   } = useTodoContext()
 
   useEffect(() => {
+    if (isMultipleTask) return 
     ;(async function () {
       const RemoteTodo = await apiCall_fetchRemoteTodos(
         API_dateID,
         setisTodoLoding,
-        setspecificDateEfficiency
+        setspecificDateEfficiency,
+        isMultipleTask
       )
       setTodos(Array.isArray(RemoteTodo) ? RemoteTodo : [])
     })()

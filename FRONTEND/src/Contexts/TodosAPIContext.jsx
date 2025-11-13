@@ -1,4 +1,4 @@
-import dayjs from "dayjs"
+import dayjs, { Dayjs } from "dayjs"
 import { createContext, useContext, useRef, useState } from "react"
 
 const TodoContext = createContext()
@@ -10,7 +10,7 @@ export function ToDoApiProvider({ children }) {
   const [Todos, setTodos] = useState([])
   const [isTodoLoding, setisTodoLoding] = useState(false)
   const [specificDateEfficiency, setspecificDateEfficiency] = useState(0)
-  const [homePageChartDate, sethomePageChartDate] = useState(dayjs().format("DD/MM/YYYY"))
+  const [homePageChartDate, sethomePageChartDate] = useState([dayjs().format("YYYY/MM/DD")])
   const [isMultipleTask, setisMultipleTask] = useState(false)
    const [SettedTodosDate, setSettedTodosDate] = useState([])
 

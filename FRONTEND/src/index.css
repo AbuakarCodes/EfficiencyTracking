@@ -4,8 +4,8 @@
   display: none;
 }
 .no-scrollbar {
-  -ms-overflow-style: none;  /* for IE/Edge */
-  scrollbar-width: none;      /* for Firefox */
+  -ms-overflow-style: none;  
+  scrollbar-width: none;     
 }
 
 @theme {

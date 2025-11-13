@@ -33,6 +33,7 @@ export default function Calendar() {
 
   useEffect(() => {
     isMultipleTask ? (API_dateID.current = []) : null
+    setclickedDates([])
   }, [isMultipleTask])
 
   // Handle prev month button disable if user registered this month or before
@@ -70,14 +71,18 @@ export default function Calendar() {
   useEffect(() => {
     if (clickedDates.length === 0) return
     if (isMultipleTask) {
-      API_dateID.current = clickedDates
-        .filter((elem) => elem.date && elem.isSelected == true)
-        .map((elem) => elem.date)
-    } else
+      const filteredSelectedDates = clickedDates
+        .filter((elem) => elem?.date && elem?.isSelected == true)
+        .map((elem) => elem?.date)
+      API_dateID.current = filteredSelectedDates
+      sethomePageChartDate(filteredSelectedDates)
+    } else {
       API_dateID.current = clickedDates[clickedDates.length - 1]?.date
-
-      // calling APi
+      sethomePageChartDate([clickedDates[clickedDates.length - 1]?.date])
+    }
+    // calling APi
     ;(async function () {
+      if (isMultipleTask) return
       try {
         const RemoteTodos = await apiCall_fetchRemoteTodos(
           API_dateID,
@@ -128,8 +133,8 @@ export default function Calendar() {
     })
   }
 
+
   const onClickHandler = async (e) => {
-    sethomePageChartDate(dayjs(e.target.id).format("DD/MM/YY"))
     // setting data for api CALL TO set and unset data, can just modified days of month as
     // id the user change the month the whole data will bw lost or user will be
     // bounded to only set multiple todos of same month
@@ -191,9 +196,11 @@ export default function Calendar() {
                   dayjs(userRegisteredDate.date),
                   "day"
                 )
-                const chosingMultipleDates = clickedDates.some(
-                  (obj) => obj.date == elementDate && obj.isSelected == true
-                )
+                const chosingMultipleDates = Array.isArray(clickedDates)
+                  ? clickedDates.some(
+                      (obj) => obj.date == elementDate && obj.isSelected == true
+                    )
+                  : null
 
                 const isToday = element.id === today
 
@@ -220,10 +227,7 @@ export default function Calendar() {
 
                     single Clicked background 
                       ${
-                        clickedDates.some(
-                          (obj) =>
-                            obj.date == elementDate && obj.isSelected === true
-                        )
+                        chosingMultipleDates
                           ? "bg-black text-white font-semibold"
                           : hasTodos
                           ? "bg-black/5"
