@@ -1,9 +1,9 @@
-import EfficiencyChart from "./Charts/HomePagePieCgart"
 import Calendar from "./Components/Calender/calender"
 import Navbar from "./Components/navbar"
 import Todo from "./Components/ToDo"
 import InitialAnimation from "./utils/MotionComponents/InitialAnimation"
 import ToDoApiProvider from "./Contexts/TodosAPIContext"
+import HomePagePieChart from "./Charts/HomePagePieChart"
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
           </InitialAnimation>
           {/* chart */}
           <InitialAnimation>
-            <EfficiencyChart />
+            <HomePagePieChart />
           </InitialAnimation>
 
           <div className="container p-4 flex flex-col md:flex-row  mx-auto">

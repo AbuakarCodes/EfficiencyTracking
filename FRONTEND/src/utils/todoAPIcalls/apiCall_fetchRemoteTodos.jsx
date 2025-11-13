@@ -15,9 +15,9 @@ export async function apiCall_fetchRemoteTodos(
       Credentials
     )
 
-    const RemoteTodo = response?.data?.data || []
+    const RemoteTodo = response?.data?.data?.goals || []
 
-    setspecificDateEfficiency(response?.data?.data?.dayEfficiency || 0)
+    setspecificDateEfficiency(response?.data?.data?.efficiency || 0)
 
     setisTodoLoding(false)
     return RemoteTodo

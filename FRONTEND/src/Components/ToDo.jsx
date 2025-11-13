@@ -34,7 +34,7 @@ export default function TodoComponent() {
         setisTodoLoding,
         setspecificDateEfficiency
       )
-      setTodos(RemoteTodo)
+      setTodos(Array.isArray(RemoteTodo) ? RemoteTodo : [])
     })()
   }, [])
 
@@ -134,7 +134,7 @@ export default function TodoComponent() {
           ) : (
             <>
               <ul className="space-y-2">
-                {Todos.map((todo) => {
+                {Todos?.map((todo) => {
                   return (
                     <li
                       key={uuidv4()}
@@ -143,7 +143,7 @@ export default function TodoComponent() {
                       {/* Wrapper to enforce text wrapping */}
                       <div className="flex-1 min-w-0">
                         <span
-                          onClick={() => toggleTodo(todo.todo_id)}
+                          onClick={() => toggleTodo(todo?.todo_id)}
                           className={`block w-full cursor-pointer break-words whitespace-normal ${
                             todo.isCompleted ? "line-through text-gray-500" : ""
                           }`}
@@ -153,7 +153,7 @@ export default function TodoComponent() {
                       </div>
 
                       <button
-                        onClick={() => deleteTodo(todo.todo_id)}
+                        onClick={() => deleteTodo(todo?.todo_id)}
                         className="text-red-600 cursor-pointer font-bold hover:text-red-800 ml-2 flex-shrink-0"
                       >
                         ✕

@@ -1,14 +1,16 @@
-import React from "react"
+
 import { Doughnut } from "react-chartjs-2"
 import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js"
-import InitialAnimation from "../utils/MotionComponents/InitialAnimation"
 import { useTodoContext } from "../Contexts/TodosAPIContext"
+import InitialAnimation from "../utils/MotionComponents/InitialAnimation"
 
 // Register chart components
 ChartJS.register(ArcElement, Tooltip)
 
-export default function EfficiencyChart() {
+
+export default function HomePagePieChart() {
   const { specificDateEfficiency, homePageChartDate } = useTodoContext()
+
   const data = {
     datasets: [
       {
