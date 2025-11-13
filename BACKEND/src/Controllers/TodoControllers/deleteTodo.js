@@ -7,6 +7,8 @@ export const DeleteTodo = async (req, res, next) => {
         const { date_id, goal_id } = req.body;
         const { id: user_id } = req.user;
 
+    
+
         // Step 1: Find and update in a single go (remove goal)
         const updatedTodo = await Todo.findOneAndUpdate(
             { user_id, date_id },

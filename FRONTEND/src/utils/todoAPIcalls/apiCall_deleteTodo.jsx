@@ -7,9 +7,8 @@ export async function apiCall_deleteTodo(
   id,
   setspecificDateEfficiency
 ) {
-  // console.log(API_dateID)
   try {
-    const data = { date_id: API_dateID.current[0], goal_id: id }
+    const data = { date_id: API_dateID.current, goal_id: id }
     const response = await axios.post(DeleteTodo_URL, data, Credentials)
     setspecificDateEfficiency(response?.data?.data?.dayEfficiency || 0)
   } catch (error) {
