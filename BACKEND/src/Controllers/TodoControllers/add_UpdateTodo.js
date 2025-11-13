@@ -3,18 +3,16 @@ import { Todo } from "../../models/todos.model.js";
 import { User } from "../../models/userSchema.model.js";
 import { ErrorClass } from "../../utils/ErrorClass.js";
 import { responseClass } from "../../utils/responseClass.js";
-import { Backend_isValidDate } from "../../utils/Backend_isValidDate.js";
+import { isValid, parse } from "date-fns"
+import { Backend_isDateValid } from "../../utils/Backend_isDateValid.js";
 
 export const add_UpdateTodos = async (req, res, next) => {
   try {
     const { date_id, goals } = req.body;
     const { id } = req.user;
 
-    
 
-    // console.log({ date_id, isDAte:Backend_isValidDate(date_id) })
-
-    // if (!Backend_isValidDate(date_id)) return res.status(400).json(new ErrorClass("Date is not valid"))
+    if (!Backend_isDateValid(date_id)) return res.status(400).json(new ErrorClass("Date is not valid"))
 
     if (!id || !date_id || !goals) {
       return res.status(400).json(new ErrorClass("Missing required fields"));
@@ -45,7 +43,7 @@ export const add_UpdateTodos = async (req, res, next) => {
     if (updatedTodo) {
       return res
         .status(200)
-        .json(new responseClass("Todo updated successfully", updatedTodo?.goals|| [], 200));
+        .json(new responseClass("Todo updated successfully", updatedTodo?.goals || [], 200));
     }
 
     const newTodo = await Todo.create({
@@ -62,7 +60,7 @@ export const add_UpdateTodos = async (req, res, next) => {
 
     return res
       .status(201)
-      .json(new responseClass("New Todo created successfully", newTodo?.goals|| [], 201));
+      .json(new responseClass("New Todo created successfully", newTodo?.goals || [], 201));
   } catch (error) {
     console.log("Error in add_UpdateTodos:", error);
     return res

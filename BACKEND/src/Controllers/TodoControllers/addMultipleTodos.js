@@ -3,11 +3,15 @@ import { Todo } from "../../models/todos.model.js";
 import { User } from "../../models/userSchema.model.js";
 import { ErrorClass } from "../../utils/ErrorClass.js";
 import { responseClass } from "../../utils/responseClass.js";
+import { Backend_isDateValid } from "../../utils/Backend_isDateValid.js";
 
 export const add_MultipleTodos = async (req, res, next) => {
     try {
         const { date_id, goals } = req.body; // date_id = array of date strings like ["2025/10/30", "2025/10/31"]
         const { id, email } = req.user;
+
+        const areDatesValid = date_id.every(d => Backend_isDateValid(d))
+        if (!areDatesValid) return res.status(400).json(new ErrorClass("Dates is not valid"))
 
         if (!id || !Array.isArray(date_id) || date_id.length === 0 || !goals) {
             return res.status(400).json(new ErrorClass("Missing or invalid fields"));
@@ -65,7 +69,7 @@ export const add_MultipleTodos = async (req, res, next) => {
                 const newTodo = await Todo.create({
                     user_id: id,
                     date_id: date,
-                    userEmail:email,
+                    userEmail: email,
                     month,
                     year,
                     totalTodoTasks,
