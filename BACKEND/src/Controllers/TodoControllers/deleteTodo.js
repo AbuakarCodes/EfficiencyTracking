@@ -7,16 +7,14 @@ export const DeleteTodo = async (req, res, next) => {
     try {
         const { date_id, goal_id } = req.body;
         const { id: user_id } = req.user;
-
-        if (!Array.isArray(date_id)) {
-            const today = dayjs().format("YYYY/MM/DD")
-            if (dayjs(date_id).isBefore(today, "day"))
-                return res.status(400).json(new ErrorClass("can't delete past Todos "));
-        }
-
+        const today = dayjs().format("YYYY/MM/DD")
 
         let Date_id = date_id
         if (!Array.isArray(date_id)) Date_id = [date_id]
+
+        const areDatesSmaller = Date_id.some(d => dayjs(d).isBefore(today, "day"))
+        if (areDatesSmaller)
+            return res.status(400).json(new ErrorClass("can't delete past Todos "));
 
 
         for (const date of Date_id) {

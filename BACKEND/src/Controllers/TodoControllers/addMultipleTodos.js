@@ -7,10 +7,17 @@ import { Backend_isDateValid } from "../../utils/Backend_isDateValid.js";
 
 export const add_MultipleTodos = async (req, res, next) => {
     try {
-        const { date_id, goals } = req.body; 
+        const { date_id, goals } = req.body;
         const { id, email } = req.user;
+        const today = dayjs().format("YYYY/MM/DD")
 
-       
+
+        const areDatesSmaller = date_id.some(d => dayjs(d).isBefore(today, "day"))
+        if (areDatesSmaller)
+            return res.status(400).json(new ErrorClass("can't add Todos for past dates "));
+
+
+
         if (!id || !Array.isArray(date_id) || date_id.length === 0 || !goals) {
             return res.status(400).json(new ErrorClass("Missing or invalid fields"));
         }

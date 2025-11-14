@@ -158,7 +158,7 @@ export default function TodoComponent() {
             className=" disabled:cursor-not-allowed disabled:opacity-65 flex-grow border border-black rounded-l-md p-2 outline-none"
           />
           <button
-            // disabled={isDisable.isClickedDate_smaller_thenToday}
+            disabled={isDisable.isClickedDate_smaller_thenToday}
             onClick={addTodo}
             className="bg-black disabled:cursor-not-allowed disabled:opacity-65 text-white px-4 rounded-r-md hover:bg-gray-800"
           >

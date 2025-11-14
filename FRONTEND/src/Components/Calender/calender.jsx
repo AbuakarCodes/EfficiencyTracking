@@ -21,10 +21,11 @@ export default function Calendar() {
     SettedTodosDate,
     setSettedTodosDate,
     clickedDates,
-    setclickedDates
+    setclickedDates,
   } = useTodoContext()
 
   const { User } = useAuthContext()
+  const today = dayjs().format("YYYY/MM/DD")
 
   const [date, setDate] = useState(dayjs())
   const [userRegisteredDate, setUserRegisteredDate] = useState({
@@ -35,6 +36,7 @@ export default function Calendar() {
   useEffect(() => {
     isMultipleTask ? (API_dateID.current = []) : null
     setclickedDates([])
+    sethomePageChartDate(today)
   }, [isMultipleTask])
 
   // Handle prev month button disable if user registered this month or before
@@ -99,7 +101,6 @@ export default function Calendar() {
 
   const year = date.year()
   const month = date.month() + 1
-  const today = dayjs().format("YYYY/MM/DD")
 
   const firstDay = date.startOf("month").day()
   const daysInMonth = date.daysInMonth()
@@ -133,7 +134,6 @@ export default function Calendar() {
       return CurrentDate.add(1, "month")
     })
   }
-
 
   const onClickHandler = async (e) => {
     // setting data for api CALL TO set and unset data, can just modified days of month as
@@ -193,7 +193,7 @@ export default function Calendar() {
 
                 const elementDate = dayjs(element.id).format("YYYY/MM/DD")
 
-                const isDisabled = !dayjs(element.id).isAfter(
+                const isDisabled_userRegesterDate = !dayjs(element.id).isAfter(
                   dayjs(userRegisteredDate.date),
                   "day"
                 )
@@ -217,11 +217,13 @@ export default function Calendar() {
                    
                       // Today background
                       ${
-                        clickedDates.length === 0
-                          ? isToday
-                            ? "!bg-black text-white font-semibold"
-                            : hasTodos
-                            ? "bg-black/5"
+                        !isMultipleTask
+                          ? clickedDates.length === 0
+                            ? isToday
+                              ? "!bg-black text-white font-semibold"
+                              : hasTodos
+                              ? "bg-black/5"
+                              : ""
                             : ""
                           : ""
                       }
@@ -252,7 +254,11 @@ export default function Calendar() {
                     key={element.id}
                     id={elementDate}
                     onClick={onClickHandler}
-                    disabled={isDisabled}
+                    disabled={
+                      isDisabled_userRegesterDate || isMultipleTask
+                        ? dayjs(elementDate).isBefore(today, "day")
+                        : ""
+                    }
                     className={buttonClass}
                   >
                     {element.day}
