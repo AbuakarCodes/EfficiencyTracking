@@ -13,7 +13,7 @@ Route.post("/register", register)
 Route.post("/login", Login)
 Route.get("/logout", auth, logout)
 Route.get("/isloggedin", isLoggedin)
-Route.get("/deleted", auth, deleteUser)
+Route.post("/deleted", auth, deleteUser)
 Route.post("/changePassword", auth, changePassword)
 
 

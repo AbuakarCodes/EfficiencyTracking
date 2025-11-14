@@ -13,9 +13,9 @@ import "./index.css"
 
 import { AuthProvider } from "./Contexts/AuthProvider"
 import { ProtectedRoute } from "./utils/ProtectedRoute"
-import ChangePassword from "./Components/ChangePassword"
 import App from "./App"
 import DotLoder from "./utils/Loders/dotLoder"
+import ChangePassword from "./Components/efficiency_Comparision/profilePopUP/ChangePassword"
 
 const Login = lazy(() => import("./Pages/login"))
 const Signin = lazy(() => import("./Pages/signin"))

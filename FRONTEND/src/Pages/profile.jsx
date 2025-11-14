@@ -6,15 +6,17 @@ import axios from "axios"
 import Navbar from "../Components/navbar"
 import DotLoder from "../utils/Loders/dotLoder"
 import { useAuthContext } from "../Contexts/AuthProvider.jsx"
-import ChangePassword from "../Components/ChangePassword.jsx"
+import ChangePassword from "../Components/efficiency_Comparision/profilePopUP/ChangePassword.jsx"
 import { toast } from "react-toastify"
 import InitialAnimation from "../utils/MotionComponents/InitialAnimation.jsx"
+import DeleteAccountPopup from "../Components/efficiency_Comparision/profilePopUP/DeleteAccount.jsx"
 
 export default function Profile() {
   const navigate = useNavigate()
   const { setIsLoggedIn, User } = useAuthContext()
   const [isLoding, setisLoding] = useState(false)
   const [showPasswordPopup, setshowPasswordPopup] = useState(false)
+  const [showDeleteAccountPopup, setshowDeleteAccountPopup] = useState(false)
   const [updatedPassDate, setupdatedPassDate] = useState("")
 
   async function logoutHandler() {
@@ -33,20 +35,7 @@ export default function Profile() {
   }
 
   async function deleteAccountHandler() {
-    try {
-      setisLoding(true)
-      const res = await axios.get(delete_URL, Credentials)
-      toast.warning("Account deleted")
-      setIsLoggedIn(false)
-      setisLoding(false)
-      navigate("/")
-    } catch (error) {
-      setisLoding(false)
-      toast(error.response?.data?.message || "Something went wrong", {
-        theme: "dark",
-      })
-      console.error(error.response?.data?.message || "Something went wrong")
-    }
+    setshowDeleteAccountPopup(true)
   }
 
   function PassWordPopUPHandler() {
@@ -65,6 +54,12 @@ export default function Profile() {
           setupdatedPassDate={setupdatedPassDate}
         />
       )}
+      {showDeleteAccountPopup && (
+        <DeleteAccountPopup setisLoding={setisLoding} 
+        setshowPasswordPopup={setshowDeleteAccountPopup}
+        />
+      )}
+
       <Navbar></Navbar>
       {isLoding && <DotLoder></DotLoder>}
       <div className="bg-background-light font-display text-primary ">
@@ -92,7 +87,7 @@ export default function Profile() {
                     ></div>
                     <div>
                       <h3 className="text-lg font-bold text-primary dark:text-background-light">
-                      {User?.name ||""}
+                        {User?.name || ""}
                       </h3>
                       <p className="text-sm text-primary/60 dark:text-background-light/60">
                         sophia.carter
@@ -102,9 +97,8 @@ export default function Profile() {
 
                   <button className=" cursor-pointer  bg-black/90 text-white flex items-center justify-center gap-2 rounded px-4 py-2 text-sm font-medium">
                     <span className="material-symbols-outlined text-base">
-                      edit
+                      Change Picture
                     </span>
-                    <span>Change Picture</span>
                   </button>
                 </div>
 
@@ -114,7 +108,7 @@ export default function Profile() {
                       Name
                     </dt>
                     <dd className="text-primary/60 dark:text-background-light/60 sm:col-span-2">
-                      {User?.name ||""}
+                      {User?.name || ""}
                     </dd>
                   </div>
 
@@ -153,13 +147,13 @@ export default function Profile() {
                 <div className="flex flex-col gap-1 ">
                   <Link
                     to="/login/:intentionalRoute"
-                    className="  bg-black text-white flex w-full items-center justify-center gap-2 rounded  px-4 md:py-3 text-sm font-medium "
+                    className="  bg-black text-white flex w-full items-center justify-center gap-2 rounded  px-4 py-3 text-sm font-medium "
                   >
                     Log into another account
                   </Link>
                   <Link
                     to="/signin/:intentionalRoute"
-                    className="  bg-black text-white flex w-full items-center justify-center gap-2 rounded  px-4 md:py-3 text-sm font-medium "
+                    className="  bg-black text-white flex w-full items-center justify-center gap-2 rounded  px-4 py-3 text-sm font-medium "
                   >
                     Add another account
                   </Link>

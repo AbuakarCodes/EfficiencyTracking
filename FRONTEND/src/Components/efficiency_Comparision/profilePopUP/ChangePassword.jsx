@@ -3,14 +3,18 @@ import { useNavigate } from "react-router"
 import { useForm } from "react-hook-form"
 import { ImCross } from "react-icons/im"
 
-import DotLoder from "../utils/Loders/dotLoder"
+import DotLoder from "../../../utils/Loders/dotLoder"
 import { toast } from "react-toastify"
-import { useState } from "react"
-import { changePassword_URL } from "../../API_EndPoints"
-import { Credentials } from "../utils/axios_Credentials"
-import InitialAnimation from "../utils/MotionComponents/InitialAnimation"
+import { useEffect, useRef, useState } from "react"
+import { changePassword_URL } from "../../../../API_EndPoints"
+import { Credentials } from "../../../utils/axios_Credentials"
+import InitialAnimation from "../../../utils/MotionComponents/InitialAnimation"
 
-export default function ChangePassword({ setshowPasswordPopup, setisLoding, setupdatedPassDate }) {
+export default function ChangePassword({
+  setshowPasswordPopup,
+  setisLoding,
+  setupdatedPassDate,
+}) {
   const [isBorderRed, setisBorderRed] = useState(false)
   const navigate = useNavigate()
   const {
@@ -21,15 +25,26 @@ export default function ChangePassword({ setshowPasswordPopup, setisLoding, setu
     formState: { errors, isSubmitting },
   } = useForm()
 
+  const elementRef = useRef(null)
 
-  
+  useEffect(() => {
+    const handler = (e) => {
+      if (elementRef.current && !elementRef.current.contains(e.target))
+        setshowPasswordPopup(false)
+    }
+    document.addEventListener("mousedown", handler)
+    return () => {
+      document.removeEventListener("mousedown", handler)
+    }
+  }, [])
+
   function PassWordPopUPhandler(params) {
     setshowPasswordPopup((prev) => {
       sessionStorage.setItem("isPasswordUpdating", false)
       return false
     })
   }
-  
+
   async function submithandler(data) {
     const { newPassword, confirmPasword } = data
     if (newPassword !== confirmPasword) {
@@ -40,23 +55,29 @@ export default function ChangePassword({ setshowPasswordPopup, setisLoding, setu
     try {
       setisLoding(true)
       const res = await axios.post(changePassword_URL, data, Credentials)
-      toast.success(res?.data?.message||"Password change sucessfully")
+      toast.success(res?.data?.message || "Password change sucessfully")
       setisLoding(false)
       setshowPasswordPopup(false)
     } catch (error) {
       setisLoding(false)
-      toast.error(error.response?.data?.message || "Somethingswswswsws went wrong", {
-        theme: "dark",
-      })
+      toast.error(
+        error.response?.data?.message || "Somethingswswswsws went wrong",
+        {
+          theme: "dark",
+        }
+      )
     }
   }
   return (
-    <InitialAnimation Y={0} >
+    <InitialAnimation Y={0}>
       {isSubmitting && <DotLoder></DotLoder>}
       <div className="fixed inset-0 bg-black/55 min-h-screen flex flex-col items-center justify-center">
         <div className="py-6 px-4">
           {/* ---- Form Section ---- */}
-          <div className=" bg-white/90 border border-black/70 rounded-2xl p-8  max-w-md shadow-[0_0_25px_-5px_rgba(255,255,255,0.2)]  backdrop-blur max-lg:mx-auto">
+          <div
+            ref={elementRef}
+            className=" bg-white/90 border border-black/70 rounded-2xl p-8  max-w-md shadow-[0_0_25px_-5px_rgba(255,255,255,0.2)]  backdrop-blur max-lg:mx-auto"
+          >
             <div className=" flex justify-end ">
               <button onClick={PassWordPopUPhandler} className="cursor-pointer">
                 <ImCross />
