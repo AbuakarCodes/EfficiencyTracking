@@ -11,9 +11,6 @@ export const add_UpdateTodos = async (req, res, next) => {
     const { date_id, goals } = req.body;
     const { id } = req.user;
 
-
-    if (!Backend_isDateValid(date_id)) return res.status(400).json(new ErrorClass("Date is not valid"))
-
     if (!id || !date_id || !goals) {
       return res.status(400).json(new ErrorClass("Missing required fields"));
     }

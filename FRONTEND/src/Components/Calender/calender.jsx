@@ -20,6 +20,8 @@ export default function Calendar() {
     setisMultipleTask,
     SettedTodosDate,
     setSettedTodosDate,
+    clickedDates,
+    setclickedDates
   } = useTodoContext()
 
   const { User } = useAuthContext()
@@ -29,7 +31,6 @@ export default function Calendar() {
     date: dayjs(User?.createdAt.split("T")[0]).format("YYYY/MM/DD"),
     isperMonthButtonDisable: false,
   })
-  const [clickedDates, setclickedDates] = useState([])
 
   useEffect(() => {
     isMultipleTask ? (API_dateID.current = []) : null

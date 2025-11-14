@@ -1,5 +1,5 @@
-// got it 
 import { Todo } from "../../models/todos.model.js";
+import { Backend_isDateValid } from "../../utils/Backend_isDateValid.js";
 import { ErrorClass } from "../../utils/ErrorClass.js";
 import { responseClass } from "../../utils/responseClass.js";
 
@@ -9,9 +9,7 @@ export const DeleteTodo = async (req, res, next) => {
         const { id: user_id } = req.user;
 
         let Date_id = date_id
-
         if (!Array.isArray(date_id)) Date_id = [date_id]
-
 
         for (const date of Date_id) {
             // Step 1: Find and update in a single go (remove goal)
@@ -40,9 +38,8 @@ export const DeleteTodo = async (req, res, next) => {
             updatedTodo.completedTodoTasks = completedTodoTasks;
             updatedTodo.dayEfficiency = dayEfficiency;
 
+
             await updatedTodo.save();
-
-
         }
         // Step 5: Return updated document
         res.status(200).json(new responseClass("Goal deleted and efficiency recalculated successfully", [], 200));

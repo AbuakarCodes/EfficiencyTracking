@@ -2,15 +2,11 @@ import { User } from "../../models/userSchema.model.js";
 import { Todo } from "../../models/todos.model.js";
 import { ErrorClass } from "../../utils/ErrorClass.js";
 import { responseClass } from "../../utils/responseClass.js";
-import { Backend_isDateValid } from "../../utils/Backend_isDateValid.js";
 
 export const changeStatusTodo = async (req, res, next) => {
     try {
         const { date_id, goal_id, newState } = req.body;
         const { id } = req.user;
-
-        console.log(date_id)
-            if (!Backend_isDateValid(date_id)) return res.status(400).json(new ErrorClass("Date is not valid"))
 
         const user = await User.findById(id);
         if (!user) return res.status(404).json(new ErrorClass("User not found", 404));

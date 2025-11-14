@@ -1,18 +1,24 @@
-import dayjs from "dayjs"
 import { v4 as uuidv4 } from "uuid"
 import { useEffect, useState } from "react"
 import { useTodoContext } from "../Contexts/TodosAPIContext"
-import { useAuthContext } from "../Contexts/AuthProvider"
 import { add_MultipleTodos_URL, addupdateTodo_url } from "../../API_EndPoints"
 import { apiCall_addTodos } from "../utils/todoAPIcalls/apiCall_addTodos.jsx"
 import { apiCall_fetchRemoteTodos } from "../utils/todoAPIcalls/apiCall_fetchRemoteTodos.jsx"
 import { apiCall_changeTodoState } from "../utils/todoAPIcalls/apiCall_changeTodoState.jsx"
 import { apiCall_deleteTodo } from "../utils/todoAPIcalls/apiCall_deleteTodo.jsx"
-import TodoListLoder from "../utils/Loders/TodoListLoder.jsx"
 import { apiCall_SettedTodo } from "../utils/todoAPIcalls/apiCall_SettedTodo.jsx"
+import TodoListLoder from "../utils/Loders/TodoListLoder.jsx"
+import dayjs from "dayjs"
 
 export default function TodoComponent() {
   const [input, setInput] = useState("")
+  const [isDisable, setisDisable] = useState({
+    isClickedDate_bigger_thenToday: false,
+    isClickedDate_smaller_thenToday: false,
+    isClickedDate_equalsToToday: true,
+  })
+  const today = dayjs().format("YYYY/MM/DD")
+
   const {
     API_goals,
     sendApiData,
@@ -24,10 +30,37 @@ export default function TodoComponent() {
     setisTodoLoding,
     isMultipleTask,
     setSettedTodosDate,
+    clickedDates,
   } = useTodoContext()
 
   useEffect(() => {
-    if (isMultipleTask) return 
+    if (isMultipleTask || clickedDates.length === 0) return
+
+    setisDisable(() => {
+      if (dayjs(clickedDates[0].date).isSame(today, "day")) {
+        return {
+          isClickedDate_bigger_thenToday: false,
+          isClickedDate_smaller_thenToday: false,
+          isClickedDate_equalsToToday: true,
+        }
+      } else if (dayjs(clickedDates[0].date).isBefore(today, "day")) {
+        return {
+          isClickedDate_bigger_thenToday: false,
+          isClickedDate_smaller_thenToday: true,
+          isClickedDate_equalsToToday: false,
+        }
+      } else if (dayjs(clickedDates[0].date).isAfter(today, "day")) {
+        return {
+          isClickedDate_bigger_thenToday: true,
+          isClickedDate_smaller_thenToday: false,
+          isClickedDate_equalsToToday: false,
+        }
+      }
+    })
+  }, [clickedDates])
+
+  useEffect(() => {
+    if (isMultipleTask) return
     ;(async function () {
       const RemoteTodo = await apiCall_fetchRemoteTodos(
         API_dateID,
@@ -63,15 +96,12 @@ export default function TodoComponent() {
 
     // API call
     apiDataBundel(UpdatedTodos)
+
     apiCall_addTodos(
       isMultipleTask ? add_MultipleTodos_URL : addupdateTodo_url,
       sendApiData.current,
       setspecificDateEfficiency
     )
-
-    if (isMultipleTask) {
-    } else {
-    }
   }
 
   const toggleTodo = (id) => {
@@ -84,7 +114,13 @@ export default function TodoComponent() {
       (element) => element.todo_id == id
     ).isCompleted
     setTodos(TogeledTodo)
-    apiCall_changeTodoState(API_dateID, id, newState, setspecificDateEfficiency)
+    if (!isMultipleTask)
+      apiCall_changeTodoState(
+        API_dateID,
+        id,
+        newState,
+        setspecificDateEfficiency
+      )
   }
 
   const deleteTodo = (id) => {
@@ -103,6 +139,7 @@ export default function TodoComponent() {
     }
   }
 
+
   return (
     <div className="flex justify-center items-center   text-black ">
       <div className="w-96 rounded-2xl shadow-lg p-6   ">
@@ -114,15 +151,17 @@ export default function TodoComponent() {
         {/* Input Section */}
         <div className="flex mb-4">
           <input
+            disabled={isDisable.isClickedDate_smaller_thenToday}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Add a new task..."
-            className="flex-grow border border-black rounded-l-md p-2 outline-none"
+            className=" disabled:cursor-not-allowed disabled:opacity-65 flex-grow border border-black rounded-l-md p-2 outline-none"
           />
           <button
+            disabled={isDisable.isClickedDate_smaller_thenToday}
             onClick={addTodo}
-            className="bg-black text-white px-4 rounded-r-md hover:bg-gray-800"
+            className="bg-black disabled:cursor-not-allowed disabled:opacity-65 text-white px-4 rounded-r-md hover:bg-gray-800"
           >
             Add
           </button>
@@ -143,19 +182,24 @@ export default function TodoComponent() {
                     >
                       {/* Wrapper to enforce text wrapping */}
                       <div className="flex-1 min-w-0">
-                        <span
+                        <button
+                          disabled={
+                            isDisable.isClickedDate_smaller_thenToday ||
+                            isDisable.isClickedDate_bigger_thenToday
+                          }
                           onClick={() => toggleTodo(todo?.todo_id)}
-                          className={`block w-full cursor-pointer break-words whitespace-normal ${
+                          className={`block disabled:cursor-not-allowed disabled:opacity-65 w-full cursor-pointer break-words whitespace-normal ${
                             todo.isCompleted ? "line-through text-gray-500" : ""
                           }`}
                         >
                           {todo.text}
-                        </span>
+                        </button>
                       </div>
 
                       <button
+                        disabled={isDisable.isClickedDate_smaller_thenToday}
                         onClick={() => deleteTodo(todo?.todo_id)}
-                        className="text-red-600 cursor-pointer font-bold hover:text-red-800 ml-2 flex-shrink-0"
+                        className=" disabled:opacity-65 text-red-600 cursor-pointer disabled:cursor-not-allowed font-bold hover:text-red-800 ml-2 flex-shrink-0"
                       >
                         ✕
                       </button>

@@ -1,6 +1,6 @@
 import { useAppContext } from "../../hooks/useCustomContext"
-import { useEffect, useRef, useState } from "react"
-import { apiCall_getMonthData } from "../../utils/EfficiencyAPICall/fetch_perMonthAPI"
+import { useEffect } from "react"
+import {  fetch_Efficiency_API } from "../../utils/EfficiencyAPICall/fetch_Efficiency_API"
 import { PeriodEfficiency_URL } from "../../../API_EndPoints"
 import dayjs from "dayjs"
 import { EfficiencyDateStyle } from "../../utils/Data_Bytes"
@@ -77,7 +77,7 @@ function InputDate() {
     // Api call and setting chart values
     try {
       setEfficiencyGraphLoding(true)
-      const result = await apiCall_getMonthData(
+      const result = await fetch_Efficiency_API(
         PeriodEfficiency_URL,
         efficiencyApiData.current
       )
