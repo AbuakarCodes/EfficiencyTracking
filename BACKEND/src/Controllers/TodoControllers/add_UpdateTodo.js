@@ -3,13 +3,17 @@ import { Todo } from "../../models/todos.model.js";
 import { User } from "../../models/userSchema.model.js";
 import { ErrorClass } from "../../utils/ErrorClass.js";
 import { responseClass } from "../../utils/responseClass.js";
-import { isValid, parse } from "date-fns"
-import { Backend_isDateValid } from "../../utils/Backend_isDateValid.js";
 
 export const add_UpdateTodos = async (req, res, next) => {
   try {
     const { date_id, goals } = req.body;
     const { id } = req.user;
+
+    const today = dayjs().format("YYYY/MM/DD")
+
+    if (dayjs(date_id).isBefore(today, "day"))
+      return res.status(400).json(new ErrorClass("can't set Todos for date before today"));
+
 
     if (!id || !date_id || !goals) {
       return res.status(400).json(new ErrorClass("Missing required fields"));

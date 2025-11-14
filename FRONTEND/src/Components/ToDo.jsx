@@ -139,7 +139,6 @@ export default function TodoComponent() {
     }
   }
 
-
   return (
     <div className="flex justify-center items-center   text-black ">
       <div className="w-96 rounded-2xl shadow-lg p-6   ">
@@ -159,7 +158,7 @@ export default function TodoComponent() {
             className=" disabled:cursor-not-allowed disabled:opacity-65 flex-grow border border-black rounded-l-md p-2 outline-none"
           />
           <button
-            disabled={isDisable.isClickedDate_smaller_thenToday}
+            // disabled={isDisable.isClickedDate_smaller_thenToday}
             onClick={addTodo}
             className="bg-black disabled:cursor-not-allowed disabled:opacity-65 text-white px-4 rounded-r-md hover:bg-gray-800"
           >
@@ -183,10 +182,7 @@ export default function TodoComponent() {
                       {/* Wrapper to enforce text wrapping */}
                       <div className="flex-1 min-w-0">
                         <button
-                          disabled={
-                            isDisable.isClickedDate_smaller_thenToday ||
-                            isDisable.isClickedDate_bigger_thenToday
-                          }
+                          disabled={!isDisable.isClickedDate_equalsToToday}
                           onClick={() => toggleTodo(todo?.todo_id)}
                           className={`block disabled:cursor-not-allowed disabled:opacity-65 w-full cursor-pointer break-words whitespace-normal ${
                             todo.isCompleted ? "line-through text-gray-500" : ""

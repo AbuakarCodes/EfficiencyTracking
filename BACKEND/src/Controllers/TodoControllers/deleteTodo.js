@@ -1,15 +1,23 @@
 import { Todo } from "../../models/todos.model.js";
-import { Backend_isDateValid } from "../../utils/Backend_isDateValid.js";
 import { ErrorClass } from "../../utils/ErrorClass.js";
 import { responseClass } from "../../utils/responseClass.js";
+import dayjs from "dayjs"
 
 export const DeleteTodo = async (req, res, next) => {
     try {
         const { date_id, goal_id } = req.body;
         const { id: user_id } = req.user;
 
+        if (!Array.isArray(date_id)) {
+            const today = dayjs().format("YYYY/MM/DD")
+            if (dayjs(date_id).isBefore(today, "day"))
+                return res.status(400).json(new ErrorClass("can't delete past Todos "));
+        }
+
+
         let Date_id = date_id
         if (!Array.isArray(date_id)) Date_id = [date_id]
+
 
         for (const date of Date_id) {
             // Step 1: Find and update in a single go (remove goal)
