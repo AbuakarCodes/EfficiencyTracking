@@ -21,6 +21,7 @@ const Login = lazy(() => import("./Pages/login"))
 const Signin = lazy(() => import("./Pages/signin"))
 const Efficiency = lazy(() => import("./Pages/Efficiency"))
 const Profile = lazy(() => import("./Pages/profile"))
+const AboutPage = lazy(() => import("./Pages/About"))
 
 function AnimatedRoutes() {
   const location = useLocation()
@@ -51,6 +52,15 @@ function AnimatedRoutes() {
           element={
             <Suspense fallback={<DotLoder />}>
               <Profile />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/About"
+          element={
+            <Suspense fallback={<DotLoder />}>
+              <AboutPage />
             </Suspense>
           }
         />

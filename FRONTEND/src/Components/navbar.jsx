@@ -13,6 +13,10 @@ export default function Navbar() {
       link: "/profile",
       text: "Profile",
     },
+    {
+      link: "/about",
+      text: "About",
+    },
   ]
 
   return (
@@ -58,7 +62,7 @@ export default function Navbar() {
             `}
             id="navbar-default"
           >
-            <ul className="font-normal flex flex-col p-2 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white">
+            <ul className="font-normal flex flex-col p-2 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-2 md:mt-0 md:border-0 md:bg-white">
               {NavItems.map((e, index) => (
                 <li key={index}>
                   <NavLink
