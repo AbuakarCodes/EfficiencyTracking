@@ -7,6 +7,8 @@ import { apiCall_fetchRemoteTodos } from "../utils/todoAPIcalls/apiCall_fetchRem
 import { apiCall_changeTodoState } from "../utils/todoAPIcalls/apiCall_changeTodoState.jsx"
 import { apiCall_deleteTodo } from "../utils/todoAPIcalls/apiCall_deleteTodo.jsx"
 import { apiCall_SettedTodo } from "../utils/todoAPIcalls/apiCall_SettedTodo.jsx"
+import { fetch_ALLTimeEfficiency } from "../utils/EfficiencyAPICall/ALLTimeEfficiency.jsx"
+import { useAppContext } from "../hooks/useCustomContext.jsx"
 import TodoListLoder from "../utils/Loders/TodoListLoder.jsx"
 import dayjs from "dayjs"
 
@@ -32,6 +34,8 @@ export default function TodoComponent() {
     setSettedTodosDate,
     clickedDates,
   } = useTodoContext()
+
+  const { setallTimeEfficiencyVal } = useAppContext()
 
   useEffect(() => {
     if (isMultipleTask || clickedDates.length === 0) return
@@ -83,7 +87,7 @@ export default function TodoComponent() {
     })()
   }, [Todos])
 
-  const addTodo = () => {
+  const addTodo = async () => {
     if (input.trim() === "") return
     const newTodo = {
       todo_id: Date.now().toString(),
@@ -97,14 +101,16 @@ export default function TodoComponent() {
     // API call
     apiDataBundel(UpdatedTodos)
 
-    apiCall_addTodos(
+    await apiCall_addTodos(
       isMultipleTask ? add_MultipleTodos_URL : addupdateTodo_url,
       sendApiData.current,
       setspecificDateEfficiency
     )
+
+    fetch_ALLTimeEfficiency(setallTimeEfficiencyVal)
   }
 
-  const toggleTodo = (id) => {
+  const toggleTodo = async (id) => {
     const TogeledTodo = Todos.map((element) =>
       element.todo_id == id
         ? { ...element, isCompleted: !element.isCompleted }
@@ -115,17 +121,20 @@ export default function TodoComponent() {
     ).isCompleted
     setTodos(TogeledTodo)
     if (!isMultipleTask)
-      apiCall_changeTodoState(
+      await apiCall_changeTodoState(
         API_dateID,
         id,
         newState,
         setspecificDateEfficiency
       )
+
+    fetch_ALLTimeEfficiency(setallTimeEfficiencyVal)
   }
 
-  const deleteTodo = (id) => {
+  const deleteTodo = async (id) => {
     setTodos(Todos.filter((element) => element.todo_id !== id))
-    apiCall_deleteTodo(API_dateID, id, setspecificDateEfficiency)
+    await apiCall_deleteTodo(API_dateID, id, setspecificDateEfficiency)
+    fetch_ALLTimeEfficiency(setallTimeEfficiencyVal)
   }
 
   // Api Functions

@@ -1,4 +1,3 @@
-import ChartDataLabels from "chartjs-plugin-datalabels"
 import {
   Chart as ChartJS,
   LineElement,
@@ -93,21 +92,19 @@ const Comparison_LineChart = () => {
     },
   }
 
-
-
   return (
     <div className="w-full h-full flex items-center justify-center relative">
       {EfficiencyGraphLoding ? <DotLoder /> : ""}
-      {(
-        Yaxis.length === 0 &&
-        Xaxis.length === 0 &&
-        Object.keys(periodA).length === 0 &&
-        Object.keys(periodB).length === 0
-      ) ? (
+      {Yaxis?.length === 0 &&
+      Xaxis?.length === 0 &&
+      Object.keys(periodA).length === 0 &&
+      Object.keys(periodB).length === 0 ? (
         <div className=" text-[3rem] md:text-[5rem] md:font-thin absolute left-[53%] md:left-1/2 top-[30%] -translate-x-1/2   flex items-center justify-center text-black/10">
-          {ProductName || "" }
+          {ProductName || ""}
         </div>
-      ): ""}
+      ) : (
+        ""
+      )}
 
       <Line data={data} options={updatedOptions} />
     </div>

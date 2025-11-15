@@ -21,6 +21,7 @@ const settedTodoDates_URL = `${hosting}${port_TodoBase}/settedTodoDates`
 const port_EfficiencyBase = ":8000/eficiency"
 const PeriodEfficiency_URL = `${hosting}${port_EfficiencyBase}/periodEfficiency`
 const ComparisionPeriodEfficiency_URL = `${hosting}${port_EfficiencyBase}/ComparisionPeriodEfficiency`
+const AllTimeEfficiency_URL = `${hosting}${port_EfficiencyBase}/AllTimeEfficiency`
 
 
 
@@ -33,5 +34,5 @@ export {
     changeStatusTodo_URL, DeleteTodo_URL, add_MultipleTodos_URL,
     settedTodoDates_URL,
     // efficiency
-    PeriodEfficiency_URL, ComparisionPeriodEfficiency_URL
+    PeriodEfficiency_URL, ComparisionPeriodEfficiency_URL, AllTimeEfficiency_URL
 }

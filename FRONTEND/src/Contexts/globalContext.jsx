@@ -15,6 +15,7 @@ export function AppProvider({ children }) {
   const [Comparison_Cordinates, setComparison_Cordinates] = useState({PeriodA:{}, PeriodB:{}})
   const [EfficiencyGraphLoding, setEfficiencyGraphLoding] = useState(false)
   const [hasComparChartData, sethasComparChartData] = useState(true)
+  const [allTimeEfficiencyVal, setallTimeEfficiencyVal] = useState(0)
  
 
 
@@ -37,6 +38,8 @@ export function AppProvider({ children }) {
     setComparison_Cordinates,
     hasComparChartData,
     sethasComparChartData,
+    allTimeEfficiencyVal,
+    setallTimeEfficiencyVal
   }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>

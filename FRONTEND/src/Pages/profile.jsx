@@ -12,6 +12,8 @@ import InitialAnimation from "../utils/MotionComponents/InitialAnimation.jsx"
 import DeleteAccountPopup from "../Components/efficiency_Comparision/profilePopUP/DeleteAccount.jsx"
 import defaultProfileImage from "../assets/ProfileImage.svg"
 import ProfileImageLoader from "../utils/Loders/ProfileIPicLoder.jsx"
+import { useAppContext } from "../hooks/useCustomContext.jsx"
+import { fetch_ALLTimeEfficiency } from "../utils/EfficiencyAPICall/ALLTimeEfficiency.jsx"
 
 export default function Profile() {
   const navigate = useNavigate()
@@ -23,6 +25,13 @@ export default function Profile() {
   const [updatedPassDate, setupdatedPassDate] = useState("")
   const [Avatar, setAvatar] = useState("")
   const fileInputRef = useRef(null)
+
+  const { allTimeEfficiencyVal, setallTimeEfficiencyVal } = useAppContext()
+
+  useEffect(() => {
+    fetch_ALLTimeEfficiency(setallTimeEfficiencyVal)
+  }, [])
+
 
   async function logoutHandler() {
     try {
@@ -68,10 +77,6 @@ export default function Profile() {
       setisImageFetching(false)
     }
   }
-
-  useEffect(() => {
-    console.log(isImageFetching)
-  }, [isImageFetching])
 
   return (
     <InitialAnimation>
@@ -146,8 +151,23 @@ export default function Profile() {
                       <h3 className="text-lg font-bold text-primary dark:text-background-light">
                         {User?.name || ""}
                       </h3>
-                      <p className="text-sm text-primary/60 dark:text-background-light/60">
-                        sophia.carter
+                      <p
+                        className={`
+                              w-20 h-6 font-bold text-center rounded
+                              ${
+                                allTimeEfficiencyVal <= 50
+                                  ? "text-red-500"
+                                  : allTimeEfficiencyVal <= 75
+                                  ? "text-yellow-400"
+                                  : allTimeEfficiencyVal <= 100
+                                  ? "text-green-500"
+                                  : "text-black"
+                              }
+                            `}
+                      >
+                        {allTimeEfficiencyVal
+                          ? `${Number(allTimeEfficiencyVal)?.toFixed(1)} % `
+                          : ""}
                       </p>
                     </div>
                   </div>
