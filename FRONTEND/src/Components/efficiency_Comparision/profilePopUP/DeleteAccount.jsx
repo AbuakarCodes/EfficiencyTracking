@@ -56,7 +56,9 @@ export default function DeleteAccountPopup({
       setshowPasswordPopup(false)
     } catch (err) {
       setisLoding(false)
-      toast.error("Something went wrong", { theme: "dark" })
+      toast.error(err?.response?.data?.message || "Something went wrong", {
+        theme: "dark",
+      })
     }
   }
 

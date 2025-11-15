@@ -32,7 +32,6 @@ export default function Profile() {
     fetch_ALLTimeEfficiency(setallTimeEfficiencyVal)
   }, [])
 
-
   async function logoutHandler() {
     try {
       setisLoding(true)
@@ -43,8 +42,6 @@ export default function Profile() {
     } catch (error) {
       toast.error(error.response?.data?.message)
       setisLoding(false)
-      alert(error.response?.data?.message || "Something went wrong")
-      console.error(error.response?.data?.message || "Something went wrong")
     }
   }
 
@@ -185,7 +182,7 @@ export default function Profile() {
                       className=" disabled:cursor-not-allowed cursor-pointer bg-black/90 text-white flex items-center justify-center gap-2 rounded px-4 py-2 text-sm font-medium"
                       disabled={isImageFetching}
                     >
-                      Change Picture
+                      {User?.ProfileImage ? "Change Picture" : "Add Picture"}
                     </button>
                   </div>
                 </div>

@@ -5,6 +5,10 @@ import Logo from ".././assets/Logo.svg"
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   let NavItems = [
+     {
+      link: "/about",
+      text: "About",
+    },
     {
       link: "/efficiency",
       text: "Efficiency",
@@ -12,11 +16,8 @@ export default function Navbar() {
     {
       link: "/profile",
       text: "Profile",
-    },
-    {
-      link: "/about",
-      text: "About",
-    },
+    }
+   
   ]
 
   return (
