@@ -1,4 +1,5 @@
 import { getSpecificMonthEfficiency } from "./specificMonthEfficiency.js";
+import dayjs from "dayjs"
 const months = [
     "Jan",
     "Feb",
@@ -15,20 +16,31 @@ const months = [
 ];
 
 
+
+
 export function getSpecificYearEfficiency(periodValue, todo) {
+    // no need for +1 as furthur we'are dealing with zero index
+    const month_of_that_year = dayjs().month() + 1
+    const currentYear = dayjs().year()
+    const isCurrentYear = Number(currentYear) === Number(periodValue?.year)
 
     const result = {
         Year_id: periodValue,
-        elementLength: 12,
-        Xaxis_Lables: months,
+        elementLength: isCurrentYear ? month_of_that_year : 12,
+        Xaxis_Lables: months.filter((e, idx) => {
+            if (idx <= month_of_that_year - 1) {
+                return e
+            }
+        }),
         efficiencyData: [],
         avrageEfficiency: 0
     };
 
     let shateredMonths = [...new Set(todo.map(m => m.month))].sort((a, b) => Number(a) - Number(b));
-    let todoMonths = Array(12).fill(0)
+    let todoMonths = Array(isCurrentYear ? month_of_that_year : 12).fill(0)
     shateredMonths.forEach((element) => {
-        todoMonths[element - 1] = element
+        if (element <= todoMonths.length)
+            todoMonths[element - 1] = element
     })
     result.efficiencyData = todoMonths.map((m) => {
         if (m > 0) {
