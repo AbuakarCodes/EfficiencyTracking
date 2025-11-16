@@ -22,6 +22,7 @@ const Signin = lazy(() => import("./Pages/signin"))
 const Efficiency = lazy(() => import("./Pages/Efficiency"))
 const Profile = lazy(() => import("./Pages/profile"))
 const AboutPage = lazy(() => import("./Pages/About"))
+const PageNotFound = lazy(() => import("./Pages/PageNotFound"))
 
 function AnimatedRoutes() {
   const location = useLocation()
@@ -104,12 +105,11 @@ function AnimatedRoutes() {
           path="*"
           element={
             <Suspense fallback={<DotLoder />}>
-              <div>404 Not Found</div>
+              <PageNotFound />
             </Suspense>
           }
         />
         <Route path="/test" element={<ChangePassword />} />
-        <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
     </AnimatePresence>
   )

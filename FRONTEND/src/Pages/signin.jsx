@@ -125,7 +125,7 @@ export default function Signin() {
                   <div className="text-sm">
                     <Link
                       to="#"
-                      className="text-black/90 hover:underline transition"
+                      className="text-black/30 cursor-not-allowed transition"
                     >
                       Forgot password?
                     </Link>
