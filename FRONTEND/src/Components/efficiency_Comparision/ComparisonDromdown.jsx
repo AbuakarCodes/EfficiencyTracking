@@ -4,6 +4,7 @@ import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md"
 import InitialAnimation from "../../utils/MotionComponents/InitialAnimation.jsx"
 import { toast } from "react-toastify"
 import { fetch_ALLTimeEfficiency } from "../../utils/EfficiencyAPICall/ALLTimeEfficiency.jsx"
+import { Click_AnyWhere_to_Close } from "../../utils/Click_AnyWhere_to_Close.js"
 
 export default function Dropdown() {
   const {
@@ -25,12 +26,8 @@ export default function Dropdown() {
 
   // Close dropdown if clicking outside
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target))
-        setIsOpen(false)
-    }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
+    const CleanUP = Click_AnyWhere_to_Close(dropdownRef, setIsOpen)
+    return CleanUP
   }, [])
 
   async function menuHandler(e, item) {

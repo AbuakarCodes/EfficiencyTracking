@@ -9,6 +9,7 @@ import DotLoder from "../../../utils/Loders/dotLoder"
 import InitialAnimation from "../../../utils/MotionComponents/InitialAnimation"
 import { useAuthContext } from "../../../Contexts/AuthProvider"
 import { useNavigate } from "react-router"
+import { Click_AnyWhere_to_Close } from "../../../utils/Click_AnyWhere_to_Close"
 
 export default function DeleteAccountPopup({
   setshowPasswordPopup,
@@ -28,13 +29,8 @@ export default function DeleteAccountPopup({
   const Navigate = useNavigate()
 
   useEffect(() => {
-    const handler = (e) => {
-      if (elementRef.current && !elementRef.current.contains(e.target)) {
-        setshowPasswordPopup(false)
-      }
-    }
-    document.addEventListener("mousedown", handler)
-    return () => document.removeEventListener("mousedown", handler)
+    const CleanUP = Click_AnyWhere_to_Close(elementRef, setshowPasswordPopup)
+    return CleanUP
   }, [])
 
   async function submithandler(data) {

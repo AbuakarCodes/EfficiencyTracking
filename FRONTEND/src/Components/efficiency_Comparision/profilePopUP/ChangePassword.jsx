@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react"
 import { changePassword_URL } from "../../../../API_EndPoints"
 import { Credentials } from "../../../utils/axios_Credentials"
 import InitialAnimation from "../../../utils/MotionComponents/InitialAnimation"
+import { Click_AnyWhere_to_Close } from "../../../utils/Click_AnyWhere_to_Close"
 
 export default function ChangePassword({
   setshowPasswordPopup,
@@ -28,14 +29,8 @@ export default function ChangePassword({
   const elementRef = useRef(null)
 
   useEffect(() => {
-    const handler = (e) => {
-      if (elementRef.current && !elementRef.current.contains(e.target))
-        setshowPasswordPopup(false)
-    }
-    document.addEventListener("mousedown", handler)
-    return () => {
-      document.removeEventListener("mousedown", handler)
-    }
+    const CleanUP = Click_AnyWhere_to_Close(elementRef, setshowPasswordPopup)
+    return CleanUP
   }, [])
 
   function PassWordPopUPhandler(params) {
