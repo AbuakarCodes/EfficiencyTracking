@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTodoContext } from "../Contexts/TodosAPIContext"
 import { add_MultipleTodos_URL, addupdateTodo_url } from "../../API_EndPoints"
 import { apiCall_addTodos } from "../utils/todoAPIcalls/apiCall_addTodos.jsx"
@@ -11,6 +11,7 @@ import { fetch_ALLTimeEfficiency } from "../utils/EfficiencyAPICall/ALLTimeEffic
 import { useAppContext } from "../hooks/useCustomContext.jsx"
 import TodoListLoder from "../utils/Loders/TodoListLoder.jsx"
 import dayjs from "dayjs"
+import { toast } from "react-toastify"
 
 export default function TodoComponent() {
   const [input, setInput] = useState("")
@@ -19,6 +20,7 @@ export default function TodoComponent() {
     isClickedDate_smaller_thenToday: false,
     isClickedDate_equalsToToday: true,
   })
+  const addButtonRef = useRef("")
   const today = dayjs().format("YYYY/MM/DD")
 
   const {
@@ -64,6 +66,8 @@ export default function TodoComponent() {
   }, [clickedDates])
 
   useEffect(() => {
+    // document.addEventListener("keydown", keyDown_HAndler)
+
     if (isMultipleTask) return
     ;(async function () {
       const RemoteTodo = await apiCall_fetchRemoteTodos(
@@ -88,7 +92,11 @@ export default function TodoComponent() {
   }, [Todos])
 
   const addTodo = async () => {
-    if (input.trim() === "") return
+    if (input.trim() === "") {
+      toast.error("Plese enter your goal", {theme:"dark"})
+      return
+    }
+
     const newTodo = {
       todo_id: Date.now().toString(),
       text: input,
@@ -162,14 +170,21 @@ export default function TodoComponent() {
             disabled={isDisable.isClickedDate_smaller_thenToday}
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              setInput(e?.target?.value || "")
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") addTodo()
+            }}
             placeholder="Add a new task..."
             className=" disabled:cursor-not-allowed disabled:opacity-65 flex-grow border border-black rounded-l-md p-2 outline-none"
           />
           <button
+            ref={addButtonRef}
+            id={"TodoAddButton"}
             disabled={isDisable.isClickedDate_smaller_thenToday}
             onClick={addTodo}
-            className="bg-black disabled:cursor-not-allowed disabled:opacity-65 text-white px-4 rounded-r-md hover:bg-gray-800"
+            className="bg-black disabled:cursor-not-allowed cursor-pointer disabled:opacity-65 text-white px-4 rounded-r-md hover:bg-gray-800"
           >
             Add
           </button>
