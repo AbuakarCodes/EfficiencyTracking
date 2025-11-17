@@ -5,7 +5,7 @@ if (isLocalhost === "true") {
   document.title = "Local Host";
   hosting = "http://localhost:8000"
 } else {
-  hosting = "https://efficiency-tracking-23ak.vercel.app"
+  hosting = "https://optivo-backend.vercel.app"
 }
 // User
 const siginIN_URL = `${hosting}/users/register`;
