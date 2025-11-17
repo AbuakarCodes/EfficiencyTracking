@@ -1,7 +1,7 @@
-
+const isLocalhost = import.meta.env?.VITE_IS_LOCALHOST_FRONTEND
 let hosting = ""
 
-if (String(import.meta.env?.VITE_IS_LOCALHOST_FRONTEND) === "true") {
+if (isLocalhost === "true") {
   document.title = "Local Host";
   hosting = "http://localhost:8000"
 } else {
