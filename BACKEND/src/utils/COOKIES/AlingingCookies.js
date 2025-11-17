@@ -3,7 +3,7 @@ dotenv.config();
 
 export let options = {}
 // for local host
-if (process.env?.IS_LOCAL_HOST) {
+if (process.env?.IS_LOCAL_HOST === "true" ) {
      options = {
         httpOnly: true,
         secure: false,   // because you're on http://localhost
