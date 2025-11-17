@@ -1,9 +1,19 @@
+// for local host 
+// const options = {
+//     httpOnly: true,
+//     secure: false,   // because you're on http://localhost
+//     sameSite: "lax", // not "none"
+//     path: "/"
+// };
+
+// deployed
 const options = {
     httpOnly: true,
-    secure: false,   // because you're on http://localhost
-    sameSite: "lax", // not "none"
+    secure: true,        // MUST be true on HTTPS
+    sameSite: "none",    // MUST be "none" for cross-site cookies
     path: "/"
 };
+
 
 function setCookies(res, ...params) {
     for (let i = 0; i < params.length; i += 2) {
