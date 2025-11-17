@@ -1,15 +1,12 @@
-// const hosting = ;
 
 let hosting = ""
 
 if (String(import.meta.env?.VITE_IS_LOCALHOST_FRONTEND) === "true") {
+  document.title = "Local Host";
   hosting = "http://localhost:8000"
 } else {
-  hosting = "https://efficiency-tracking-urs4.vercel.app"
+  hosting = "https://efficiency-tracking-23ak.vercel.app"
 }
-
-console.log(hosting)
-
 // User
 const siginIN_URL = `${hosting}/users/register`;
 const Login_URL = `${hosting}/users/login`;
