@@ -10,7 +10,7 @@ app.use(cookieParser());
 app.use(cors({
     origin: [
         "http://localhost:5173",  //  local frontend
-        "https://efficiency-tracking-urs4.vercel.app"  // deployed frontend
+       "https://optivo-frontend.vercel.app"  // deployed frontend
     ],
     credentials: true
 }));
