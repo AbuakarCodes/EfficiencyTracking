@@ -8,8 +8,20 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
-      "dest": "/api/index.js"
+      "src": "/users/(.*)",
+      "dest": "api/index.js"
+    },
+    {
+      "src": "/todos/(.*)",
+      "dest": "api/index.js"
+    },
+    {
+      "src": "/eficiency/(.*)",
+      "dest": "api/index.js"
+    },
+    {
+      "src": "/",
+      "dest": "api/index.js"
     }
   ]
 }
