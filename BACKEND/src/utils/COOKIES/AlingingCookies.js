@@ -1,18 +1,26 @@
-// for local host 
-// const options = {
-//     httpOnly: true,
-//     secure: false,   // because you're on http://localhost
-//     sameSite: "lax", // not "none"
-//     path: "/"
-// };
+import dotenv from "dotenv";
+dotenv.config();
 
-// deployed
-const options = {
-    httpOnly: true,
-    secure: true,        // MUST be true on HTTPS
-    sameSite: "none",    // MUST be "none" for cross-site cookies
-    path: "/"
-};
+export let options = {}
+// for local host
+if (process.env?.IS_LOCAL_HOST) {
+     options = {
+        httpOnly: true,
+        secure: false,   // because you're on http://localhost
+        sameSite: "lax", // not "none"
+        path: "/"
+    }
+} else {
+    // deployed
+    options = {
+        httpOnly: true,
+        secure: true,        // MUST be true on HTTPS
+        sameSite: "none",    // MUST be "none" for cross-site cookies
+        path: "/"
+    };
+
+}
+
 
 
 function setCookies(res, ...params) {

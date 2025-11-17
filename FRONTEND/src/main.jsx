@@ -24,6 +24,9 @@ const Profile = lazy(() => import("./Pages/profile"))
 const AboutPage = lazy(() => import("./Pages/About"))
 const PageNotFound = lazy(() => import("./Pages/PageNotFound"))
 
+
+
+
 function AnimatedRoutes() {
   const location = useLocation()
 
