@@ -22,7 +22,7 @@ if (process.env?.IS_LOCAL_HOST === "true") {
     };
     clearOptions = {
         ...setOptions,
-        domain: "optivo-backend.vercel.app" // domain only, no protocls
+        domain: "optivo-backend.vercel.app" // domain only, no (protocls) https
     };
 }
 
