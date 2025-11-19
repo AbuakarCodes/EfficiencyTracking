@@ -7,15 +7,15 @@ import { Route } from "../src/Router/userRouter.js";
 import { TodoRoute } from "../src/Router/TodoRouter.js";
 import { EfficiencyRoute } from "../src/Router/EfficiencyRouter.js";
 
-const response = await dbConnection();
-console.log(response) 
+const isDB_connected = await dbConnection();
+
 
 app.use("/users", Route);
 app.use("/todos", TodoRoute);
 app.use("/eficiency", EfficiencyRoute);
 
 app.get("/", (req, res) => {
-  res.json({ message: "ok" });
+  res.json({ message: "ok", isDB_connected });
 });
 
 
