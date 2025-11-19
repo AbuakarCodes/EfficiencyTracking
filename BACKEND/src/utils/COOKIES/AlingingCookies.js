@@ -1,42 +1,37 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-export let options = {}
-// for local host
-if (process.env?.IS_LOCAL_HOST === "true" ) {
-     options = {
+let setOptions = {};
+let clearOptions = {};
+
+if (process.env?.IS_LOCAL_HOST === "true") {
+    setOptions = {
         httpOnly: true,
-        secure: false,   // because you're on http://localhost
-        sameSite: "lax", // not "none"
-        path: "/"
-    }
-} else {
-    // deployed
-    options = {
-        httpOnly: true,
-        secure: true,        // MUST be true on HTTPS
-        sameSite: "none",    // MUST be "none" for cross-site cookies
+        secure: false,
+        sameSite: "lax",
         path: "/"
     };
-
+    clearOptions = { ...setOptions };
+} else {
+    setOptions = {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/"
+    };
+    clearOptions = {
+        ...setOptions,
+        domain: "optivo-backend.vercel.app"
+    };
 }
 
-
-
-function setCookies(res, ...params) {
+export function setCookies(res, ...params) {
     for (let i = 0; i < params.length; i += 2) {
-        res.cookie(params[i], params[i + 1], options);
+        res.cookie(params[i], params[i + 1], setOptions); 
     }
-    return {
-        setted_Access_Token: params[1]
-    }
+    return { setted_Access_Token: params[1] };
 }
 
-
-function clearCookies(res, ...params) {
-    params.forEach((elem) => {
-        return res.clearCookie(elem, options);
-    })
+export function clearCookies(res, ...params) {
+    params.forEach((elem) => res.clearCookie(elem, clearOptions));
 }
-
-export { setCookies, clearCookies }

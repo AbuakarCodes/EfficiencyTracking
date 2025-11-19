@@ -7,7 +7,8 @@ import { Route } from "../src/Router/userRouter.js";
 import { TodoRoute } from "../src/Router/TodoRouter.js";
 import { EfficiencyRoute } from "../src/Router/EfficiencyRouter.js";
 
-await dbConnection(); 
+const response = await dbConnection();
+console.log(response) 
 
 app.use("/users", Route);
 app.use("/todos", TodoRoute);
