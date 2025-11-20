@@ -1,8 +1,16 @@
 {
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "https://optivo-backend.vercel.app/:path*"
+      "source": "/users/:path*",
+      "destination": "https://optivo-backend.vercel.app/users/:path*"
+    },
+    {
+      "source": "/todos/:path*",
+      "destination": "https://optivo-backend.vercel.app/todos/:path*"
+    },
+    {
+      "source": "/eficiency/:path*",
+      "destination": "https://optivo-backend.vercel.app/eficiency/:path*"
     }
   ]
 }
