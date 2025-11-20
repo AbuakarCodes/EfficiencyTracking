@@ -1,42 +1,49 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-// export let setOptions = {};
-// export let clearOptions = {};
-// if (process.env?.IS_LOCAL_HOST === "true") {
-//     setOptions = {
-//         httpOnly: true,
-//         secure: false,
-//         sameSite: "lax",
-//         path: "/"
-//     };
-//     clearOptions = { ...setOptions }; 
-// } else {
-//     setOptions = {
-//         httpOnly: true,
-//         secure: true,
-//         sameSite: "none",
-//         path: "/"
-//     };
-//     clearOptions = {
-//         ...setOptions,
-//         domain: "optivo-backend.vercel.app"
-//     };
-// }
+export let setOptions = {};
+export let clearOptions = {};
 
-const options = {
-    httpOnly: true,
-    secure: !process.env?.IS_LOCAL_HOST === "true",
-    sameSite: "strict",
+const isLocal = process.env.IS_LOCAL_HOST === "true";
+
+// Localhost (no HTTPS)
+if (isLocal) {
+    setOptions = {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        path: "/"
+    };
+
+    clearOptions = {
+        ...setOptions
+    };
+}
+
+// Production with PROXY (IMPORTANT)
+else {
+    setOptions = {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/"
+        // ❌ DO NOT set domain when using a proxy
+    };
+
+    clearOptions = {
+        ...setOptions
+        // No domain needed — proxy makes backend share domain with frontend
+    };
 }
 
 export function setCookies(res, ...params) {
     for (let i = 0; i < params.length; i += 2) {
-        res.cookie(params[i], params[i + 1], options);
+        res.cookie(params[i], params[i + 1], setOptions);
     }
-    return { setted_Access_Token: params[1] };
 }
 
 export function clearCookies(res, ...params) {
-    params.forEach((elem) => res.clearCookie(elem, options));
+    params.forEach((cookieName) =>
+        res.clearCookie(cookieName, clearOptions)
+    );
 }

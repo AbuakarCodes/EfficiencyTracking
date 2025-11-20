@@ -8,8 +8,7 @@ import { ErrorClass } from "../utils/ErrorClass.js"
 
 const auth = async (req, res, next) => {
     const { accesssToken, refreshToken } = req.cookies
-    if (!accesssToken && !refreshToken) return res.status(401).json(new ErrorClass("User is not logged in", 401))
-
+   
     try {
         const decodedAccess = jwt.verify(accesssToken, process.env.ACCESS_TOKEN_SECRET)
         req.user = decodedAccess
@@ -31,7 +30,9 @@ const auth = async (req, res, next) => {
                 const newAccessToken = user.generateAccessToken();
                 const newRefreshToken = user.generateRefreshToken();
                 // Set new cookies
-                setCookies(res, "accesssToken", newAccessToken, "refreshToken", newRefreshToken)
+                res.cookie("accesssToken", newAccessToken, { httpOnly: true, secure: true, sameSite: "strict" });
+                res.cookie("refreshToken", newRefreshToken, { httpOnly: true, secure: true, sameSite: "strict" });
+
                 req.user = DecodedRefresh
                 return next()
 
