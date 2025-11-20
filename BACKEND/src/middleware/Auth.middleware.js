@@ -31,9 +31,7 @@ const auth = async (req, res, next) => {
                 const newAccessToken = user.generateAccessToken();
                 const newRefreshToken = user.generateRefreshToken();
                 // Set new cookies
-                res.cookie("accesssToken", newAccessToken, { httpOnly: true, secure: true, sameSite: "strict" });
-                res.cookie("refreshToken", newRefreshToken, { httpOnly: true, secure: true, sameSite: "strict" });
-
+                setCookies(res, "accesssToken", newAccessToken, "refreshToken", newRefreshToken)
                 req.user = DecodedRefresh
                 return next()
 
